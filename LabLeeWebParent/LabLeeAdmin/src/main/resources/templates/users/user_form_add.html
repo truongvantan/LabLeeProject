@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Thêm mới người dùng', 'none')}" />
+<body>
+	<div class="container-fluid">
+		<div th:replace="~{fragments::menu}"></div>
+		<h1 class="text-center">Thêm mới người dùng</h1>
+		<div th:replace="~{fragments::alert_message_box}"></div>
+		<form
+			th:action="@{/users/add}"
+			th:object="${userFormAddDTO}"
+			method="POST"
+			style="max-width: 700px; margin: 0 auto"
+			enctype="multipart/form-data"
+		>
+			<div class="border border-secondary rounded p-3">
+				<div class="form-group row mb-3">
+					<label
+						class="col-sm-4 col-form-label"
+						for="email"
+					>
+						Email:
+						<span class="text-danger">(*)</span>
+					</label>
+					<div class="col-sm-8">
+						<input
+							type="text"
+							class="form-control"
+							id="email"
+							th:field="*{email}"
+						>
+						<span
+							th:if="${#fields.hasErrors('email')}"
+							th:errors="${userFormAddDTO.email}"
+							class="text-danger"
+						>Email Error</span>
+					</div>
+				</div>
+				<div class="form-group row mb-3">
+					<label
+						class="col-sm-4 col-form-label"
+						for="firstName"
+					>
+						Tên:
+						<span class="text-danger">(*)</span>
+					</label>
+					<div class="col-sm-8">
+						<input
+							type="text"
+							class="form-control"
+							id="firstName"
+							th:field="*{firstName}"
+						>
+						<span
+							th:if="${#fields.hasErrors('firstName')}"
+							th:errors="${userFormAddDTO.firstName}"
+							class="text-danger"
+						>First Name Error</span>
+					</div>
+				</div>
+				<div class="form-group row mb-3">
+					<label
+						class="col-sm-4 col-form-label"
+						for="lastName"
+					>
+						Họ đệm:
+						<span class="text-danger">(*)</span>
+					</label>
+					<div class="col-sm-8">
+						<input
+							type="text"
+							class="form-control"
+							id="lastName"
+							th:field="*{lastName}"
+						>
+						<span
+							th:if="${#fields.hasErrors('lastName')}"
+							th:errors="${userFormAddDTO.lastName}"
+							class="text-danger"
+						>Last Name Error</span>
+					</div>
+				</div>
+				<div class="form-group row mb-3">
+					<label
+						class="col-sm-4 col-form-label"
+						for="password"
+					>
+						Mật khẩu:
+						<span class="text-danger">(*)</span>
+					</label>
+					<div class="col-sm-8">
+						<input
+							type="password"
+							class="form-control"
+							id="password"
+							name="password"
+							th:value="*{password}"
+						>
+						<span
+							th:if="${#fields.hasErrors('password')}"
+							th:errors="${userFormAddDTO.password}"
+							class="text-danger"
+						>Password Error</span>
+					</div>
+				</div>
+				<div class="form-group row mb-3">
+					<label
+						class="col-sm-4 col-form-label"
+						for="repassword"
+					>
+						Nhập lại mật khẩu:
+						<span class="text-danger">(*)</span>
+					</label>
+					<div class="col-sm-8">
+						<input
+							type="password"
+							class="form-control"
+							id="repassword"
+							name="repassword"
+							th:value="*{repassword}"
+						>
+						<span
+							th:if="${#fields.hasErrors('repassword')}"
+							th:errors="${userFormAddDTO.repassword}"
+							class="text-danger"
+						>Re Password Error</span>
+					</div>
+				</div>
+				<div class="form-group row mb-3">
+					<label class="col-sm-4 col-form-label d-flex align-items-center">Quyền:</label>
+					<div class="col-sm-8">
+						<th:block th:each="roleDTO : ${listRoleDTOs}">
+							<div class="form-check">
+								<input
+									class="form-check-input"
+									type="checkbox"
+									th:value="${roleDTO.id}"
+									th:field="*{setRoleDTOIds}"
+								>
+								<label
+									class="form-check-label"
+									th:for="${roleDTO.name}"
+								>[[${roleDTO.name}]]</label>
+								-
+								<small>[[${roleDTO.description}]]</small>
+							</div>
+						</th:block>
+						<span
+							th:if="${#fields.hasErrors('setRoleDTOIds')}"
+							th:errors="${userFormAddDTO.setRoleDTOIds}"
+							class="text-danger"
+						>Role Error</span>
+					</div>
+				</div>
+				<div class="form-group row mb-3">
+					<label
+						class="col-sm-4 col-form-label"
+						for="enabled"
+					>Khả dụng:</label>
+					<div class="col-sm-8">
+						<div class="form-check form-switch mt-2">
+							<input
+								class="form-check-input"
+								type="checkbox"
+								id="enabled"
+								th:field="*{enabled}"
+							/>
+						</div>
+						<span
+							th:if="${#fields.hasErrors('enabled')}"
+							th:errors="${userFormAddDTO.enabled}"
+							class="text-danger"
+						>Enabled Error</span>
+					</div>
+				</div>
+				<div class="form-group row mb-3">
+					<label
+						class="col-sm-4 col-form-label"
+						for="fileImage"
+					>Avatar:</label>
+					<div class="col-sm-8 d-flex flex-wrap">
+						<input
+							type="hidden"
+							th:field="*{photo}"
+						/>
+						<input
+							type="file"
+							id="fileImage"
+							name="image"
+							accept="image/png, image/jpeg, image/webp"
+						/>
+						
+						<span
+							th:if="${error != null}"
+							class="text-danger"
+						>[[${error}]]</span>
+						<img
+							width="150px"
+							class="img-fluid mt-2"
+							id="thumbnail"
+							alt="photo"
+							th:src="@{/images/default-user.png}"
+						/>
+					</div>
+				</div>
+				<div class="text-center">
+					<input
+						type="submit"
+						value="Thêm mới"
+						class="btn btn-primary m-3"
+					/>
+					<input
+						type="button"
+						value="Quay lại trang trước"
+						class="btn btn-secondary"
+						id="buttonCancel"
+					/>
+				</div>
+			</div>
+		</form>
+		<div th:replace="~{fragments::footer}"></div>
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/users}]]";
+	</script>
+	<script
+		type="text/javascript"
+		th:src="@{/js/common_form.js}"
+	></script>
+</body>
+</html>

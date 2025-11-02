@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head
+	th:fragment="page_head(title, remove)"
+	th:remove="${remove}"
+>
+<meta
+	http-equiv="Content-Type"
+	content="text/html; charset=UTF-8"
+/>
+<meta
+	name="viewport"
+	content="width=device-width,initial-scale=1.0, minimum-scale=1.0"
+/>
+
+<title>[[${title}]]</title>
+<link
+	rel="preconnect"
+	href="https://fonts.googleapis.com"
+/>
+<link
+	rel="preconnect"
+	href="https://fonts.gstatic.com"
+	crossorigin
+/>
+<link
+	href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+	rel="stylesheet"
+/>
+<link
+	rel="stylesheet"
+	type="text/css"
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"
+/>
+<link
+	rel="stylesheet"
+	type="text/css"
+	th:href="@{/fontawesome/all.css}"
+>
+<!-- <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" /> -->
+<link
+	rel="stylesheet"
+	type="text/css"
+	th:href="@{/css/style.css}"
+/>
+<script
+	type="text/javascript"
+	th:src="@{/webjars/jquery/jquery.min.js}"
+></script>
+<script
+	type="text/javascript"
+	th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"
+></script>
+<script
+	type="text/javascript"
+	th:src="@{/js/common.js}"
+></script>
+</head>
+
+<body>
+	<!-- ============================== Pagination ============================================= -->
+	<div
+		th:fragment="pagination(moduleURL, entityName)"
+		th:remove="tag"
+	>
+		<div
+			th:if="${currentPageNumber <= totalPageNumber}"
+			class="mt-4 text-center"
+		>
+			<span>
+				Trang
+				<b>[[${currentPageNumber}]]</b>
+				của [[${totalPageNumber}]]
+			</span>
+		</div>
+		<div
+			th:unless="${currentPageNumber <= totalPageNumber}"
+			class="mt-4"
+		>
+			<span>
+				<b>Danh sách rỗng</b>
+			</span>
+		</div>
+		<div
+			th:if="${totalItems > 0}"
+			class="mt-4"
+		>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center flex-wrap">
+					<!-- First -->
+					<li th:class="${currentPageNumber > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments::page_link(${moduleURL}, 1, 'Đầu')}"></a>
+					</li>
+					<!-- Previous -->
+					<li th:class="${currentPageNumber > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments::page_link(${moduleURL}, ${currentPageNumber - 1}, 'Trước')}"></a>
+					</li>
+					<!-- Page Numbers -->
+					<li
+						th:each="pageNum : ${pageNumbers}"
+						th:class="${currentPageNumber != pageNum ? 'page-item' : 'page-item active'}"
+					>
+							<a th:replace="~{fragments::page_link(${moduleURL}, ${pageNum}, ${pageNum})}"></a>
+					</li>
+					<!-- Next -->
+					<li th:class="${currentPageNumber < totalPageNumber ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments::page_link(${moduleURL}, ${currentPageNumber + 1}, 'Tiếp')}"></a>
+					</li>
+					<!-- Last -->
+					<li th:class="${currentPageNumber < totalPageNumber ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments::page_link(${moduleURL}, ${totalPageNumber}, 'Cuối')}"></a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	<!-- ============================== END Pagination ============================================= -->
+
+	<!-- ============================== Page Link ============================================= -->
+	<a
+		th:fragment="page_link(moduleURL, pageNum, label)"
+		class="page-link"
+		th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}"
+	>[[${label}]]</a>
+	<!-- ============================== END Page Link ============================================= -->
+
+	<!-- ============================== Search Form ============================================= -->
+	<div
+		th:fragment="search_form(moduleURL, title)"
+		class="row mt-1"
+	>
+		<form
+			class="col-sm-4 d-flex align-items-center"
+			th:action="@{${moduleURL} + '/page/1'}"
+		>
+			<input
+				type="hidden"
+				name="sortField"
+				th:value="${sortField}"
+			/>
+			<input
+				type="hidden"
+				name="sortDir"
+				th:value="${sortDir}"
+			/>
+			<input
+				name="keyword"
+				th:value="${keyword}"
+				class="form-control mr-2 w-75"
+				type="search"
+				placeholder="Tìm kiếm..."
+				aria-label="Search"
+			/>
+			&nbsp;
+			<button
+				class="btn btn-outline-success d-block ml-2 mr-2"
+				type="submit"
+				id="btnSearch"
+				title="Tìm kiếm"
+			>
+				<i class="fa-solid fa-magnifying-glass"></i>
+			</button>
+		</form>
+	</div>
+	<!-- ============================== END Search Form ============================================= -->
+
+	<!-- ============================== Footer ============================================= -->
+	<div
+		th:fragment="footer"
+		id="footer"
+		class="text-center m-3"
+	>
+		<p>Lab ông Tuyến - Copyright &copy; Lab Lee</p>
+	</div>
+	<!-- ============================== END Footer ============================================= -->
+
+	<!-- ============================== Confirm Modal ============================================= -->
+	<div
+		th:fragment="confirm_modal"
+		class="modal fade text-center"
+		id="confirmModal"
+	>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Xác nhận xóa</h4>
+					<button
+						type="button"
+						class="btn-close"
+						data-bs-dismiss="modal"
+						aria-label="Close"
+					></button>
+				</div>
+				<div class="modal-body">
+					<span id="confirmText"></span>
+				</div>
+				<div class="modal-footer">
+					<a
+						href=""
+						class="btn btn-success"
+						id="confirmButton"
+					>Xác nhận</a>
+					<button
+						type="button"
+						class="btn btn-danger"
+						data-bs-dismiss="modal"
+					>Hủy</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- ============================== END Confirm Modal  ============================================= -->
+
+	<!-- ============================== Edit Button ============================================= -->
+	<div
+		th:fragment="edit(entityName, editURL)"
+		th:remove="tag"
+	>
+		<a
+			th:href="@{${editURL}}"
+			class="fa-solid fa-pen-to-square fa-xl icon-green"
+			data-bs-toggle="tooltip"
+			data-bs-placement="top"
+			th:title="'Chỉnh sửa ' + ${entityName} + ' này'"
+		> </a>
+	</div>
+	<!-- ============================== END Edit Button  ============================================= -->
+
+	<!-- ============================== Delete Button  ============================================= -->
+	<div
+		th:fragment="delete(entityName, entityId, deleteURL, visible)"
+		th:remove="tag"
+	>
+		<th:block th:if="${visible}">
+			<a
+				th:href="@{${deleteURL}}"
+				th:entityId="${entityId}"
+				class="fa-solid fa-trash fa-xl link-delete icon-red"
+				data-bs-toggle="tooltip"
+				data-bs-placement="top"
+				th:title="'Xóa ' + ${entityName} + ' này'"
+			> </a>
+		</th:block>
+	</div>
+	<!-- ============================== END Delete Button  ============================================= -->
+
+	<!-- ============================== Alert Message Box  ============================================= -->
+	<div
+		th:fragment="alert_message_box"
+		class="row mt-3"
+	>
+		<div class="col-xs-12">
+			<div
+				th:if="${successMessage != null}"
+				class="alert alert-success text-center"
+			>[[${successMessage}]]</div>
+			<div
+				th:if="${errorMessage != null}"
+				class="alert alert-danger text-center"
+			>[[${errorMessage}]]</div>
+		</div>
+	</div>
+	<!-- ============================== END Alert Message Box ============================================= -->
+
+
+	<!-- ============================== Enabled Status Button  ============================================= -->
+	<div
+		th:fragment="enabled_status(enabled, entityName, entityURL, entityId)"
+		th:remove="tag"
+	>
+		<a
+			th:if="${enabled == true}"
+			th:entityId="${entityId}"
+			class="link-enabled-false fa-solid fa-toggle-on fa-xl icon-blue"
+			data-bs-toggle="tooltip"
+			data-bs-placement="top"
+			th:title="'Khóa ' + ${entityName} + ' này'"
+			th:href="@{${entityURL} + '/enabled/false'}"
+		></a>
+		<a
+			th:if="${enabled == false}"
+			th:entityId="${entityId}"
+			class="link-enabled-true fa-solid fa-toggle-off fa-xl icon-silver"
+			data-bs-toggle="tooltip"
+			data-bs-placement="top"
+			th:title="'Mở khóa ' + ${entityName} + ' này'"
+			th:href="@{${entityURL} + '/enabled/true'}"
+		></a>
+	</div>
+	<!-- ============================== END Enabled Status Button  ============================================= -->
+
+	<!-- ============================== Deleted Status Button  ============================================= -->
+	<div
+		th:fragment="deleted_status(delected, entityName, entityURL, entityId)"
+		th:remove="tag"
+	>
+		<a
+			th:if="${delected == true}"
+			th:entityId="${entityId}"
+			class="link-deleted-false fa-solid fa-toggle-on fa-xl icon-blue"
+			data-bs-toggle="tooltip"
+			data-bs-placement="top"
+			th:title="'Hoàn tác xóa ' + ${entityName} + ' này'"
+			th:href="@{${entityURL} + '/deleted/false'}"
+		></a>
+		<a
+			th:if="${delected == false}"
+			th:entityId="${entityId}"
+			class="link-deleted-true fa-solid fa-toggle-off fa-xl icon-silver"
+			data-bs-toggle="tooltip"
+			data-bs-placement="top"
+			th:title="'Xóa ' + ${entityName} + ' này'"
+			th:href="@{${entityURL} + '/deleted/true'}"
+		></a>
+	</div>
+	<!-- ============================== END Deleted Status Button  ============================================= -->
+
+	<!-- ============================== Header Navigation  ============================================= -->
+	<div th:fragment="menu">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container-fluid">
+				<a
+					class="navbar-brand"
+					th:href="@{/}"
+				>
+					<img
+						alt="logo"
+						th:src="@{/images/logo.jpg}"
+						width="50"
+						height="50"
+					>
+				</a>
+				<button
+					class="navbar-toggler"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#topNavbar"
+					aria-controls="navbarSupportedContent"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div
+					class="collapse navbar-collapse"
+					id="topNavbar"
+				>
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item">
+							<a
+								class="nav-link active"
+								aria-current="page"
+								th:href="@{/}"
+							>Trang chủ</a>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:href="@{/users}"
+							>Người dùng</a>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:href="@{/members}"
+							>Thành viên</a>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:href="@{/articles}"
+							>Bài viết</a>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:href="@{/projects}"
+							>Dự án</a>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:href="@{/activities}"
+							>Hoạt động</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a
+								class="nav-link dropdown-toggle"
+								href="#"
+								id="navbarDropdown"
+								role="button"
+								data-bs-toggle="dropdown"
+								aria-expanded="false"
+							> @account </a>
+							<ul
+								class="dropdown-menu"
+								aria-labelledby="navbarDropdown"
+							>
+								<li>
+									<a
+										class="dropdown-item"
+										th:href="@{/account-details}"
+									>Hồ sơ</a>
+								</li>
+								<li>
+									<a
+										class="dropdown-item"
+										th:href="@{/logout}"
+									>Đăng xuất</a>
+								</li>
+							</ul>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+	<!-- ============================== END Header Navigation ============================================= -->
+</body>
+</html>

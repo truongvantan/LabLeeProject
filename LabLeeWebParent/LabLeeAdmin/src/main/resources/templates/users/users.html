@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Danh sách tài khoản', 'none')}" />
+<body>
+	<div class="container-fluid">
+		<div th:replace="~{fragments::menu}"></div>
+		<h1 class="text-center">List user</h1>
+		<div th:replace="~{fragments::alert_message_box}"></div>
+		<a
+			th:href="@{/users/showAdd}"
+			class="btn btn-primary"
+		>Thêm mới</a>
+		<div th:replace="~{fragments::search_form('/users', 'người dùng')}"></div>
+		<table class="table table-responsive-xl table-bordered table-striped table-hove">
+			<thead>
+				<tr>
+					<th scope="col">User ID</th>
+					<th scope="col">Photo</th>
+					<th scope="col">First Name</th>
+					<th scope="col">Last Name</th>
+					<th scope="col">Email</th>
+					<th scope="col">Role</th>
+					<th scope="col">Enabled</th>
+					<th scope="col">Deleted</th>
+					<th scope="col">Activities</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="userDTO : ${listUserDTOs}">
+					<td>[[${userDTO.id}]]</td>
+					<td class="d-flex justify-content-center align-items-center">
+						<span
+							th:if="${userDTO.photo == null}"
+							class="fa-solid fa-user fa-3x"
+						></span>
+						<img
+							width="80px"
+							th:if="${userDTO.photo != null}"
+							th:src="@{${userDTO.photoImagePath}}"
+						/>
+					</td>
+					<td>[[${userDTO.firstName}]]</td>
+					<td>[[${userDTO.lastName}]]</td>
+					<td>[[${userDTO.email}]]</td>
+					<td>[[${userDTO.setRoleDTOs}]]</td>
+					<td>
+						<div
+							th:replace="~{fragments::enabled_status(${userDTO.enabled}, 'người dùng', '/users/' + ${userDTO.id}, ${userDTO.id})}"
+						></div>
+					</td>
+					<td>
+						<div
+							th:replace="~{fragments::deleted_status(${userDTO.deleted}, 'người dùng', '/users/' + ${userDTO.id}, ${userDTO.id})}"
+						></div>
+					</td>
+					<td>
+						<div th:replace="~{fragments::edit('người dùng', '/users/showEdit/' + ${userDTO.id})}"></div>
+
+						<!-- <div
+							th:replace="~{fragments::delete('người dùng', ${userDTO.id}, '/users/delete/' + ${userDTO.id}, true)}"
+						></div> -->
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div
+			th:replace="~{fragments::pagination('/users', 'users')}"
+		></div>
+
+		<div th:replace="~{fragments::confirm_modal}"></div>
+		<div th:replace="~{fragments::footer}"></div>
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/users}]]";
+
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+
+		$(document).ready(function() {
+			$(".link-deleted-false").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'người dùng', 'Bạn muốn hoàn tác xóa');
+			});
+			
+			$(".link-deleted-true").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'người dùng', 'Bạn chắc chắn muốn xóa');
+			});
+			
+			$(".link-enabled-true").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'người dùng', 'Bạn muốn mở khóa');
+			});
+			
+			$(".link-enabled-false").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'người dùng', 'Bạn chắc chắn muốn khóa');
+			});
+		});
+	</script>
+
+</body>
+</html>

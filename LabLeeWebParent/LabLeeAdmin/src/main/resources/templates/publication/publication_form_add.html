@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<head th:replace="~{fragments :: page_head('Thêm mới bài báo', 'tag')}" />
+<link
+	rel="stylesheet"
+	th:href="@{/richtext/richtext.min.css}"
+/>
+<script
+	type="text/javascript"
+	th:src="@{/richtext/jquery.richtext.min.js}"
+></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/42.0.1/ckeditor.js"></script>
+<meta
+	name="_csrf"
+	th:content="${_csrf.token}"
+/>
+<meta
+	name="_csrf_header"
+	th:content="${_csrf.headerName}"
+/>
+</head>
+<body>
+	<div class="container-fluid">
+		<div th:replace="~{navigation::menu}"></div>
+		<h1 class="text-center">Thêm mới bài báo</h1>
+		<div th:replace="~{fragments::alert_message_box}"></div>
+		<form
+			th:action="@{/publications/add}"
+			th:object="${publication}"
+			method="POST"
+			style="max-width: 1000px; margin: 0 auto"
+			enctype="multipart/form-data"
+		>
+			<div class="border border-secondary rounded p-3">
+				<div class="my-4">
+					<label>Title:</label>
+					<input
+						class="form-control"
+						th:field="*{title}"
+					/>
+					<span
+						th:if="${#fields.hasErrors('title')}"
+						th:errors="${publication.title}"
+						class="text-danger"
+					>Title Error</span>
+				</div>
+
+				<div class="my-4">
+					<label>DOI link:</label>
+					<input
+						class="form-control"
+						th:field="*{doiLink}"
+					/>
+					<span
+						th:if="${#fields.hasErrors('doiLink')}"
+						th:errors="${publication.doiLink}"
+						class="text-danger"
+					>DOI link Error</span>
+				</div>
+
+				<div class="my-4">
+					<label>Enabled:</label>
+					<div class="form-check form-switch mt-2">
+						<input
+							class="form-check-input"
+							type="checkbox"
+							id="enabled"
+							th:field="*{enabled}"
+						/>
+					</div>
+				</div>
+
+				<div class="my-4">
+					<label>Thumbnail:</label>
+
+					<input
+						type="hidden"
+						th:field="*{thumbnail}"
+					/>
+					<input
+						type="file"
+						id="fileImage"
+						name="image"
+						accept="image/png, image/jpeg, image/webp"
+					/>
+
+					<span
+						th:if="${error != null}"
+						class="text-danger"
+					>[[${error}]]</span>
+					<img
+						width="150px"
+						class="img-fluid mt-2"
+						id="thumbnailPublication"
+						alt="thumbnail"
+						th:src="@{${publication.thumbnailPath}}"
+					/>
+					<small>Vui lòng chọn file có kích thước dưới 1MB</small>
+				</div>
+
+				<div class="my-4">
+					<label>Cite:</label>
+					<textarea
+						class="form-control"
+						th:field="*{cite}"
+						rows="4"
+					></textarea>
+					<span
+						th:if="${#fields.hasErrors('cite')}"
+						th:errors="${publication.cite}"
+						class="text-danger"
+					>Cite Error</span>
+				</div>
+
+				<div class="my-4">
+					<label>Abstract:</label>
+					<textarea
+						class="form-control"
+						th:field="*{publicationAbstract}"
+						rows="10"
+					></textarea>
+					<span
+						th:if="${#fields.hasErrors('publicationAbstract')}"
+						th:errors="${publication.publicationAbstract}"
+						class="text-danger"
+					>Abstract Error</span>
+				</div>
+
+				<div class="text-center">
+					<input
+						type="submit"
+						value="Thêm mới"
+						class="btn btn-primary m-3"
+					/>
+					<input
+						type="button"
+						value="Thoát"
+						class="btn btn-secondary"
+						id="buttonCancel"
+					/>
+				</div>
+			</div>
+		</form>
+		<div th:replace="~{fragments::footer}"></div>
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/publications}]]";
+		const contextPathURL = "[[@{/}]]";
+		const urlUploadImage = "[[@{/api/upload/publication-image}]]";
+		
+		$(document).ready(function () {
+			$('#cite').richText();
+
+		});
+		
+		ClassicEditor.create(document.querySelector('#publicationAbstract'), {
+		    ckfinder: {
+		        uploadUrl: urlUploadImage
+		    }
+		}).then(editor => {
+		    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+		    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+		
+		    // Custom upload adapter
+		    class MyUploadAdapter {
+		        constructor(loader) { this.loader = loader; }
+		        upload() {
+		            return this.loader.file
+		                .then(file => new Promise((resolve, reject) => {
+		                    const data = new FormData();
+		                    data.append('upload', file);
+		
+		                    fetch(urlUploadImage, {
+		                        method: 'POST',
+		                        body: data,
+		                        headers: { [csrfHeader]: csrfToken }  // Thêm CSRF token
+		                    })
+		                    .then(response => response.json())
+		                    .then(data => {
+		                        if (data.url) resolve({ default: data.url });
+		                        else reject(data.error?.message || 'Upload failed');
+		                    })
+		                    .catch(err => reject(err));
+		                }));
+		        }
+		        abort() { }
+		    }
+		
+		    // Override upload adapter
+		    editor.plugins.get('FileRepository').createUploadAdapter = loader => new MyUploadAdapter(loader);
+		}).catch(error => {
+		    console.error(error);
+		});
+		
+	</script>
+	<script
+		type="text/javascript"
+		th:src="@{/js/common_form.js}"
+	></script>
+</body>
+</html>

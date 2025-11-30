@@ -1,0 +1,96 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: "Open Sans", sans-serif;
+}
+
+body {
+	margin-bottom: 50px;
+}
+
+*.icon-white {
+	color: white;
+}
+
+*.icon-dark {
+	color: gray;
+}
+
+*.icon-green {
+	color: #65B741;
+}
+
+*.icon-silver {
+	color: silver;
+}
+
+*.icon-red {
+	color: red;
+}
+
+*.icon-blue {
+	color: #4942E4;
+}
+
+*.icon-yellow {
+	color: #FFA700;
+}
+
+/* #footer {
+	position: fixed;
+	height: 50px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	margin-bottom: 0px;
+} */
+
+.truncate-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.line {
+	border-bottom: 5px solid black;
+	width: 100%;
+}
+
+/* .card {
+	position: relative;
+} */
+
+/* .btn-details-member {
+	position: absolute;
+	bottom: 10px;
+	left: 20px;
+} */
+
+.p-limit-2 {
+  overflow: hidden;
+  display: -webkit-box; /* Required for -webkit-line-clamp */
+  -webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
+  -webkit-line-clamp: 2; /* Set the maximum number of lines */
+  text-overflow: ellipsis; /* Adds ellipsis for overflowed content */
+}
+
+.square {
+	aspect-ratio: 1/1;
+}
+
+.card-img-top {
+	width: 100%;
+	height: auto;
+	display: block;
+	object-fit: cover;
+}
+
+.ellipsis-content {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.publication-abstract *, .publication-cite * {
+	font-size: 18px !important;
+}

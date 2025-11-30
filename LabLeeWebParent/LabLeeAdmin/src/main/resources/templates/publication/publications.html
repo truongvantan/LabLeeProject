@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Danh sách bài báo', 'none')}" />
+<body>
+	<div class="container-fluid">
+		<div th:replace="~{navigation::menu}"></div>
+		<h1 class="text-center mt-5">Danh sách bài báo</h1>
+		<div th:replace="~{fragments::alert_message_box}"></div>
+		<a
+			th:href="@{/publications/showAdd}"
+			class="btn btn-primary"
+		>Thêm mới</a>
+		<div th:replace="~{fragments::search_form('/publications', 'bài báo')}"></div>
+		<table class="table table-responsive-xl table-bordered table-hover">
+			<thead>
+				<tr>
+					<th th:replace="~{fragments::column_link('/publications', 'id', 'ID')}" />
+					<th scope="col">Thumbnail</th>
+					<th th:replace="~{fragments::column_link('/publications', 'title', 'Title')}" />
+					<th th:replace="~{fragments::column_link('/publications', 'doiLink', 'DOI link')}" />
+					<th th:replace="~{fragments::column_link('/publications', 'cite', 'Cite')}" />
+					<th th:replace="~{fragments::column_link('/publications', 'publicationAbstract', 'Abstract')}" />
+					<th th:replace="~{fragments::column_link('/publications', 'enabled', 'Enabled')}" />
+					<th scope="col">Activities</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="publication : ${listPublications}">
+					<td>[[${publication.id}]]</td>
+					<td class="d-flex justify-content-center align-items-center">
+						<span
+							th:if="${publication.thumbnail == null}"
+							class="fa-solid fa-user fa-3x"
+						></span>
+						<img
+							width="80px"
+							height="80px"
+							th:if="${publication.thumbnail != null}"
+							th:src="@{${publication.thumbnailPath}}"
+						/>
+					</td>
+					<td>[[${publication.shortTitle}]]</td>
+					<td>[[${publication.shortDoiLink}]]</td>
+					<td class="truncate-text">[[${publication.shortCite}]]</td>
+					<td class="truncate-text">[[${publication.shortPublicationAbstract}]]</td>
+					<td>
+						<div
+							th:replace="~{fragments::enabled_status(${publication.enabled}, 'publication', '/publications/' + ${publication.id}, ${publication.id})}"
+						></div>
+					</td>
+					<td>
+						<div
+							th:replace="~{fragments::edit('bài báo', '/publications/showEdit/' + ${publication.id})}"
+						></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div th:replace="~{fragments::pagination('/publications', 'publications')}"></div>
+
+		<div th:replace="~{fragments::confirm_modal}"></div>
+		<div th:replace="~{fragments::footer}"></div>
+
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/publications}]]";
+
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+		
+		$(document).ready(function() {
+			$(".link-enabled-true").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'bài báo', 'Bạn muốn mở khóa');
+			});
+			
+			$(".link-enabled-false").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'bài báo', 'Bạn chắc chắn muốn khóa');
+			});
+		});
+
+	</script>
+</body>
+</html>

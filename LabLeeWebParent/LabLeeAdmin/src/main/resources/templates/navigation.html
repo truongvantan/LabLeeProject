@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+>
+
+<body>
+	<!-- ============================== Header Navigation  ============================================= -->
+	<div
+		th:fragment="menu"
+		class="sticky-top"
+	>
+		<form
+			th:action="@{/logout}"
+			method="post"
+			th:hidden="true"
+			name="logoutForm"
+		>
+			<input type="submit" />
+		</form>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container-fluid">
+				<a
+					class="navbar-brand"
+					th:href="@{/}"
+				>
+					<img
+						alt="logo"
+						th:src="@{/images/logo.jpg}"
+						width="50"
+						height="50"
+					>
+				</a>
+				<button
+					class="navbar-toggler"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#topNavbar"
+					aria-controls="navbarSupportedContent"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div
+					class="collapse navbar-collapse"
+					id="topNavbar"
+				>
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item">
+							<a
+								class="nav-link active"
+								aria-current="page"
+								th:href="@{/}"
+							>Trang chủ</a>
+						</li>
+
+						<li
+							class="nav-item"
+							sec:authorize="hasAuthority('Root Admin')"
+						>
+							<a
+								class="nav-link"
+								th:href="@{/users}"
+							>Người dùng</a>
+						</li>
+
+						<li
+							class="nav-item"
+							sec:authorize="hasAnyAuthority('Root Admin', 'Thành viên lab')"
+						>
+							<a
+								class="nav-link"
+								th:href="@{/members}"
+							>Thành viên</a>
+						</li>
+
+						<li
+							class="nav-item"
+							sec:authorize="hasAnyAuthority('Root Admin', 'Thành viên lab', 'Cộng tác viên' , 'Kiểm duyệt nội dung')"
+						>
+							<a
+								class="nav-link"
+								th:href="@{/publications}"
+							>Bài báo</a>
+						</li>
+
+						<li
+							class="nav-item"
+							sec:authorize="hasAnyAuthority('Root Admin', 'Thành viên lab', 'Cộng tác viên' , 'Kiểm duyệt nội dung')"
+						>
+							<a
+								class="nav-link"
+								th:href="@{/projects}"
+							>Dự án</a>
+						</li>
+
+						<li
+							class="nav-item"
+							sec:authorize="hasAnyAuthority('Root Admin', 'Thành viên lab', 'Cộng tác viên' , 'Kiểm duyệt nội dung')"
+						>
+							<a
+								class="nav-link"
+								th:href="@{/activities}"
+							>Hoạt động</a>
+						</li>
+
+						<li class="nav-item dropdown">
+							<a
+								class="nav-link dropdown-toggle"
+								sec:authentication="principal.fullName"
+								th:href="@{/account}"
+								id="navbarDropdown"
+								role="button"
+								data-bs-toggle="dropdown"
+								aria-expanded="false"
+							></a>
+							<ul
+								class="dropdown-menu"
+								aria-labelledby="navbarDropdown"
+							>
+								<li>
+									<a
+										class="dropdown-item"
+										th:href="@{/account}"
+									>Thông tin tài khoản</a>
+								</li>
+								<li>
+									<a
+										class="dropdown-item"
+										th:href="@{/profile}"
+									>Hồ sơ cá nhân</a>
+								</li>
+								<li>
+									<a
+										class="dropdown-item"
+										href=""
+										id="logoutLink"
+									>Đăng xuất</a>
+								</li>
+							</ul>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+	<!-- ============================== END Header Navigation ============================================= -->
+</body>
+</html>

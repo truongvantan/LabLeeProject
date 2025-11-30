@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import com.lablee.admin.repository.UserRepository;
 import com.lablee.common.entity.Role;
 import com.lablee.common.entity.User;
 
@@ -20,91 +21,79 @@ import com.lablee.common.entity.User;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Rollback(false)
 public class UserRepositoryTests {
-	
+
 	@Autowired
 	private UserRepository repo;
-	
+
 	@Test
 	@Disabled("")
 	public void testCreateFirstUser() {
-		User user = new User("example@gmail.com", "password", "Tân", "Trương Văn");
+		User user = new User("example@gmail.com", "password", "Admin");
 		Role roleRootAdmin = new Role(1);
-		
+
 		user.addRole(roleRootAdmin);
-		
+
 		User saved = repo.save(user);
-		
+
 		assertThat(saved.getId()).isGreaterThan(0);
 	}
-	
+
 	@Test
 	@Disabled("")
 	public void testCreateListUser() {
-		User user1 = new User("ronaldo@gmail.com", "password", "Ronaldo", "Cristiano");
-		User user2 = new User("messi@gmail.com", "password", "Messi", "Lionel");
-		User user3 = new User("halland@gmail.com", "password", "Halland", "Erling");
-		
+		User user1 = new User("ronaldo@gmail.com", "password", "Cristiano Ronaldo");
+		User user2 = new User("messi@gmail.com", "password", "Lionel Messi");
+		User user3 = new User("halland@gmail.com", "password", "Erling Halland");
+
 		Role roleMember = new Role(2);
-		
+
 		user1.addRole(roleMember);
 		user2.addRole(roleMember);
 		user3.addRole(roleMember);
-		
+
 		repo.saveAll(List.of(user1, user2, user3));
-		
+
 	}
-	
+
 	@Test
 	@Disabled("")
 	public void testCreateUserWithMultipleRoles() {
-		User user = new User("johndoe@gmail.com", "password", "Doe", "John");
+		User user = new User("johndoe@gmail.com", "password", "John Doe");
 		Role roleMember = new Role(2);
 		Role roleContentModerator = new Role(4);
-		
+
 		user.addRole(roleMember);
 		user.addRole(roleContentModerator);
-		
+
 		User saved = repo.save(user);
-		
+
 		assertThat(saved.getId()).isGreaterThan(0);
 	}
-	
+
 	@Test
 	@Disabled("")
 	public void testGetAllUser() {
 		List<User> listUsers = repo.findAll();
-		
+
 		System.out.println("Count: " + listUsers.size());
-		
+
 		for (User u : listUsers) {
 			System.out.println(u);
 		}
 	}
-	
-	@Test
-	@Disabled("")
-	public void testGetAllUserWithoutDelete() {
-		List<User> listUsers = repo.findAllWithoutDelete();
-		
-		System.out.println("Count: " + listUsers.size());
-		
-		for (User u : listUsers) {
-			System.out.println(u);
-		}
-	}
-	
+
 	@Test
 	@Disabled("")
 	public void testUpdateUserInfo() {
 		User userRootAdmin = repo.findById(1).get();
-		
+
 		userRootAdmin.setEnabled(true);
 		userRootAdmin.setEmail("tan@gmail.com");
-		
+
 		repo.save(userRootAdmin);
-		
+
 	}
-	
+
 	@Test
 	@Disabled("")
 	public void testUpdateUserRole() {
@@ -113,33 +102,21 @@ public class UserRepositoryTests {
 		Role roleCollaborator = new Role(3);
 		userJohn.getSetRoles().remove(roleContentModerator);
 		userJohn.addRole(roleCollaborator);
-		
+
 		repo.save(userJohn);
-		
+
 	}
-	
+
 	@Test
 	@Disabled("")
 	public void testHardDeleteUser() {
 		Optional<User> optionalUser = repo.findByEmail("johndoe@gmail.com");
-		
+
 		if (optionalUser.isPresent()) {
 			User userJane = optionalUser.get();
 			repo.deleteById(userJane.getId());
 		}
-		
+
 	}
-	
-	@Test
-	@Disabled("")
-	public void testSoftDeleteUser() {
-		Optional<User> optionalUser = repo.findByEmail("johndoe@gmail.com");
-		
-		if (optionalUser.isPresent()) {
-			User userJohn = optionalUser.get();
-			repo.deleteByIdSoft(userJohn.getId());
-			
-		}
-		
-	}
+
 }

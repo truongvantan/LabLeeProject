@@ -11,8 +11,10 @@ $(document).ready(function() {
 		} else {
 			this.setCustomValidity("");
 			showImageThumbnail(this);
+			showImageThumbnailPublication(this);
 		}
 	});
+	
 });
 
 function showImageThumbnail(fileInput) {
@@ -20,6 +22,15 @@ function showImageThumbnail(fileInput) {
 	const reader = new FileReader();
 	reader.onload = function(e) {
 		$("#thumbnail").attr("src", e.target.result);
+	}
+	reader.readAsDataURL(file);
+}
+
+function showImageThumbnailPublication(fileInput) {
+	const file = fileInput.files[0];
+	const reader = new FileReader();
+	reader.onload = function(e) {
+		$("#thumbnailPublication").attr("src", e.target.result);
 	}
 	reader.readAsDataURL(file);
 }

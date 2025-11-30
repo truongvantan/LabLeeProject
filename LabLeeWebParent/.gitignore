@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 src/main/resources/*.properties
+user-photos/
+member-avatars/
+uploads/
+publication-thumbnails/
 
 ### STS ###
 .apt_generated

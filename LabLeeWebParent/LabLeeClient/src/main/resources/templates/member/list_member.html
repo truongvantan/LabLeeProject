@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Member List', 'none')}" />
+<body>
+	<div th:replace="~{navigation::menu}"></div>
+	<div class="container">
+		<h1 class="text-center mt-3">Our members</h1>
+		<div class="line text-center mt-3"></div>
+		<div th:replace="~{fragments::search_form('/members', 'member')}"></div>
+		<div class="list-members">
+			<div class="row d-flex flex-wrap">
+				<th:block th:each="memberProfile : ${listMemberLabProfiles}">
+					<div class="col-md-4 mt-3">
+						<div
+							class="card rounded-3"
+							style="height: 100%"
+						>
+							<img
+								th:src="@{${memberProfile.avatarPath}}"
+								class="card-img-top square"
+								alt="member-photo"
+							>
+							<div class="card-body">
+								<h5 class="card-title">[[${memberProfile.user.fullName}]]</h5>
+								<div
+									class="member-organization"
+								
+								>
+									<p class="card-text">[[${memberProfile.academicRank}]]</p>
+									<p class="card-text p-limit-2">[[${memberProfile.currentOrganization}]]</p>
+									<p class="card-text fst-italic ellipsis-content">[[${memberProfile.researchInterests}]]</p>
+									<p class="card-text">([[${memberProfile.displayPeriod}]])</p>
+
+								<a
+									th:href="@{'/members/details/' + ${memberProfile.id}}"
+									class="btn btn-primary btn-details-member"
+								>Details</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</th:block>
+
+			</div>
+		</div>
+		<div th:replace="~{fragments::pagination('/members', 'members')}"></div>
+		<div th:replace="~{fragments::footer}"></div>
+	</div>
+	
+	<script type="text/javascript">
+		const moduleURL = "[[@{/members}]]";
+	</script>
+</body>
+</html>

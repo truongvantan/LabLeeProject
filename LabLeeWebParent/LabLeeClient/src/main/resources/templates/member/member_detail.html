@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Member Detail', 'none')}" />
+<body>
+	<div th:replace="~{navigation::menu}"></div>
+	<div class="container mt-5">
+		<h1 class="text-center mt-5">[[${memberLabProfile.user.fullName}]]</h1>
+		<h4 class="text-center">[[${memberLabProfile.currentOrganization}]]</h4>
+		<p class="text-center fst-italic">[[${memberLabProfile.researchInterests}]]</p>
+		<article
+			th:utext="${memberLabProfile.bio}"
+		></article>
+
+	</div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Danh sách thành viên', 'none')}" />
+<body>
+	<div class="container-fluid">
+		<div th:replace="~{navigation::menu}"></div>
+		<h1 class="text-center mt-5">Danh sách thành viên Lab</h1>
+		<div th:replace="~{fragments::alert_message_box}"></div>
+		<a
+			th:href="@{/members/showAdd}"
+			class="btn btn-primary"
+		>Thêm mới</a>
+		<div th:replace="~{fragments::search_form('/members', 'thành viên')}"></div>
+		<table class="table table-responsive-xl table-bordered table-hover">
+			<thead>
+				<tr>
+					<th th:replace="~{fragments::column_link('/members', 'id', 'ID profile')}" />
+					<th scope="col">Avatar</th>
+					<!-- <th th:replace="~{fragments::column_link('/members', 'fullName', 'Họ tên')}" /> -->
+					<th scope="col">Họ và tên</th>
+					<th th:replace="~{fragments::column_link('/members', 'emailPublic', 'Email Public')}" />
+					<th
+						th:replace="~{fragments::column_link('/members', 'researchInterests', 'Lĩnh vực nghiên cứu')}"
+					/>
+					<th scope="col">Ngày vào lab</th>
+					<th scope="col">Ngày tốt nghiệp</th>
+					<th th:replace="~{fragments::column_link('/members', 'enabled', 'Enabled')}" />
+					<th scope="col">Activities</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="memberLabDTO : ${listMemberLabDTOs}">
+					<td>[[${memberLabDTO.id}]]</td>
+					<td class="d-flex justify-content-center align-items-center">
+						<span
+							th:if="${memberLabDTO.avatar == null}"
+							class="fa-solid fa-user fa-3x"
+						></span>
+						<img
+							width="80px"
+							height="80px"
+							th:if="${memberLabDTO.avatar != null}"
+							th:src="@{${memberLabDTO.avatarPath}}"
+						/>
+					</td>
+					<td>[[${memberLabDTO.user.fullName}]]</td>
+					<td>[[${memberLabDTO.emailPublic}]]</td>
+					<td>[[${memberLabDTO.researchInterests}]]</td>
+					<td>[[${memberLabDTO.joinDate}]]</td>
+					<td>[[${memberLabDTO.leaveDate}]]</td>
+					<td>
+						<div
+							th:replace="~{fragments::enabled_status(${memberLabDTO.enabled}, 'hồ sơ thành viên', '/members/' + ${memberLabDTO.id}, ${memberLabDTO.id})}"
+						></div>
+					</td>
+					<td>
+						<div
+							th:replace="~{fragments::edit('thành viên lab', '/members/showEdit/' + ${memberLabDTO.id})}"
+						></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div th:replace="~{fragments::pagination('/members', 'members')}"></div>
+
+		<div th:replace="~{fragments::confirm_modal}"></div>
+		<div th:replace="~{fragments::footer}"></div>
+
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/members}]]";
+
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+		
+		$(document).ready(function() {
+			$(".link-enabled-true").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'hồ sơ thành viên lab', 'Bạn muốn mở khóa');
+			});
+			
+			$(".link-enabled-false").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'hồ sơ thành viên lab', 'Bạn chắc chắn muốn khóa');
+			});
+		});
+
+	</script>
+</body>
+</html>

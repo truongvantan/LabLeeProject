@@ -24,8 +24,10 @@ public class FileUploadUtil {
 		
 		try {
 			InputStream inputStream = multipartFile.getInputStream();
-			Path filePath = uploadPath.resolve(fileName);
-			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+			if (fileName != null) {
+				Path filePath = uploadPath.resolve(fileName);
+				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);	
+			}
 		} catch (IOException e) {
 			LOGGER.error("Could not save file: " + fileName);
 			throw new IOException("Could not save file: " + fileName, e);

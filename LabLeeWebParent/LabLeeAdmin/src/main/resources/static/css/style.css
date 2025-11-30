@@ -6,22 +6,63 @@
 }
 
 body {
-    margin-bottom:50px;
+	margin-bottom: 50px;
 }
 
-*.icon-white{color: white;}
-*.icon-dark {color: gray;}
-*.icon-green {color: #65B741;}
-*.icon-silver {color: silver;}
-*.icon-red {color: red;}
-*.icon-blue {color: #4942E4;}
-*.icon-yellow {color: #FFA700;}
+*.icon-white {
+	color: white;
+}
+
+*.icon-dark {
+	color: gray;
+}
+
+*.icon-green {
+	color: #65B741;
+}
+
+*.icon-silver {
+	color: silver;
+}
+
+*.icon-red {
+	color: red;
+}
+
+*.icon-blue {
+	color: #4942E4;
+}
+
+*.icon-yellow {
+	color: #FFA700;
+}
 
 #footer {
-    position: fixed;
-    height: 50px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    margin-bottom: 0px;
+	/* position: fixed;
+	height: 50px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	margin-bottom: 0px; */
+}
+
+.truncate-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.editor-wrapper {
+    width: 100%;             /* Chiều rộng wrapper */
+    max-width: 1000px;       /* Giới hạn tối đa */
+    margin: auto;
+}
+
+.ck-editor {
+    width: 100%;             /* Chiều rộng editor */
+}
+
+.ck-editor__editable_inline {
+    min-height: 400px;       /* Chiều cao vùng soạn thảo */
+    font-size: 14px;
 }

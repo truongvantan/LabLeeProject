@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@EntityScan({"com.lablee.common.entity", "com.lablee.admin.user"})
+@EntityScan({"com.lablee.common.entity", "com.lablee.admin.repository"})
 public class LabLeeAdminApplication {
 
 	public static void main(String[] args) {

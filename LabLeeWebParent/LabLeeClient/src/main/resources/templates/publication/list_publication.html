@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('List Publications', 'none')}" />
+<body>
+	<div th:replace="~{navigation::menu}"></div>
+	<div class="container">
+		<h1 class="text-center mt-3">Publications</h1>
+		<div class="line text-center mt-3"></div>
+		<div th:replace="~{fragments::search_form('/publications', 'publication')}"></div>
+		<th:block th:each="publication : ${listPublications}">
+			<div class="row mt-5">
+				<div class="row d-flex mt-2">
+					<div class="col-md-12">
+						<p class="fw-bold" style="font-size: 23px;">[[${publication.id}]]. [[${publication.title}]]</p>
+					</div>
+				</div>
+				<div class="row d-flex">
+					<div class="col-md-12 publication-cite">
+						<th:block th:utext="${publication.cite}"></th:block>
+					</div>
+				</div>
+				<div class="row d-flex">
+					<div class="col-md-12 d-flex justify-content-center">
+						<img
+							alt="thumbnail"
+							width="300px"
+							th:src="@{${publication.thumbnailPath}}"
+							style="border: 1px solid black;"
+						>
+					</div>
+				</div>
+				<div class="row d-flex">
+					<div class="col-md-12 publication-abstract">
+						<th:block th:utext="${publication.publicationAbstract}"></th:block>
+					</div>
+				</div>
+				<div class="row d-flex">
+					<div class="col-md-12">
+						Details:
+						<a
+							class="fw-bold"
+							th:href="${publication.doiLink}"
+						>[[${publication.doiLink}]]</a>
+					</div>
+				</div>
+			</div>
+		</th:block>
+		<div th:replace="~{fragments::pagination('/publications', 'publications')}"></div>
+		<div th:replace="~{fragments::footer}"></div>
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/publications}]]";
+	</script>
+</body>
+</html>

@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Lab Lee Client</title>
-</head>
+<html
+	xmlns:th="http://www.thymeleaf.org"
+>
+<head th:replace="~{fragments :: page_head('Trang chủ', 'none')}" />
 <body>
-	<h1>Lab lee client page</h1>
+	<div class="container-fluid">
+		<div th:replace="~{navigation::menu}"></div>
+		<h1>Lab lee client home page</h1>
+	
+	</div>
 </body>
 </html>

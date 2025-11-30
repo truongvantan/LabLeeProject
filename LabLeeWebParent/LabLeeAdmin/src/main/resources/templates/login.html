@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Đăng nhập', 'none')}" />
+<body>
+	<div class="container-fluid h-100">
+		<div th:replace="~{fragments::alert_message_box}"></div>
+		<div class="row justify-content-sm-center h-100">
+			<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+				<div class="text-center my-5">
+					<img
+						th:src="@{/images/logo.jpg}"
+						alt="logo"
+						width="100"
+						height="100"
+					>
+				</div>
+				<div class="card shadow-lg">
+					<div class="card-body p-5">
+						<h1 class="fs-4 card-title fw-bold mb-4 text-center">Login</h1>
+						<div th:if="${param.error}">
+							<p class="text-danger text-center fw-bold">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+						</div>
+						<div th:if="${param.logout}">
+							<p class="text-warning text-center fw-bold">Bạn đã đăng xuất. Vui lòng đăng nhập để sử
+								dụng hệ thống</p>
+						</div>
+						<form
+							th:action="@{/login}"
+							method="POST"
+						>
+							<div class="mb-3">
+								<label
+									class="mb-2 text-muted"
+									for="email"
+								>Email</label>
+								<input
+									id="email"
+									type="email"
+									class="form-control"
+									name="email"
+									value=""
+									required
+									autofocus
+								>
+							</div>
+
+							<div class="mb-3">
+								<div class="mb-2 w-100">
+									<label
+										class="text-muted"
+										for="password"
+									>Password</label>
+								</div>
+								<input
+									id="password"
+									type="password"
+									class="form-control"
+									name="password"
+									required
+								>
+							</div>
+
+							<div class="d-flex align-items-center">
+								<div class="form-check">
+									<input
+										class="form-check-input me-2"
+										type="checkbox"
+										name="remember-me"
+										id="rememberMe"
+									>
+									<label
+										class="form-check-label"
+										for="rememberMe"
+									>Ghi nhớ đăng nhập</label>
+								</div>
+							</div>
+							<div class="d-flex justify-content-center">
+								<button
+									type="submit"
+									class="btn btn-primary"
+								>Login</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div th:replace="~{fragments::footer}"></div>
+	</div>
+</body>
+</html>

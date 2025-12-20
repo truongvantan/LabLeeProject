@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "roles")
@@ -20,7 +19,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

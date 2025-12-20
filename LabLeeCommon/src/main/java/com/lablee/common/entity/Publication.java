@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "publications")
@@ -23,7 +22,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Publication {
 
 	@Id
@@ -42,6 +40,9 @@ public class Publication {
 	private String thumbnail;
 
 	private boolean enabled;
+	
+	@Column(columnDefinition = "CHAR(4)", nullable = true)
+	private String publishYear;
 
 	@Override
 	public int hashCode() {

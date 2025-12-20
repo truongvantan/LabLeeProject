@@ -21,7 +21,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "member_profiles")
@@ -29,7 +28,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class MemberLabProfile {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,6 +63,7 @@ public class MemberLabProfile {
 	@JoinColumn(name = "user_id", nullable = false, unique = true)
 	private User user;
 
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -81,6 +80,11 @@ public class MemberLabProfile {
 		MemberLabProfile other = (MemberLabProfile) obj;
 		return Objects.equals(id, other.id);
 	}
+	
+	@Transient
+	public String getFullName() {
+		return user.getFullName();
+	}
 
 	@Transient
 	public String getAvatarPath() {
@@ -91,7 +95,7 @@ public class MemberLabProfile {
 		return new StringBuffer(ConstantUtil.PATH_MEMBER_LAB_AVATAR_STORED_DEFAULT).append(this.id).append("/")
 				.append(this.avatar).toString();
 	}
-
+	
 	@Transient
 	public String getDisplayPeriod() {
 		DateTimeFormatter fmt = DateTimeFormatter.ofPattern(ConstantUtil.FORMAT_DISPLAY_PERIOD_MEMBER_MM_YYYY);

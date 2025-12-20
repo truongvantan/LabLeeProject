@@ -12,17 +12,17 @@ import lombok.Data;
 @Data
 public class UserFormAddDTO {
 	
-	@Pattern(regexp = ConstantUtil.REGEX_EMAIL, message = ConstantUtil.MESSAGE_VALIDATION_EMAIL_FAIL)
+	@Pattern(regexp = ConstantUtil.REGEX_EMAIL, message = ConstantUtil.MESSAGE_FAIL_VALIDATION_EMAIL)
 	private String email;
 	
-	@NotBlank(message = ConstantUtil.MESSAGE_VALIDATION_BLANK_INPUT_TEXT_FAIL)
-	@Size(max = 128, message = ConstantUtil.MESSAGE_VALIDATION_MAX_SIZE_INPUT_TEXT_128_FAIL)
+	@NotBlank(message = ConstantUtil.MESSAGE_FAIL_VALIDATION_BLANK_INPUT_TEXT)
+	@Size(max = 128, message = ConstantUtil.MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_128)
 	private String fullName;
 	
-	@Pattern(regexp = ConstantUtil.REGEX_PASSWORD_20, message = ConstantUtil.MESSAGE_VALIDATION_PASSWORD_20_FAIL)
+	@Pattern(regexp = ConstantUtil.REGEX_PASSWORD_20, message = ConstantUtil.MESSAGE_FAIL_VALIDATION_PASSWORD_20)
 	private String password;
 	
-	@Pattern(regexp = ConstantUtil.REGEX_PASSWORD_20, message = ConstantUtil.MESSAGE_VALIDATION_PASSWORD_20_FAIL)
+	@Pattern(regexp = ConstantUtil.REGEX_PASSWORD_20, message = ConstantUtil.MESSAGE_FAIL_VALIDATION_PASSWORD_20)
 	private String repassword;
 	private String photo;
 	private boolean enabled;

@@ -12,6 +12,8 @@ $(document).ready(function() {
 			this.setCustomValidity("");
 			showImageThumbnail(this);
 			showImageThumbnailPublication(this);
+			showImageThumbnailProject(this)
+			showImageThumbnailNews(this)
 		}
 	});
 	
@@ -31,6 +33,24 @@ function showImageThumbnailPublication(fileInput) {
 	const reader = new FileReader();
 	reader.onload = function(e) {
 		$("#thumbnailPublication").attr("src", e.target.result);
+	}
+	reader.readAsDataURL(file);
+}
+
+function showImageThumbnailProject(fileInput) {
+	const file = fileInput.files[0];
+	const reader = new FileReader();
+	reader.onload = function(e) {
+		$("#thumbnailProject").attr("src", e.target.result);
+	}
+	reader.readAsDataURL(file);
+}
+
+function showImageThumbnailNews(fileInput) {
+	const file = fileInput.files[0];
+	const reader = new FileReader();
+	reader.onload = function(e) {
+		$("#thumbnailNews").attr("src", e.target.result);
 	}
 	reader.readAsDataURL(file);
 }

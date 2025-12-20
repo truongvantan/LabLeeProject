@@ -49,7 +49,8 @@
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item">
 							<a
-								class="nav-link active"
+								class="nav-link"
+								th:classappend="${activeLink == '/' ? 'active' : ''}"
 								aria-current="page"
 								th:href="@{/}"
 							>Trang chủ</a>
@@ -61,6 +62,7 @@
 						>
 							<a
 								class="nav-link"
+								th:classappend="${activeLink == '/users' ? 'active' : ''}"
 								th:href="@{/users}"
 							>Người dùng</a>
 						</li>
@@ -71,6 +73,7 @@
 						>
 							<a
 								class="nav-link"
+								th:classappend="${activeLink == '/members' ? 'active' : ''}"
 								th:href="@{/members}"
 							>Thành viên</a>
 						</li>
@@ -81,6 +84,7 @@
 						>
 							<a
 								class="nav-link"
+								th:classappend="${activeLink == '/publications' ? 'active' : ''}"
 								th:href="@{/publications}"
 							>Bài báo</a>
 						</li>
@@ -91,6 +95,7 @@
 						>
 							<a
 								class="nav-link"
+								th:classappend="${activeLink == '/projects' ? 'active' : ''}"
 								th:href="@{/projects}"
 							>Dự án</a>
 						</li>
@@ -101,8 +106,20 @@
 						>
 							<a
 								class="nav-link"
-								th:href="@{/activities}"
-							>Hoạt động</a>
+								th:classappend="${activeLink == '/news' ? 'active' : ''}"
+								th:href="@{/news}"
+							>Bài đăng</a>
+						</li>
+						
+						<li
+							class="nav-item"
+							sec:authorize="hasAuthority('Root Admin')"
+						>
+							<a
+								class="nav-link"
+								th:classappend="${activeLink == '/settings' ? 'active' : ''}"
+								th:href="@{/settings}"
+							>Cài đặt chung</a>
 						</li>
 
 						<li class="nav-item dropdown">

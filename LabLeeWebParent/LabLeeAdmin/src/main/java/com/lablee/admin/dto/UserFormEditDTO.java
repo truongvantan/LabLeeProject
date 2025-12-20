@@ -14,11 +14,11 @@ import lombok.Data;
 public class UserFormEditDTO {
 	private Integer id;
 	
-	@Pattern(regexp = ConstantUtil.REGEX_EMAIL, message = ConstantUtil.MESSAGE_VALIDATION_EMAIL_FAIL)
+	@Pattern(regexp = ConstantUtil.REGEX_EMAIL, message = ConstantUtil.MESSAGE_FAIL_VALIDATION_EMAIL)
 	private String email;
 	
-	@NotBlank(message = ConstantUtil.MESSAGE_VALIDATION_BLANK_INPUT_TEXT_FAIL)
-	@Size(max = 128, message = ConstantUtil.MESSAGE_VALIDATION_MAX_SIZE_INPUT_TEXT_128_FAIL)
+	@NotBlank(message = ConstantUtil.MESSAGE_FAIL_VALIDATION_BLANK_INPUT_TEXT)
+	@Size(max = 128, message = ConstantUtil.MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_128)
 	private String fullName;
 	
 	private String password;

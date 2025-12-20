@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html
-	xmlns:th="http://www.thymeleaf.org"
->
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head
 	th:fragment="page_head(title, remove)"
@@ -16,7 +14,7 @@
 	content="width=device-width,initial-scale=1.0, minimum-scale=1.0"
 />
 
-<title>[[${title}]]</title>
+<title>[[${SITE_LAB_NAME}]] - [[${title}]]</title>
 <link
 	rel="preconnect"
 	href="https://fonts.googleapis.com"
@@ -27,9 +25,9 @@
 	crossorigin
 />
 <link
-	href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+	href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
 	rel="stylesheet"
-/>
+>
 <link
 	rel="stylesheet"
 	type="text/css"
@@ -46,6 +44,16 @@
 	type="text/css"
 	th:href="@{/css/style.css}"
 />
+<link
+	rel="stylesheet"
+	type="text/css"
+	th:href="@{/css/global.css}"
+/>
+<link
+	rel="stylesheet"
+	type="text/css"
+	th:href="@{/css/index.css}"
+/>
 <script
 	type="text/javascript"
 	th:src="@{/webjars/jquery/jquery.min.js}"
@@ -61,21 +69,209 @@
 </head>
 
 <body>
-	<!-- ============================== Column Table Sort Link ============================================= -->
-	<th
-		scope="col"
-		th:fragment="column_link(moduleURL, fieldName, columnLabel)"
+	<!-- ============================== Header ============================================= -->
+	<section
+		th:fragment="header"
+		id="header"
 	>
-		<a
-			class="link-underline-opacity-75-hover"
-			th:href="@{${moduleURL} + '/page/' + ${currentPageNumber} + '?sortField=' + ${fieldName} +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}"
-		>[[${columnLabel}]]</a>
-		<span
-			th:if="${sortField == fieldName}"
-			th:class="${sortDir == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}"
-		></span>
-	</th>
-	<!-- ============================== END Column Table Sort Link ============================================= -->
+		<nav
+			class="navbar navbar-expand-md navbar-light bg_light"
+			id="navbar_sticky"
+		>
+			<div class="container-xl">
+				<a
+					class="text-black p-0 navbar-brand fw-bold"
+					th:href="@{/}"
+				>
+					<img
+						alt="logo"
+						th:src="@{${SITE_LOGO}}"
+						width="50"
+						height="50"
+					>
+					[[${SITE_LAB_NAME}]]
+				</a>
+				<button
+					class="navbar-toggler"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div
+					class="collapse navbar-collapse"
+					id="navbarSupportedContent"
+				>
+					<ul class="navbar-nav mb-0 ms-auto">
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:classappend="${activeLink == '/' ? 'active' : ''}"
+								aria-current="page"
+								th:href="@{/}"
+							>Home</a>
+						</li>
+
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:classappend="${activeLink == '/members' ? 'active' : ''}"
+								th:href="@{/members}"
+							>Members</a>
+						</li>
+
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:classappend="${activeLink == '/publications' ? 'active' : ''}"
+								th:href="@{/publications}"
+							>Publications</a>
+						</li>
+
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:classappend="${activeLink == '/projects' ? 'active' : ''}"
+								th:href="@{/projects}"
+							>Projects</a>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:classappend="${activeLink == '/news' ? 'active' : ''}"
+								th:href="@{/news}"
+							>News</a>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:classappend="${activeLink == '/about-us' ? 'active' : ''}"
+								th:href="@{/about-us}"
+							>About us</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</section>
+	<!-- ============================== END header ============================================= -->
+
+	<!-- ============================== Footer ============================================= -->
+	<section
+		th:fragment="footer"
+		id="footer"
+		class="p_3 bg_light"
+	>
+		<div class="container-xl">
+			<p class="text-center h4">[[${SITE_LAB_NAME_DETAILS}]] - [[${CONTACT_NAME_UNIVERSITY}]]</p>
+			<div class="footer_1 row mt-3">
+				<div class="col-md-3 d-flex align-items-center justify-content-center">
+					<div class="footer_1i">
+						<h4 class="mb-3">
+							<a
+								class="text-black"
+								th:href="@{/}"
+							>
+								<img
+									alt="logo"
+									th:src="@{${SITE_LOGO}}"
+									width="50"
+									height="50"
+								>
+								[[${SITE_LAB_NAME}]]
+							</a>
+						</h4>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="footer_1i">
+						<h5 class="mb-3">Quick Links</h5>
+						<div class="row footer_3ism">
+							<h6 class="col-md-12 col-6">
+								<a th:href="@{/members}">
+									<i class="fa fa-circle col_blue me-1 font_8"></i>
+									Members
+								</a>
+							</h6>
+							<h6 class="col-md-12 col-6 mt-2">
+								<a th:href="@{/publications}">
+									<i class="fa fa-circle col_blue me-1 font_8"></i>
+									Publications
+								</a>
+							</h6>
+							<h6 class="col-md-12 col-6 mt-2">
+								<a th:href="@{/projects}">
+									<i class="fa fa-circle col_blue me-1 font_8"></i>
+									Projects
+								</a>
+							</h6>
+							<h6 class="col-md-12 col-6 mt-2 mb-0">
+								<a th:href="@{/news}">
+									<i class="fa fa-circle col_blue me-1 font_8"></i>
+									News
+								</a>
+							</h6>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="footer_1i">
+						<h5 class="mb-3">Resources</h5>
+						<div class="row footer_3ism">
+							<h6 class="col-md-12 col-6">
+								<a th:href="${LINK_WEBSITE_UNIVERSITY}">
+									<i class="fa fa-circle col_blue me-1 font_8"></i>
+									[[${CONTACT_NAME_UNIVERSITY}]]
+								</a>
+							</h6>
+							<h6 class="col-md-12 col-6 mt-2 mb-0">
+								<a th:href="${LINK_WEBSITE_DEPARTMENT}">
+									<i class="fa fa-circle col_blue me-1 font_8"></i>
+									[[${CONTACT_NAME_DEPARTMENT}]]
+								</a>
+							</h6>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="footer_1i">
+						<h5 class="mb-3">Contact Information</h5>
+						<h6>
+							<i class="fa fa-phone-square col_blue me-1"></i>
+							Office: [[${CONTACT_PHONE_NUMBER}]]
+						</h6>
+						<h6 class="mt-3">
+							<i class="fa fa-envelope col_blue me-1"></i>
+							[[${CONTACT_EMAIL}]]
+						</h6>
+						<h6 class="mt-3">
+							<i class="fa fa-map col_blue me-1"></i>
+							[[${CONTACT_ADDRESS}]]
+						</h6>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div class="footer_2 row text-center">
+				<div class="col-md-12">
+					<p class="mb-0">
+						©
+						<span th:text="${#dates.year(#dates.createNow())}"></span>
+						[[${COPYRIGHT}]]
+						<a
+							class="col_blue fw-bold"
+							th:href="${LINK_WEBSITE_UNIVERSITY}"
+						>[[${CONTACT_NAME_UNIVERSITY_ABBREVIATION}]]</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- ============================== END Footer ============================================= -->
 
 	<!-- ============================== Pagination ============================================= -->
 	<div
@@ -149,7 +345,8 @@
 		class="row my-3"
 	>
 		<form
-			class="col-sm-4 d-flex align-items-center"
+			id="search-form"
+			class="col-sm-4 d-flex align-items-center w-100"
 			th:action="@{${moduleURL} + '/page/1'}"
 		>
 			<input
@@ -192,16 +389,6 @@
 	</div>
 	<!-- ============================== END Search Form ============================================= -->
 
-	<!-- ============================== Footer ============================================= -->
-	<div
-		th:fragment="footer"
-		id="footer"
-		class="text-center m-3"
-	>
-		<p>Lab ông Tuyến - Copyright &copy; Lab Lee</p>
-	</div>
-	<!-- ============================== END Footer ============================================= -->
-
 	<!-- ============================== Confirm Modal ============================================= -->
 	<div
 		th:fragment="confirm_modal"
@@ -239,39 +426,6 @@
 	</div>
 	<!-- ============================== END Confirm Modal  ============================================= -->
 
-	<!-- ============================== Edit Button ============================================= -->
-	<div
-		th:fragment="edit(entityName, editURL)"
-		th:remove="tag"
-	>
-		<a
-			th:href="@{${editURL}}"
-			class="fa-solid fa-pen-to-square fa-xl icon-green"
-			data-bs-toggle="tooltip"
-			data-bs-placement="top"
-			th:title="'Chỉnh sửa ' + ${entityName} + ' này'"
-		> </a>
-	</div>
-	<!-- ============================== END Edit Button  ============================================= -->
-
-	<!-- ============================== Delete Button  ============================================= -->
-	<div
-		th:fragment="delete(entityName, entityId, deleteURL, visible)"
-		th:remove="tag"
-	>
-		<th:block th:if="${visible}">
-			<a
-				th:href="@{${deleteURL}}"
-				th:entityId="${entityId}"
-				class="fa-solid fa-trash fa-xl link-delete icon-red"
-				data-bs-toggle="tooltip"
-				data-bs-placement="top"
-				th:title="'Xóa ' + ${entityName} + ' này'"
-			> </a>
-		</th:block>
-	</div>
-	<!-- ============================== END Delete Button  ============================================= -->
-
 	<!-- ============================== Alert Message Box  ============================================= -->
 	<div
 		th:fragment="alert_message_box"
@@ -289,59 +443,6 @@
 		</div>
 	</div>
 	<!-- ============================== END Alert Message Box ============================================= -->
-
-
-	<!-- ============================== Enabled Status Button  ============================================= -->
-	<div
-		th:fragment="enabled_status(enabled, entityName, entityURL, entityId)"
-		th:remove="tag"
-	>
-		<a
-			th:if="${enabled == true}"
-			th:entityId="${entityId}"
-			class="link-enabled-false fa-solid fa-toggle-on fa-xl icon-blue"
-			data-bs-toggle="tooltip"
-			data-bs-placement="top"
-			th:title="'Khóa ' + ${entityName} + ' này'"
-			th:href="@{${entityURL} + '/enabled/false'}"
-		></a>
-		<a
-			th:if="${enabled == false}"
-			th:entityId="${entityId}"
-			class="link-enabled-true fa-solid fa-toggle-off fa-xl icon-silver"
-			data-bs-toggle="tooltip"
-			data-bs-placement="top"
-			th:title="'Mở khóa ' + ${entityName} + ' này'"
-			th:href="@{${entityURL} + '/enabled/true'}"
-		></a>
-	</div>
-	<!-- ============================== END Enabled Status Button  ============================================= -->
-
-	<!-- ============================== Deleted Status Button  ============================================= -->
-	<div
-		th:fragment="deleted_status(delected, entityName, entityURL, entityId)"
-		th:remove="tag"
-	>
-		<a
-			th:if="${delected == true}"
-			th:entityId="${entityId}"
-			class="link-deleted-false fa-solid fa-toggle-on fa-xl icon-blue"
-			data-bs-toggle="tooltip"
-			data-bs-placement="top"
-			th:title="'Hoàn tác xóa ' + ${entityName} + ' này'"
-			th:href="@{${entityURL} + '/deleted/false'}"
-		></a>
-		<a
-			th:if="${delected == false}"
-			th:entityId="${entityId}"
-			class="link-deleted-true fa-solid fa-toggle-off fa-xl icon-silver"
-			data-bs-toggle="tooltip"
-			data-bs-placement="top"
-			th:title="'Xóa ' + ${entityName} + ' này'"
-			th:href="@{${entityURL} + '/deleted/true'}"
-		></a>
-	</div>
-	<!-- ============================== END Deleted Status Button  ============================================= -->
 
 </body>
 </html>

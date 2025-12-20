@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('List Projects', 'none')}" />
+<body>
+	<section th:replace="~{fragments::header}"></section>
+	<div class="container">
+		<h1 class="text-center mt-3 text-header-color-common">Projects</h1>
+		<div class="line-break-common-5px text-center mt-3"></div>
+
+		<div th:replace="~{fragments::search_form('/projects', 'projects')}"></div>
+		<th:block th:each="project : ${listProjects}">
+			<div class="row">
+				<div class="row d-flex mt-2">
+					<div class="col-md-12">
+						<a
+							th:href="@{'/projects/details/' + ${project.id}}"
+							class="fw-bold h3"
+						>[[${project.endDate}]]: [[${project.title}]]</a>
+					</div>
+				</div>
+				<div class="row d-flex mt-2">
+					<div
+						class="col-md-12"
+						style="font-size: 23px;"
+					>
+						<label class="fw-bold">Member:</label>
+						<p
+							class="fst-italic mx-2"
+							style="display: inline-block;"
+						>[[${project.listMemberName}]]</p>
+					</div>
+				</div>
+				<div class="row d-flex mt-2">
+					<div
+						class="col-md-12"
+						style="font-size: 23px;"
+					>
+						<label class="fw-bold">Sponsor:</label>
+						<p
+							class="fst-italic mx-2"
+							style="display: inline-block;"
+						>[[${project.sponsor}]]</p>
+					</div>
+				</div>
+				<div class="row d-flex my-3">
+					<div class="col-md-12 d-flex justify-content-center">
+						<figure class="rectangle-thumbnail-container image-hover-scale">
+							<a th:href="@{'/projects/details/' + ${project.id}}">
+								<img
+									alt="thumbnail"
+									th:src="@{${project.thumbnailPath}}"
+									class="img-thumbnail"
+								>
+							</a>
+						</figure>
+					</div>
+				</div>
+				<div class="row d-flex">
+					<div class="col-md-12 project-abstract p-limit-5">
+						<th:block th:utext="${project.projectAbstract}"></th:block>
+					</div>
+				</div>
+				<div class="row d-flex mt-2">
+					<div class="col-md-12">
+						<a
+							class="button_1 pt-2 pb-2"
+							th:href="@{'/projects/details/' + ${project.id}}"
+						>View details</a>
+					</div>
+				</div>
+			</div>
+			<div class="line-break-common-2px text-center mt-3"></div>
+		</th:block>
+		<div th:replace="~{fragments::pagination('/projects', 'projects')}"></div>
+		<div th:replace="~{fragments::footer}"></div>
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/projects}]]";
+	</script>
+</body>
+</html>

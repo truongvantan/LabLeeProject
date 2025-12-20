@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Project Detail', 'none')}" />
+<body>
+	<section th:replace="~{fragments::header}"></section>
+	<div class="container mt-5">
+		<h1 class="text-center mt-3">Our Projects</h1>
+		<div class="line-break-common-5px text-center mt-3"></div>
+		<div th:replace="~{fragments::search_form('/projects', 'project')}"></div>
+		<h2
+			class="text-center mt-5"
+			style="font-size: 50px"
+		>[[${project.title}]]</h2>
+		<p
+			class="text-center fst-italic"
+			style="font-size: 20px"
+		>[[${project.listMemberName}]]</p>
+
+		<p
+			class="fw-bold text-center"
+			style="font-size: 35px;"
+		>Sponsor: [[${project.sponsor}]]
+		<p>
+		<p
+			class="fw-bold"
+			style="font-size: 30px"
+		>Abstract
+		<p>
+		<div
+			style="font-size: 1.1rem;"
+			th:utext="${project.projectAbstract}"
+		></div>
+		<div class="line-break-common-2px text-center mt-3"></div>
+		<article
+			class="mt-4"
+			style="font-size: 1.1rem;"
+			th:utext="${project.content}"
+		></article>
+
+
+		<div th:replace="~{fragments::footer}"></div>
+	</div>
+	<script type="text/javascript">
+		const moduleURL = "[[@{/projects}]]";
+	</script>
+</body>
+</html>

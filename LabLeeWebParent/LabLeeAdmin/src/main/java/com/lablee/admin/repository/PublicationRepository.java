@@ -12,22 +12,17 @@ import com.lablee.common.entity.Publication;
 @Repository
 public interface PublicationRepository extends JpaRepository<Publication, Integer> {
 
-	@Query(value = """
-			SELECT *
-			FROM publications
+	@Query("""
+			SELECT p
+			FROM Publication p
 			WHERE
-			  -- Match ID if keyword is numeric
-			  (CAST(:keyword AS TEXT) ~ '^[0-9]+$' AND id = CAST(:keyword AS INTEGER))
-			  OR
-			  -- ILIKE for partial match
-			  title ILIKE CONCAT('%', :keyword, '%')
-			  OR cite ILIKE CONCAT('%', :keyword, '%')
-			  OR doi_link ILIKE CONCAT('%', :keyword, '%')
-			  OR publication_abstract ILIKE CONCAT('%', :keyword, '%')
-			  OR
-			  -- Full-text search (if text)
-			  (to_tsvector('english', coalesce(title,'') || ' ' || coalesce(cite,'') || ' ' || coalesce(doi_link,'') || ' ' || coalesce(publication_abstract,'')) @@ plainto_tsquery('english', :keyword))
-			""", nativeQuery = true)
+				CONCAT(p.id, '') LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(p.cite) LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(p.doiLink) LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(p.publicationAbstract) LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(p.publishYear) LIKE LOWER(CONCAT('%', :keyword, '%'))
+			""")
 	Page<Publication> findAll(@Param("keyword") String keyword, Pageable pageable);
 
 }

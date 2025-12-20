@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div
+		th:fragment="content"
+		th:remove="tag"
+	>
+		<div class="my-4">
+			<label>Abstract:</label>
+			<textarea
+				class="form-control tinymce-editor"
+				th:field="*{publicationAbstract}"
+				rows="10"
+			></textarea>
+			<span
+				th:if="${#fields.hasErrors('publicationAbstract')}"
+				th:errors="${publicationFormAddDTO.publicationAbstract}"
+				class="text-danger"
+			>Abstract Error</span>
+		</div>
+
+	</div>
+</body>
+</html>

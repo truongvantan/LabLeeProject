@@ -14,29 +14,23 @@ import com.lablee.common.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-	
+
 	@Query("SELECT u FROM User u JOIN FETCH u.setRoles WHERE u.email = :email")
 	Optional<User> findByEmail(@Param("email") String email);
 
 	List<User> findAllByOrderByIdAsc();
 
-	@Query(value = """
-			SELECT *
-			FROM users
+	@Query("""
+			SELECT u
+			FROM User u
 			WHERE
-			  -- Match ID if keyword is numeric
-			  (CAST(:keyword AS TEXT) ~ '^[0-9]+$' AND id = CAST(:keyword AS INTEGER))
-			  OR
-			  -- ILIKE for partial match
-			  email ILIKE CONCAT('%', :keyword, '%')
-			  OR full_name ILIKE CONCAT('%', :keyword, '%')
-			  OR
-			  -- Full-text search (if text)
-			  (to_tsvector('english', coalesce(email,'') || ' ' || coalesce(full_name,'')) @@ plainto_tsquery('english', :keyword))
-			""", nativeQuery = true)
+				CONCAT(u.id, '') LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%'))
+			""")
 	Page<User> findAll(@Param("keyword") String keyword, Pageable pageable);
-	
-	@Query(value="""
+
+	@Query(value = """
 			SELECT u.*
 			FROM users u
 			INNER JOIN users_roles ur ON u.id = ur.user_id

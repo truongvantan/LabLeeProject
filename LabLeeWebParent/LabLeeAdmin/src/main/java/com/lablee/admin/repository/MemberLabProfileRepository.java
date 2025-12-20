@@ -1,5 +1,6 @@
 package com.lablee.admin.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,22 +15,19 @@ import com.lablee.common.entity.MemberLabProfile;
 @Repository
 public interface MemberLabProfileRepository extends JpaRepository<MemberLabProfile, Integer> {
 
-	@Query(value = """
-			SELECT *
-			FROM member_profiles
+	@Query("""
+			SELECT m
+			FROM MemberLabProfile m
 			WHERE
-			  -- Match ID if keyword is numeric
-			  (CAST(:keyword AS TEXT) ~ '^[0-9]+$' AND id = CAST(:keyword AS INTEGER))
-			  OR
-			  -- ILIKE for partial match
-			  email_public ILIKE CONCAT('%', :keyword, '%')
-			  OR research_interests ILIKE CONCAT('%', :keyword, '%')
-			  OR current_organization ILIKE CONCAT('%', :keyword, '%')
-			  OR academic_rank ILIKE CONCAT('%', :keyword, '%')
-			  OR
-			  -- Full-text search (if text)
-			  (to_tsvector('english', coalesce(email_public,'') || ' ' || coalesce(research_interests,'') || ' ' || coalesce(current_organization,'') || ' ' || coalesce(academic_rank,'')) @@ plainto_tsquery('english', :keyword))
-			""", nativeQuery = true)
+				CONCAT(m.id, '') LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR CONCAT(m.joinDate, '') LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR CONCAT(m.leaveDate, '') LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(m.currentOrganization) LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(m.user.fullName) LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(m.emailPublic) LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(m.researchInterests) LIKE LOWER(CONCAT('%', :keyword, '%'))
+				OR LOWER(m.academicRank) LIKE LOWER(CONCAT('%', :keyword, '%'))
+			""")
 	Page<MemberLabProfile> findAll(@Param("keyword") String keyword, Pageable pageable);
 
 	@Query("""
@@ -37,5 +35,12 @@ public interface MemberLabProfileRepository extends JpaRepository<MemberLabProfi
 			WHERE m.id = :id
 			""")
 	Optional<MemberLabProfile> findByIdCustom(@Param("id") int id);
+	
+	@Query("""
+			SELECT m
+			FROM MemberLabProfile m
+			WHERE m.enabled = TRUE
+			""")
+	List<MemberLabProfile> findAllEnabled();
 
 }

@@ -21,7 +21,31 @@ import com.lablee.common.constant.ConstantUtil;
 public class ImageUploadController {
 	@PostMapping("/publication-image")
 	public ResponseEntity<Map<String, Object>> uploadPublicationImage(@RequestParam("upload") MultipartFile file) {
-		System.err.println("ImageUploadController");
+		return handleUploadImage(file, ConstantUtil.PATH_PUBLICATION_CONTENT_UPLOAD_DIR_DEFAULT, ConstantUtil.PATH_PUBLICATION_CONTENT_STORED_DEFAULT);
+	}
+	
+	@PostMapping("/project-image")
+	public ResponseEntity<Map<String, Object>> uploadProjectImage(@RequestParam("upload") MultipartFile file) {
+		return handleUploadImage(file, ConstantUtil.PATH_PROJECT_CONTENT_UPLOAD_DIR_DEFAULT, ConstantUtil.PATH_PROJECT_CONTENT_STORED_DEFAULT);
+	}
+	
+	@PostMapping("/member-bio-image")
+	public ResponseEntity<Map<String, Object>> uploadMemberBioImage(@RequestParam("upload") MultipartFile file) {
+		return handleUploadImage(file, ConstantUtil.PATH_MEMBER_LAB_BIO_UPLOAD_DIR_DEFAULT, ConstantUtil.PATH_MEMBER_LAB_BIO_STORED_DEFAULT);
+	}
+	
+	@PostMapping("/news-image")
+	public ResponseEntity<Map<String, Object>> uploadNewsImage(@RequestParam("upload") MultipartFile file) {
+		return handleUploadImage(file, ConstantUtil.PATH_NEWS_CONTENT_UPLOAD_DIR_DEFAULT, ConstantUtil.PATH_NEWS_CONTENT_STORED_DEFAULT);
+	}
+
+	private ResponseEntity<Map<String, Object>> handleUploadImage(MultipartFile file, String uploadDir, String uploadStoredPath) {
+		// validation file size
+		if (!FileUploadUtil.isValidFileSize(file)) {
+			return ResponseEntity.badRequest()
+					.body(Map.of("error", Map.of("message", "Dung lượng ảnh phải nhỏ hơn 1MB!")));
+		}
+		
 		Map<String, Object> response = new HashMap<>();
 		try {
 			if (file == null || file.isEmpty()) {
@@ -29,20 +53,16 @@ public class ImageUploadController {
 				System.err.println("ImageUploadController: File is empty");
 				return ResponseEntity.badRequest().body(response);
 			}
-
-			String uploadDir = ConstantUtil.PATH_PUBLICATION_CONTENT_UPLOAD_DIR_DEFAULT;
+			
 			String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
 			try {
 				if (file != null && !file.isEmpty()) {
 					FileUploadUtil.saveFile(uploadDir, fileName, file);
 
-					// URL truy cập từ trình duyệt (phải trùng ResourceHandler)
-					String fileUrl = ConstantUtil.PATH_PUBLICATION_CONTENT_STORED_DEFAULT + fileName;
-					response.put("url", fileUrl.substring(1));
-					System.out.println("url: " + fileUrl);
-					
-					System.out.println("Saved file to: " + fileUrl);
+					String fileUrl = uploadStoredPath + fileName;
+
+					response.put("url", fileUrl);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

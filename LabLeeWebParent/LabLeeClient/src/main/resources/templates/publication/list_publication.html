@@ -2,48 +2,71 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: page_head('List Publications', 'none')}" />
 <body>
-	<div th:replace="~{navigation::menu}"></div>
+	<section th:replace="~{fragments::header}"></section>
 	<div class="container">
-		<h1 class="text-center mt-3">Publications</h1>
-		<div class="line text-center mt-3"></div>
+		<h1 class="text-center mt-3 text-header-color-common">Publications</h1>
+		<div class="line-break-common-5px text-center mt-3"></div>
+
 		<div th:replace="~{fragments::search_form('/publications', 'publication')}"></div>
+		<div class="row">
+			<div class="col-12">
+				<label class="fw-bold">Publish Year:</label>
+				<select
+					id="sort-select"
+					class="form-select w-25"
+				>
+					<th:block th:each="sortDirValue : ${listSortDir}">
+						<option
+							th:value="${sortDirValue}"
+							th:selected="(${sortDir} == ${sortDirValue})"
+						>[[${sortDirValue}]]</option>
+					</th:block>
+				</select>
+			</div>
+		</div>
 		<th:block th:each="publication : ${listPublications}">
-			<div class="row mt-5">
+			<div class="row">
 				<div class="row d-flex mt-2">
 					<div class="col-md-12">
-						<p class="fw-bold" style="font-size: 23px;">[[${publication.id}]]. [[${publication.title}]]</p>
+						<a
+							th:href="${publication.doiLink}"
+							class="fw-bold h4"
+						> [[${publication.publishYear}]] - [[${publication.title}]] </a>
 					</div>
 				</div>
-				<div class="row d-flex">
+				<div class="row d-flex mt-2">
 					<div class="col-md-12 publication-cite">
 						<th:block th:utext="${publication.cite}"></th:block>
 					</div>
 				</div>
-				<div class="row d-flex">
+				<div class="row d-flex my-3">
 					<div class="col-md-12 d-flex justify-content-center">
-						<img
-							alt="thumbnail"
-							width="300px"
-							th:src="@{${publication.thumbnailPath}}"
-							style="border: 1px solid black;"
-						>
+						<figure class="rectangle-thumbnail-container image-hover-scale">
+							<a th:href="${publication.doiLink}">
+								<img
+									alt="thumbnail"
+									th:src="@{${publication.thumbnailPath}}"
+									class="img-thumbnail"
+								>
+							</a>
+						</figure>
 					</div>
 				</div>
 				<div class="row d-flex">
-					<div class="col-md-12 publication-abstract">
+					<div class="col-md-12 publication-abstract p-limit-5">
 						<th:block th:utext="${publication.publicationAbstract}"></th:block>
 					</div>
 				</div>
-				<div class="row d-flex">
+				<div class="row d-flex mt-2">
 					<div class="col-md-12">
-						Details:
 						<a
-							class="fw-bold"
 							th:href="${publication.doiLink}"
-						>[[${publication.doiLink}]]</a>
+							class="button_1 pt-2 pb-2"
+						> View details </a>
 					</div>
 				</div>
 			</div>
+			<div class="line-break-common-2px text-center mt-3"></div>
 		</th:block>
 		<div th:replace="~{fragments::pagination('/publications', 'publications')}"></div>
 		<div th:replace="~{fragments::footer}"></div>
@@ -51,6 +74,15 @@
 
 	<script type="text/javascript">
 		const moduleURL = "[[@{/publications}]]";
+		
+		$(document).ready(function () {
+			$('#sort-select').on('change', function() {
+		        const sortDir = $(this).val();
+		        $("input[name='sortField']").val('publishYear');
+		        $("input[name='sortDir']").val(sortDir);
+		        $('#search-form').submit();
+		    });
+		});
 	</script>
 </body>
 </html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('List News', 'none')}" />
+<body>
+	<section th:replace="~{fragments::header}"></section>
+	<div class="container">
+		<h1 class="text-center mt-3 text-header-color-common">News</h1>
+		<div class="line-break-common-5px text-center mt-3"></div>
+
+		<div th:replace="~{fragments::search_form('/news', 'news')}"></div>
+		<th:block th:each="news : ${listNews}">
+			<div class="row mt-4">
+				<div class="col-md-3 d-flex align-items-center">
+					<figure class="square-thumbnail-container image-hover-scale">
+						<a th:href="@{'/news/details/' + ${news.id}}">
+							<img
+								alt="news-thumbnail"
+								th:src="@{${news.thumbnailPath}}"
+								class="img-thumbnail"
+							>
+						</a>
+					</figure>
+				</div>
+
+				<div class="col-md-9">
+					<a
+						th:href="@{'/news/details/' + ${news.id}}"
+						class="h4 d-block fw-bold"
+					> [[${news.title}]] </a>
+					<span th:text="${#temporals.format(news.updateAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
+					<div class="p-limit-5">
+						<p th:utext="${news.shortDescription}"></p>
+					</div>
+				</div>
+			</div>
+			<div class="line-break-common-2px text-center mt-3"></div>
+		</th:block>
+		<div th:replace="~{fragments::pagination('/news', 'news')}"></div>
+		<div th:replace="~{fragments::footer}"></div>
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/news}]]";
+	</script>
+</body>
+</html>

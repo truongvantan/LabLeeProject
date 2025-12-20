@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: page_head('Member List', 'none')}" />
 <body>
-	<div th:replace="~{navigation::menu}"></div>
+	<section th:replace="~{fragments::header}"></section>
 	<div class="container">
-		<h1 class="text-center mt-3">Our members</h1>
-		<div class="line text-center mt-3"></div>
+		<h1 class="text-center mt-3 text-header-color-common">Our members</h1>
+		<div class="line-break-common-5px text-center mt-3"></div>
 		<div th:replace="~{fragments::search_form('/members', 'member')}"></div>
 		<div class="list-members">
 			<div class="row d-flex flex-wrap">
@@ -15,13 +15,15 @@
 							class="card rounded-3"
 							style="height: 100%"
 						>
-							<img
-								th:src="@{${memberProfile.avatarPath}}"
-								class="card-img-top square"
-								alt="member-photo"
-							>
+							<a th:href="@{'/members/details/' + ${memberProfile.id}}" class="image-hover-scale">
+								<img
+									th:src="@{${memberProfile.avatarPath}}"
+									class="card-img-top square"
+									alt="member-photo"
+								>
+							</a>
 							<div class="card-body">
-								<h5 class="card-title">[[${memberProfile.user.fullName}]]</h5>
+								<h5 class="card-title">[[${memberProfile.fullName}]]</h5>
 								<div
 									class="member-organization"
 								
@@ -33,7 +35,7 @@
 
 								<a
 									th:href="@{'/members/details/' + ${memberProfile.id}}"
-									class="btn btn-primary btn-details-member"
+									class="button_1 pt-2 pb-2"
 								>Details</a>
 								</div>
 							</div>

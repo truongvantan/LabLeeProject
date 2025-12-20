@@ -61,17 +61,17 @@ public class UserService {
 			MultipartFile multipartFile) {
 		// validation binding result form
 		if (bindingResult.hasErrors()) {
-			return ConstantUtil.MESSAGE_VALIDATION_BINDING_RESULT_FAIL;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		// validation password vs repassword
 		if (!userFormAddDTO.getPassword().equals(userFormAddDTO.getRepassword())) {
-			return ConstantUtil.MESSAGE_VALIDATION_REPASSWORD_PASSWORD_USER_FAIL;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_REPASSWORD_PASSWORD_USER;
 		}
 
 		// validation file size
 		if (!FileUploadUtil.isValidFileSize(multipartFile)) {
-			return ConstantUtil.MESSAGE_VALIDATION_UPLOAD_FILE_SIZE_1MB_FAIL;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_UPLOAD_FILE_SIZE_1MB;
 		}
 
 		// validation photo
@@ -102,7 +102,7 @@ public class UserService {
 		} catch (DataIntegrityViolationException e) { // duplicate email
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return ConstantUtil.MESSAGE_VALIDATION_DUPLICATE_EMAIL_USER;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER;
 		}
 
 		return ConstantUtil.MESSAGE_SUCCESS_INSERT_NEW_USER;
@@ -132,12 +132,12 @@ public class UserService {
 			MultipartFile multipartFile) {
 		// validation binding result form
 		if (bindingResult.hasErrors()) {
-			return ConstantUtil.MESSAGE_VALIDATION_BINDING_RESULT_FAIL;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		// validation file size
 		if (!FileUploadUtil.isValidFileSize(multipartFile)) {
-			return ConstantUtil.MESSAGE_VALIDATION_UPLOAD_FILE_SIZE_1MB_FAIL;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_UPLOAD_FILE_SIZE_1MB;
 		}
 
 		// validation photo
@@ -157,8 +157,8 @@ public class UserService {
 		} else {
 			if (!userFormEditDTO.getPassword().matches(ConstantUtil.REGEX_PASSWORD_20)) {
 				bindingResult.rejectValue("password", "userFormEditDTO.password",
-						ConstantUtil.MESSAGE_VALIDATION_PASSWORD_20_FAIL);
-				return ConstantUtil.MESSAGE_VALIDATION_BINDING_RESULT_FAIL;
+						ConstantUtil.MESSAGE_FAIL_VALIDATION_PASSWORD_20);
+				return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 			}
 
 			String encodePassword = passwordEncoder.encode(userFormEditDTO.getPassword());
@@ -184,7 +184,7 @@ public class UserService {
 		} catch (DataIntegrityViolationException e) { // duplicate email
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return ConstantUtil.MESSAGE_VALIDATION_DUPLICATE_EMAIL_USER;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER;
 		}
 
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_USER;
@@ -267,12 +267,12 @@ public class UserService {
 			MultipartFile multipartFile) {
 		// validation binding result form
 		if (bindingResult.hasErrors()) {
-			return ConstantUtil.MESSAGE_VALIDATION_BINDING_RESULT_FAIL;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		// validation file size
 		if (!FileUploadUtil.isValidFileSize(multipartFile)) {
-			return ConstantUtil.MESSAGE_VALIDATION_UPLOAD_FILE_SIZE_1MB_FAIL;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_UPLOAD_FILE_SIZE_1MB;
 		}
 
 		// validation photo
@@ -290,16 +290,16 @@ public class UserService {
 		if (userAccountFormEditDTO.getNewPassword() != null && !userAccountFormEditDTO.getNewPassword().isBlank()) {
 			if (!userAccountFormEditDTO.getNewPassword().matches(ConstantUtil.REGEX_PASSWORD_20)) {
 				bindingResult.rejectValue("newPassword", "userAccountFormEditDTO.newPassword",
-						ConstantUtil.MESSAGE_VALIDATION_PASSWORD_20_FAIL);
+						ConstantUtil.MESSAGE_FAIL_VALIDATION_PASSWORD_20);
 
-				return ConstantUtil.MESSAGE_VALIDATION_BINDING_RESULT_FAIL;
+				return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 			}
 
 			if (!userAccountFormEditDTO.getNewPassword().equals(userAccountFormEditDTO.getConfirmPassword())) {
 				bindingResult.rejectValue("confirmPassword", "userAccountFormEditDTO.confirmPassword",
-						ConstantUtil.MESSAGE_VALIDATION_CONFIRM_PASSWORD_FAIL);
+						ConstantUtil.MESSAGE_FAIL_VALIDATION_CONFIRM_PASSWORD);
 
-				return ConstantUtil.MESSAGE_VALIDATION_BINDING_RESULT_FAIL;
+				return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 			}
 
 			String encodePassword = passwordEncoder.encode(userAccountFormEditDTO.getNewPassword());
@@ -309,9 +309,9 @@ public class UserService {
 			userAccountFormEditDTO.setNewPassword(existUserInDB.getPassword());
 		} else {
 			bindingResult.rejectValue("confirmPassword", "userAccountFormEditDTO.confirmPassword",
-					ConstantUtil.MESSAGE_VALIDATION_CONFIRM_PASSWORD_FAIL);
+					ConstantUtil.MESSAGE_FAIL_VALIDATION_CONFIRM_PASSWORD);
 
-			return ConstantUtil.MESSAGE_VALIDATION_BINDING_RESULT_FAIL;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		// validation unique value
@@ -337,7 +337,7 @@ public class UserService {
 		} catch (DataIntegrityViolationException e) { // duplicate email
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return ConstantUtil.MESSAGE_VALIDATION_DUPLICATE_EMAIL_USER;
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER;
 		}
 
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_USER_ACCOUNT;
@@ -366,6 +366,10 @@ public class UserService {
 
 	public List<User> findAllMemberLabWithoutProfile() {
 		return userRepository.findAllMemberLabWithoutProfile();
+	}
+
+	public User findById(Integer id) {
+		return userRepository.findById(id).get();
 	}
 
 }

@@ -46,22 +46,22 @@ public class PaginationCommon {
 	public List<Integer> getListPageNumbers(int totalPageNumber, int currentPageNumber) {
 		List<Integer> pageNumbers = new ArrayList<>();
 
-		if (totalPageNumber <= 10) { // Situation 1
+		if (totalPageNumber <= 10) { // Tình huống 1
 			for (int i = 1; i <= totalPageNumber; i++) {
 				pageNumbers.add(i);
 			}
 
-		} else if (currentPageNumber <= 5) { // Situation 3
+		} else if (currentPageNumber <= 5) { // Tình huống 3
 			for (int i = 1; i <= 10; i++) {
 				pageNumbers.add(i);
 			}
 
-		} else if (currentPageNumber >= (totalPageNumber - 5)) { // Situation 4
+		} else if (currentPageNumber >= (totalPageNumber - 5)) { // Tình huống 4
 			for (int i = totalPageNumber - 9; i <= totalPageNumber; i++) {
 				pageNumbers.add(i);
 			}
 
-		} else { // Situation 5
+		} else { // Tình huống 5
 			for (int i = currentPageNumber - 3; i <= currentPageNumber + 6; i++) {
 				pageNumbers.add(i);
 			}

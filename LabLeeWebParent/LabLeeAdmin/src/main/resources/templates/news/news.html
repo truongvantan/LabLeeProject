@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Danh sách bài đăng', 'none')}" />
+<body>
+	<div class="container-fluid">
+		<div th:replace="~{navigation::menu}"></div>
+		<h1 class="text-center mt-5">Danh sách bài đăng</h1>
+		<div th:replace="~{fragments::alert_message_box}"></div>
+		<a
+			th:href="@{/news/showAdd}"
+			class="btn btn-primary"
+		>Thêm mới</a>
+		<div th:replace="~{fragments::search_form('/news', 'bài đăng')}"></div>
+		<table class="table table-responsive-xl table-bordered table-hover">
+			<thead>
+				<tr>
+					<th th:replace="~{fragments::column_link('/news', 'id', 'ID')}" />
+					<th scope="col">Thumbnail</th>
+					<th th:replace="~{fragments::column_link('/news', 'title', 'Title')}" />
+					<th th:replace="~{fragments::column_link('/news', 'createAt', 'Create At')}" />
+					<th th:replace="~{fragments::column_link('/news', 'updateAt', 'Update At')}" />
+					<th scope="col">Author</th>
+					<th th:replace="~{fragments::column_link('/news', 'enabled', 'Enabled')}" />
+					<th scope="col">Activities</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="news : ${listNews}">
+					<td>[[${news.id}]]</td>
+					<td class="d-flex justify-content-center align-items-center">
+						<span
+							th:if="${news.thumbnail == null}"
+							class="fa-solid fa-user fa-3x"
+						></span>
+						<img
+							width="80px"
+							height="80px"
+							th:if="${news.thumbnail != null}"
+							th:src="@{${news.thumbnailPath}}"
+						/>
+					</td>
+					<td>[[${news.shortTitle}]]</td>
+					<td th:text="${#temporals.format(news.createAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${#temporals.format(news.updateAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td>[[${news.authorFullName}]]</td>
+					<td>
+						<div
+							th:replace="~{fragments::enabled_status(${news.enabled}, 'news', '/news/' + ${news.id}, ${news.id})}"
+						></div>
+					</td>
+					<td>
+						<div
+							th:replace="~{fragments::edit('bài đăng', '/news/showEdit/' + ${news.id})}"
+						></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div th:replace="~{fragments::pagination('/news', 'news')}"></div>
+
+		<div th:replace="~{fragments::confirm_modal}"></div>
+		<div th:replace="~{fragments::footer}"></div>
+
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/news}]]";
+
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+		
+		$(document).ready(function() {
+			$(".link-enabled-true").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'bài đăng', 'Bạn muốn mở khóa');
+			});
+			
+			$(".link-enabled-false").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'bài đăng', 'Bạn chắc chắn muốn khóa');
+			});
+		});
+
+	</script>
+</body>
+</html>

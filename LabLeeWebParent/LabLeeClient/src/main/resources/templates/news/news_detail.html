@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('' + ${news.title}, 'none')}" />
+<body>
+	<section th:replace="~{fragments::header}"></section>
+	<div class="container mt-5">
+		<h1 class="text-center mt-3">News</h1>
+		<div class="line-break-common-5px text-center mt-3"></div>
+		<div th:replace="~{fragments::search_form('/news', 'news')}"></div>
+
+		<h2
+			class="text-center mt-5"
+			style="font-size: 50px"
+		>[[${news.title}]]</h2>
+		<p
+			class="text-center fst-italic"
+			style="font-size: 20px"
+			th:text="${#temporals.format(news.updateAt, 'yyyy-MM-dd HH:mm:ss')}"
+		></p>
+		<article
+			class="mt-4"
+			style="font-size: 1.1rem;"
+			th:utext="${news.content}"
+		></article>
+
+
+	</div>
+	<div th:replace="~{fragments::footer}"></div>
+	<script type="text/javascript">
+		const moduleURL = "[[@{/projects}]]";
+	</script>
+</body>
+</html>

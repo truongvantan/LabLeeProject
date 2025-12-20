@@ -23,6 +23,7 @@ public class MemberLabProfileController {
 	
 	@GetMapping("/members")
 	public String listFirstPage(Model model) {
+		model.addAttribute("activeLink", "/members");
 		return listByPage(model, "1", "id", "asc", null);
 	}
 	
@@ -31,6 +32,8 @@ public class MemberLabProfileController {
 			@RequestParam(name = "sortField", defaultValue = "id") String sortField,
 			@RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
 			@RequestParam(name = "keyword", defaultValue = "") String keyword) {
+		model.addAttribute("activeLink", "/members");
+		
 		sortField  = "id";
 		sortDir = "asc";
 
@@ -64,6 +67,8 @@ public class MemberLabProfileController {
 	
 	@GetMapping("/members/details/{memberProfileId}")
 	public String showMemberProfileDetail(Model model, @PathVariable(name = "memberProfileId", required = false) String memberProfileId) {
+		model.addAttribute("activeLink", "/members");
+		
 		try {
 			MemberLabProfile memberLabProfile = memberLabProfileService.findByIdEnabled(memberProfileId);
 			model.addAttribute("memberLabProfile", memberLabProfile);

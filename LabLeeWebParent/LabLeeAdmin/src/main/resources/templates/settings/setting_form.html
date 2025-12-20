@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<head th:replace="~{fragments :: page_head('Setting', 'tag')}" />
+<script
+	src="https://cdn.tiny.cloud/1/23v8b65dspuhtpforj308ya1cib61htuo5l3sd5j8f328t4y/tinymce/6/tinymce.min.js"
+	referrerpolicy="origin"
+></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div th:replace="~{navigation::menu}"></div>
+		<div th:replace="~{fragments::alert_message_box}"></div>
+		<h1 class="text-center">General information of website</h1>
+		<form
+			th:action="@{/settings/save_general}"
+			method="POST"
+			style="max-width: 1250px; margin: 0 auto"
+			enctype="multipart/form-data"
+		>
+			<div class="border border-secondary rounded p-3">
+				<!-- Nav tabs -->
+				<ul
+					class="nav nav-tabs"
+					id="myTab"
+					role="tablist"
+				>
+					<li
+						class="nav-item"
+						role="presentation"
+					>
+						<button
+							class="nav-link active"
+							data-bs-toggle="tab"
+							data-bs-target="#general"
+							type="button"
+							role="tab"
+						>General Information</button>
+					</li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div
+						class="tab-pane p-3 active"
+						id="general"
+						role="tabpanel"
+					>
+						<div th:replace="~{settings/setting_general :: content}"></div>
+					</div>
+				</div>
+				<!-- END Tab panes -->
+
+				<div class="text-center">
+					<input
+						type="submit"
+						value="Lưu"
+						class="btn btn-primary m-3"
+					/>
+					<input
+						type="button"
+						value="Hủy"
+						class="btn btn-secondary"
+						id="buttonCancel"
+					/>
+				</div>
+			</div>
+		</form>
+		<div th:replace="~{fragments::footer}"></div>
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/settings}]]";
+	</script>
+	<script
+		type="text/javascript"
+		th:src="@{/js/common_form.js}"
+	></script>
+</body>
+</html>

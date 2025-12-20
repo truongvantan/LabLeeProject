@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div
+		th:fragment="content"
+		th:remove="tag"
+	>
+		<div class="my-4">
+			<label>Main Content:</label>
+			<textarea
+				class="form-control tinymce-editor"
+				th:field="*{content}"
+				rows="10"
+			></textarea>
+			<span
+				th:if="${#fields.hasErrors('content')}"
+				th:errors="${newsFormAddDTO.content}"
+				class="text-danger"
+			>Content Error</span>
+		</div>
+	</div>
+</body>
+</html>

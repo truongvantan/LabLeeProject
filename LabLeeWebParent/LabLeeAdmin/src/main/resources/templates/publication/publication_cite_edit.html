@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div
+		th:fragment="content"
+		th:remove="tag"
+	>
+		<div class="my-4">
+			<label>Cite:</label>
+			<textarea
+				class="form-control tinymce-editor"
+				th:field="*{cite}"
+				rows="4"
+			></textarea>
+			<span
+				th:if="${#fields.hasErrors('cite')}"
+				th:errors="${publicationFormEditDTO.cite}"
+				class="text-danger"
+			>Cite Error</span>
+		</div>
+	</div>
+</body>
+</html>

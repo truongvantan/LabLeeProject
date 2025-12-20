@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Danh sách dự án', 'none')}" />
+<body>
+	<div class="container-fluid">
+		<div th:replace="~{navigation::menu}"></div>
+		<h1 class="text-center mt-5">Danh sách dự án</h1>
+		<div th:replace="~{fragments::alert_message_box}"></div>
+		<a
+			th:href="@{/projects/showAdd}"
+			class="btn btn-primary"
+		>Thêm mới</a>
+		<div th:replace="~{fragments::search_form('/projects', 'dự án')}"></div>
+		<table class="table table-responsive-xl table-bordered table-hover">
+			<thead>
+				<tr>
+					<th th:replace="~{fragments::column_link('/projects', 'id', 'ID')}" />
+					<th scope="col">Thumbnail</th>
+					<th th:replace="~{fragments::column_link('/projects', 'title', 'Title')}" />
+					<th th:replace="~{fragments::column_link('/projects', 'sponsor', 'Sponsor')}" />
+					<th th:replace="~{fragments::column_link('/projects', 'budget', 'Budget')}" />
+					<th th:replace="~{fragments::column_link('/projects', 'startDate', 'Start Date')}" />
+					<th th:replace="~{fragments::column_link('/projects', 'endDate', 'End Date')}" />
+					<th scope="col">List Member</th>
+					<th th:replace="~{fragments::column_link('/projects', 'enabled', 'Enabled')}" />
+					<th scope="col">Activities</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="project : ${listProjects}">
+					<td>[[${project.id}]]</td>
+					<td class="d-flex justify-content-center align-items-center">
+						<span
+							th:if="${project.thumbnail == null}"
+							class="fa-solid fa-user fa-3x"
+						></span>
+						<img
+							width="80px"
+							height="80px"
+							th:if="${project.thumbnail != null}"
+							th:src="@{${project.thumbnailPath}}"
+						/>
+					</td>
+					<td>[[${project.shortTitle}]]</td>
+					<td>[[${project.sponsor}]]</td>
+					<td>[[${project.budget}]] NTD</td>
+					<td>[[${project.startDate}]]</td>
+					<td>[[${project.endDate}]]</td>
+					<td class="truncate-text">[[${project.listMemberName}]]</td>
+					<td>
+						<div
+							th:replace="~{fragments::enabled_status(${project.enabled}, 'project', '/projects/' + ${project.id}, ${project.id})}"
+						></div>
+					</td>
+					<td>
+						<div
+							th:replace="~{fragments::edit('dự án', '/projects/showEdit/' + ${project.id})}"
+						></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div th:replace="~{fragments::pagination('/projects', 'projects')}"></div>
+
+		<div th:replace="~{fragments::confirm_modal}"></div>
+		<div th:replace="~{fragments::footer}"></div>
+
+	</div>
+
+	<script type="text/javascript">
+		const moduleURL = "[[@{/projects}]]";
+
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+		
+		$(document).ready(function() {
+			$(".link-enabled-true").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'dự án', 'Bạn muốn mở khóa');
+			});
+			
+			$(".link-enabled-false").on("click", function(e) {
+				e.preventDefault();
+				showConfirmModal($(this), 'dự án', 'Bạn chắc chắn muốn khóa');
+			});
+		});
+
+	</script>
+</body>
+</html>

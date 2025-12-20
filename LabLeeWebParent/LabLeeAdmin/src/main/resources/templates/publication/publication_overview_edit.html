@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div
+		th:fragment="content"
+		th:remove="tag"
+	>
+		<div class="my-4">
+			<label>Title:</label>
+			<input
+				class="form-control"
+				th:field="*{title}"
+			/>
+			<span
+				th:if="${#fields.hasErrors('title')}"
+				th:errors="${publicationFormEditDTO.title}"
+				class="text-danger"
+			>Title Error</span>
+		</div>
+
+		<div class="my-4">
+			<label>Publish Year:</label>
+			<input
+				class="form-control"
+				th:field="*{publishYear}"
+			/>
+			<span
+				th:if="${#fields.hasErrors('title')}"
+				th:errors="${publicationFormEditDTO.publishYear}"
+				class="text-danger"
+			>Publish Year Error</span>
+		</div>
+
+		<div class="my-4">
+			<label>DOI link:</label>
+			<input
+				class="form-control"
+				th:field="*{doiLink}"
+			/>
+			<span
+				th:if="${#fields.hasErrors('doiLink')}"
+				th:errors="${publicationFormEditDTO.doiLink}"
+				class="text-danger"
+			>DOI link Error</span>
+		</div>
+
+		<div class="my-4">
+			<label>Enabled:</label>
+			<div class="form-check form-switch mt-2">
+				<input
+					class="form-check-input"
+					type="checkbox"
+					id="enabled"
+					th:field="*{enabled}"
+				/>
+			</div>
+		</div>
+
+		<div class="my-4">
+			<label>Thumbnail:</label>
+
+			<input
+				type="hidden"
+				th:field="*{thumbnail}"
+			/>
+			<input
+				type="file"
+				id="fileImage"
+				name="image"
+				accept="image/png, image/jpeg, image/webp"
+			/>
+
+			<span
+				th:if="${error != null}"
+				class="text-danger"
+			>[[${error}]]</span>
+			<img
+				width="150px"
+				class="img-fluid mt-2"
+				id="thumbnailPublication"
+				alt="thumbnail"
+				th:src="@{${publicationFormEditDTO.thumbnailPath}}"
+			/>
+			<small>Vui lòng chọn file có kích thước dưới 1MB</small>
+		</div>
+
+	</div>
+</body>
+</html>

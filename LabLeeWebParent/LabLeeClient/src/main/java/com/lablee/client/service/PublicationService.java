@@ -36,7 +36,7 @@ public class PublicationService {
 		}
 		
 		Sort sort = Sort.by(sortField);
-		sort = "asc".equals(sortDir) ? sort.ascending() : sort.descending();
+		sort = "Ascending".equalsIgnoreCase(sortDir) ? sort.ascending() : sort.descending();
 
 		Pageable pageable = PageRequest.of(pageNum - 1, PAGE_SIZE, sort);
 
@@ -54,5 +54,14 @@ public class PublicationService {
 		listPublications = pagePublication.getContent();
 
 		return new Object[] { listPublications, totalPages, totalElements };
+	}
+	public long getTotalPublications() {
+		return publicationRepository.count();
+	}
+	public long getTotalPublicationsEnabled() {
+		return publicationRepository.getTotalPublicationsEnabled();
+	}
+	public List<Publication> getList3LatestPublications() {
+		return publicationRepository.findFirst3ByOrderByPublishYearDesc();
 	}
 }

@@ -19,6 +19,8 @@
 					<!-- <th th:replace="~{fragments::column_link('/members', 'fullName', 'Họ tên')}" /> -->
 					<th scope="col">Họ và tên</th>
 					<th th:replace="~{fragments::column_link('/members', 'emailPublic', 'Email Public')}" />
+					<th th:replace="~{fragments::column_link('/members', 'academicRank', 'Academic Rank')}" />
+					<th th:replace="~{fragments::column_link('/members', 'currentOrganization', 'Current Organization')}" />
 					<th
 						th:replace="~{fragments::column_link('/members', 'researchInterests', 'Lĩnh vực nghiên cứu')}"
 					/>
@@ -45,6 +47,8 @@
 					</td>
 					<td>[[${memberLabDTO.user.fullName}]]</td>
 					<td>[[${memberLabDTO.emailPublic}]]</td>
+					<td>[[${memberLabDTO.academicRank}]]</td>
+					<td>[[${memberLabDTO.currentOrganization}]]</td>
 					<td>[[${memberLabDTO.researchInterests}]]</td>
 					<td>[[${memberLabDTO.joinDate}]]</td>
 					<td>[[${memberLabDTO.leaveDate}]]</td>

@@ -17,6 +17,7 @@
 					<th th:replace="~{fragments::column_link('/publications', 'id', 'ID')}" />
 					<th scope="col">Thumbnail</th>
 					<th th:replace="~{fragments::column_link('/publications', 'title', 'Title')}" />
+					<th th:replace="~{fragments::column_link('/publications', 'publishYear', 'Publish Year')}" />
 					<th th:replace="~{fragments::column_link('/publications', 'doiLink', 'DOI link')}" />
 					<th th:replace="~{fragments::column_link('/publications', 'cite', 'Cite')}" />
 					<th th:replace="~{fragments::column_link('/publications', 'publicationAbstract', 'Abstract')}" />
@@ -40,6 +41,7 @@
 						/>
 					</td>
 					<td>[[${publication.shortTitle}]]</td>
+					<td>[[${publication.publishYear}]]</td>
 					<td>[[${publication.shortDoiLink}]]</td>
 					<td class="truncate-text">[[${publication.shortCite}]]</td>
 					<td class="truncate-text">[[${publication.shortPublicationAbstract}]]</td>

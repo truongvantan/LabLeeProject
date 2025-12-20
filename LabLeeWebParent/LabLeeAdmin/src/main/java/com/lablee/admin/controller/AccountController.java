@@ -65,7 +65,7 @@ public class AccountController {
 		case ConstantUtil.MESSAGE_SUCCESS_EDIT_USER_ACCOUNT:
 			model.addAttribute("successMessage", messageReturned);
 			loggedUser.setFullName(userAccountFormEditDTO.getFullName());
-		case ConstantUtil.MESSAGE_VALIDATION_BINDING_RESULT_FAIL:
+		case ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT:
 			break;
 		default:
 			model.addAttribute("errorMessage", messageReturned);

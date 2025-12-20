@@ -9,13 +9,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.lablee.client.exception.MemberLabProfileNotFoundException;
 import com.lablee.client.repository.MemberLabProfileRepository;
-import com.lablee.common.constant.ConstantUtil;
 import com.lablee.common.entity.MemberLabProfile;
-import com.lablee.common.entity.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +22,7 @@ public class MemberLabProfileService {
 
 	private final MemberLabProfileRepository memberLabProfileRepository;
 	
-	private static final int PAGE_SIZE = 3;
+	private static final int PAGE_SIZE = 6;
 
 	public MemberLabProfile findByIdEnabled( String memberProfileId) throws MemberLabProfileNotFoundException {
 		int id = -1;
@@ -83,6 +80,18 @@ public class MemberLabProfileService {
 		listMemberLabProfile = pageMemberLabProfile.getContent();
 
 		return new Object[] { listMemberLabProfile, totalPages, totalElements };
+	}
+
+	public long getTotalMembers() {
+		return memberLabProfileRepository.count();
+	}
+
+	public long getTotalMembersEnabled() {
+		return memberLabProfileRepository.getTotalMembersEnabled();
+	}
+
+	public List<MemberLabProfile> getAllMembersEnabled() {
+		return memberLabProfileRepository.getListMemberProfileEnabled();
 	}
 
 }

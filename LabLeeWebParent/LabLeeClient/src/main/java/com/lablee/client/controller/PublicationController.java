@@ -22,17 +22,17 @@ public class PublicationController {
 	
 	@GetMapping("/publications")
 	public String listFirstPage(Model model) {
-		return listByPage(model, "1", "id", "asc", null);
+		model.addAttribute("activeLink", "/publications");
+		return listByPage(model, "1", "publishYear", "Descending", null);
 	}
 	
 	@GetMapping("/publications/page/{pageNum}")
 	public String listByPage(Model model, @PathVariable(name = "pageNum", required = false) String strPageNum,
-			@RequestParam(name = "sortField", defaultValue = "id") String sortField,
-			@RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
+			@RequestParam(name = "sortField", defaultValue = "publishYear") String sortField,
+			@RequestParam(name = "sortDir", defaultValue = "Descending") String sortDir,
 			@RequestParam(name = "keyword", defaultValue = "") String keyword) {
-		sortField  = "id";
-		sortDir = "asc";
-
+		model.addAttribute("activeLink", "/publications");
+		
 		Object[] arrReturned = publicationService.listByPage(strPageNum, keyword, sortField, sortDir);
 
 		List<Publication> listPublications = (List<Publication>) arrReturned[0];
@@ -48,7 +48,9 @@ public class PublicationController {
 		}
 
 		List<Integer> pageNumbers = paginationCommon.getListPageNumbers(totalPageNumber, currentPageNumber);
-
+		List<String> listSortDir = List.of("Descending", "Ascending");
+		
+		model.addAttribute("listSortDir", listSortDir);
 		model.addAttribute("currentPageNumber", currentPageNumber);
 		model.addAttribute("totalPageNumber", totalPageNumber);
 		model.addAttribute("totalItems", totalElements);

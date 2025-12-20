@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div
+		th:fragment="content"
+		th:remove="tag"
+	>
+		<div class="my-4">
+			<label>Bio:</label>
+			<textarea
+				class="form-control tinymce-editor"
+				th:field="*{bio}"
+				rows="10"
+			></textarea>
+			<span
+				th:if="${#fields.hasErrors('bio')}"
+				th:errors="${memberLabProfileFormAddDTO.bio}"
+				class="text-danger"
+			>Bio Error</span>
+		</div>
+	</div>
+</body>
+</html>

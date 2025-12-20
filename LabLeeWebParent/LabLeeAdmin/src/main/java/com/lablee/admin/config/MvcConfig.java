@@ -11,9 +11,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		exposeDirectory("../user-photos", registry);
-		exposeDirectory("../member-avatars", registry);
-		exposeDirectory("../publication-thumbnails", registry);
+//		exposeDirectory("../user-photos", registry);
+//		exposeDirectory("../member-avatars", registry);
+//		exposeDirectory("../publication-thumbnails", registry);
 		exposeDirectory("../uploads", registry);
 	}
 	

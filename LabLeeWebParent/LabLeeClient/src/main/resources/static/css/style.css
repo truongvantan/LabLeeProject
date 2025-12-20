@@ -2,7 +2,6 @@
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;
-	font-family: "Open Sans", sans-serif;
 }
 
 body {
@@ -37,42 +36,61 @@ body {
 	color: #FFA700;
 }
 
-/* #footer {
-	position: fixed;
-	height: 50px;
-	bottom: 0px;
-	left: 0px;
-	right: 0px;
-	margin-bottom: 0px;
-} */
-
 .truncate-text {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-.line {
+.line-break-black {
 	border-bottom: 5px solid black;
 	width: 100%;
 }
 
-/* .card {
-	position: relative;
-} */
+.text-header-color-common {
+	color: #3989ed;
+}
 
-/* .btn-details-member {
-	position: absolute;
-	bottom: 10px;
-	left: 20px;
-} */
+.line-break-common-5px {
+	border-bottom: 5px solid #5e9cea;
+	width: 100%;
+}
+
+.line-break-common-2px {
+	border-bottom: 2px solid #5e9cea;
+	width: 100%;
+}
+
+.p-limit-1 {
+	overflow: hidden;
+	display: -webkit-box; /* Required for -webkit-line-clamp */
+	-webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
+	-webkit-line-clamp: 1; /* Set the maximum number of lines */
+	text-overflow: ellipsis; /* Adds ellipsis for overflowed content */
+}
 
 .p-limit-2 {
-  overflow: hidden;
-  display: -webkit-box; /* Required for -webkit-line-clamp */
-  -webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
-  -webkit-line-clamp: 2; /* Set the maximum number of lines */
-  text-overflow: ellipsis; /* Adds ellipsis for overflowed content */
+	overflow: hidden;
+	display: -webkit-box; /* Required for -webkit-line-clamp */
+	-webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
+	-webkit-line-clamp: 2; /* Set the maximum number of lines */
+	text-overflow: ellipsis; /* Adds ellipsis for overflowed content */
+}
+
+.p-limit-3 {
+	overflow: hidden;
+	display: -webkit-box; /* Required for -webkit-line-clamp */
+	-webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
+	-webkit-line-clamp: 3; /* Set the maximum number of lines */
+	text-overflow: ellipsis; /* Adds ellipsis for overflowed content */
+}
+
+.p-limit-5 {
+	overflow: hidden;
+	display: -webkit-box; /* Required for -webkit-line-clamp */
+	-webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
+	-webkit-line-clamp: 5; /* Set the maximum number of lines */
+	text-overflow: ellipsis; /* Adds ellipsis for overflowed content */
 }
 
 .square {
@@ -91,6 +109,84 @@ body {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-.publication-abstract *, .publication-cite * {
+
+.publication-abstract *, .publication-cite *, .project-abstract * {
 	font-size: 18px !important;
+}
+
+/* Hover image Scale effect */
+.image-hover-scale img {
+	transition: transform 0.3s ease-in-out;
+}
+
+.image-hover-scale:hover img {
+	transform: scale(1.1); /* Increases size by 10% */
+}
+
+/* ===== SLIDER ===== */
+.slider-viewport {
+	overflow: hidden;
+	width: 100%;
+}
+
+.slider-track {
+	transition: transform 0.4s ease-in-out;
+}
+
+.slider-item {
+	flex: 0 0 20%; /* 5 cards / row */
+	padding: 0 8px;
+}
+
+/* ===== CARD IMAGE ===== */
+.card-img-wrapper {
+	width: 100%;
+	height: 220px;
+	background-color: #f8f9fa;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.img-uniform {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+}
+
+/* ===== RESPONSIVE ===== */
+@media ( max-width : 992px) {
+	.slider-item {
+		flex: 0 0 50%; /* tablet: 2 card */
+	}
+}
+
+@media ( max-width : 576px) {
+	.slider-item {
+		flex: 0 0 100%; /* mobile: 1 card */
+	}
+}
+
+.square-thumbnail-container {
+	width: 17rem;
+	height: 17rem;
+	overflow: hidden;
+}
+
+.square-thumbnail-container img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.rectangle-thumbnail-container {
+	width: 70%;
+	aspect-ratio: 16 / 9;
+}
+
+.rectangle-thumbnail-container img {
+	width: 100%;
+	height: 100%;
+	object-fit: content;
 }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div
+		th:fragment="content"
+		th:remove="tag"
+	>
+		<div class="my-4">
+			<label>Short Description:</label>
+			<textarea
+				class="form-control tinymce-editor"
+				th:field="*{shortDescription}"
+				rows="10"
+			></textarea>
+			<span
+				th:if="${#fields.hasErrors('shortDescription')}"
+				th:errors="${newsFormEditDTO.shortDescription}"
+				class="text-danger"
+			>Short Description Error</span>
+		</div>
+	</div>
+</body>
+</html>

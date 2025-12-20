@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div
+		th:fragment="content"
+		th:remove="tag"
+	>
+		<div class="my-4">
+			<label>Mã hồ sơ:</label>
+			<input
+				class="form-control"
+				th:field="*{id}"
+				readonly="readonly"
+			/>
+		</div>
+
+		<div class="my-4">
+			<label>Họ tên:</label>
+			<input
+				class="form-control"
+				th:field="*{fullName}"
+				readonly="readonly"
+			/>
+		</div>
+
+		<div class="my-4">
+			<label>Học hàm/Học vị:</label>
+			<input
+				class="form-control"
+				th:field="*{academicRank}"
+			/>
+			<span
+				th:if="${#fields.hasErrors('academicRank')}"
+				th:errors="${memberLabProfileFormEditDTO.academicRank}"
+				class="text-danger"
+			>Academic Rank Error</span>
+		</div>
+
+		<div class="my-4">
+			<label>Đơn vị đang công tác:</label>
+			<input
+				class="form-control"
+				th:field="*{currentOrganization}"
+			/>
+			<span
+				th:if="${#fields.hasErrors('currentOrganization')}"
+				th:errors="${memberLabProfileFormEditDTO.currentOrganization}"
+				class="text-danger"
+			>Current Organization Error</span>
+		</div>
+
+		<div class="my-4">
+			<label>Lĩnh vực nghiên cứu:</label>
+			<input
+				class="form-control"
+				th:field="*{researchInterests}"
+			/>
+			<span
+				th:if="${#fields.hasErrors('researchInterests')}"
+				th:errors="${memberLabProfileFormEditDTO.researchInterests}"
+				class="text-danger"
+			>Research Interests Error</span>
+		</div>
+
+		<div class="my-4">
+			<label>Email public:</label>
+			<input
+				class="form-control"
+				th:field="*{emailPublic}"
+			/>
+			<span
+				th:if="${#fields.hasErrors('emailPublic')}"
+				th:errors="${memberLabProfileFormEditDTO.emailPublic}"
+				class="text-danger"
+			>Email Public Error</span>
+		</div>
+
+		<div class="my-4">
+			<label>Ngày vào lab:</label>
+			<input
+				class="form-control"
+				type="date"
+				th:field="*{joinDate}"
+				required
+			/>
+			<span
+				th:if="${#fields.hasErrors('joinDate')}"
+				th:errors="${memberLabProfileFormEditDTO.joinDate}"
+				class="text-danger"
+			>Join Date Error</span>
+		</div>
+
+		<div class="my-4">
+			<label>Ngày tốt nghiệp:</label>
+			<input
+				class="form-control"
+				type="date"
+				th:field="*{leaveDate}"
+			/>
+			<span
+				th:if="${#fields.hasErrors('leaveDate')}"
+				th:errors="${memberLabProfileFormEditDTO.leaveDate}"
+				class="text-danger"
+			>Leave Date Error</span>
+		</div>
+
+		<div class="my-4">
+			<label>Enabled:</label>
+			<div class="form-check form-switch mt-2">
+				<input
+					class="form-check-input"
+					type="checkbox"
+					id="enabled"
+					th:field="*{enabled}"
+				/>
+			</div>
+		</div>
+
+		<div class="my-4">
+			<label>Avatar:</label>
+
+			<input
+				type="hidden"
+				th:field="*{avatar}"
+			/>
+			<input
+				type="file"
+				id="fileImage"
+				name="image"
+				accept="image/png, image/jpeg, image/webp"
+			/>
+
+			<span
+				th:if="${error != null}"
+				class="text-danger"
+			>[[${error}]]</span>
+			<img
+				width="150px"
+				class="img-fluid mt-2"
+				id="thumbnail"
+				alt="avatar"
+				th:src="@{${memberLabProfileFormEditDTO.avatarPath}}"
+			/>
+			<small>Vui lòng chọn file có kích thước dưới 1MB</small>
+		</div>
+	</div>
+</body>
+</html>

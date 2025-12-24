@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('A', 'none')}" />
+<body>
+	<section th:replace="~{fragments::header}"></section>
+	<div class="container">
+		<h1 class="text-center mt-5">[[${SITE_LAB_NAME}]] - [[${SITE_LAB_NAME_DETAILS}]]</h1>
+		<div class="line-break-common-5px text-center mt-3"></div>
+
+		<section
+			id="blog_h"
+			class="p_3 bg-white mt-3"
+		>
+			<div class="container-xl">
+				<div class="row blog_h1">
+					<div class="col-md-12">
+						<div class="about_1">
+							<div th:utext="${SITE_ABOUT_US}"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	</div>
+	<div th:replace="~{fragments::footer}"></div>
+	<script type="text/javascript">
+		const moduleURL = "[[@{/about-us}]]";
+	</script>
+</body>
+</html>

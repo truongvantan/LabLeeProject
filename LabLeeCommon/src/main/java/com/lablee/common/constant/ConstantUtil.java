@@ -65,6 +65,10 @@ public class ConstantUtil {
 	public static final String PATH_NEWS_THUMBNAIL_STORED_DEFAULT = "/uploads/news-thumbnails/";
 	public static final String PATH_NEWS_CONTENT_UPLOAD_DIR_DEFAULT = "../uploads/news-content/";
 	public static final String PATH_NEWS_CONTENT_STORED_DEFAULT = "/uploads/news-content/";
+	
+	// default upload setting about us
+	public static final String PATH_ABOUT_US_CONTENT_UPLOAD_DIR_DEFAULT = "../uploads/about-us-content/";
+	public static final String PATH_ABOUT_US_CONTENT_STORED_DEFAULT = "/uploads/about-us-content/";
 
 	// Message User
 	public static final String MESSAGE_FAIL_VALIDATION_REPASSWORD_PASSWORD_USER = "Mật khẩu và xác nhận mật khẩu không trùng khớp";
@@ -90,13 +94,16 @@ public class ConstantUtil {
 	public static final String MESSAGE_FAIL_ADD_PUBLICATION = "Thêm mới bài báo thất bại";
 	public static final String MESSAGE_SUCCESS_EDIT_PUBLICATION = "Cập nhật bài báo thành công";
 	public static final String MESSAGE_FAIL_EDIT_PUBLICATION = "Cập nhật bài báo thất bại";
-
+	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_PUBLICATION = "Tiêu đề đã tồn tại";
+	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_DOI_LINK_PUBLICATION = "DOI link đã tồn tại";
+	
 	// Message Project
 	public static final String MESSAGE_SUCCESS_ADD_PROJECT = "Thêm mới dự án thành công";
 	public static final String MESSAGE_FAIL_ADD_PROJECT = "Thêm mới dự án thất bại";
 	public static final String MESSAGE_SUCCESS_EDIT_PROJECT = "Cập nhật dự án thành công";
 	public static final String MESSAGE_FAIL_EDIT_PROJECT = "Cập nhật dự án thất bại";
 	public static final String MESSAGE_FAIL_VALIDATION_END_DATE_PROJECT = "End date phải sau ngày Start Date";
+	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_PROJECT = "Tiêu đề đã tồn tại";
 
 	// Message News
 	public static final String MESSAGE_SUCCESS_ADD_NEWS = "Thêm mới bài đăng thành công";
@@ -104,4 +111,6 @@ public class ConstantUtil {
 	public static final String MESSAGE_SUCCESS_EDIT_NEWS = "Cập nhật bài đăng thành công";
 	public static final String MESSAGE_FAIL_EDIT_NEWS = "Cập nhật bài đăng thất bại";
 	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_NEWS = "Tiêu đề đã tồn tại";
+	
+	
 }

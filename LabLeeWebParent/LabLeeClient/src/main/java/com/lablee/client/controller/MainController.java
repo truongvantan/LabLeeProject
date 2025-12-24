@@ -10,10 +10,13 @@ import com.lablee.client.service.MemberLabProfileService;
 import com.lablee.client.service.NewsService;
 import com.lablee.client.service.ProjectService;
 import com.lablee.client.service.PublicationService;
+import com.lablee.client.service.SettingService;
+import com.lablee.client.service.VisitService;
 import com.lablee.common.entity.MemberLabProfile;
 import com.lablee.common.entity.News;
 import com.lablee.common.entity.Project;
 import com.lablee.common.entity.Publication;
+import com.lablee.common.entity.Setting;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,25 +27,26 @@ public class MainController {
 	private final PublicationService publicationService;
 	private final ProjectService projectService;
 	private final NewsService newsService;
-	
-	@GetMapping({"", "/"})
+	private final SettingService settingService;
+	private final VisitService visitService;
+
+	@GetMapping({ "", "/" })
 	public String getHomePage(Model model) {
 		model.addAttribute("activeLink", "/");
-		
+
 		long numberOfMembers = memberLabProfileService.getTotalMembersEnabled();
 		long numberOfPublications = publicationService.getTotalPublicationsEnabled();
 		long numberOfProjects = projectService.getTotalProjectsEnabled();
-		
+
 		Project latestProject = projectService.getLatestProject();
-		
+
 		List<MemberLabProfile> listMembers = memberLabProfileService.getAllMembersEnabled();
-		
+
 		List<Publication> list4LatestPublications = publicationService.getList3LatestPublications();
-		
-		
+
 		List<News> list4LatestNews = newsService.getList4LatestNews();
-		
-		
+
+
 		model.addAttribute("numberOfMembers", numberOfMembers);
 		model.addAttribute("numberOfPublications", numberOfPublications);
 		model.addAttribute("numberOfProjects", numberOfProjects);
@@ -50,7 +54,28 @@ public class MainController {
 		model.addAttribute("listMembers", listMembers);
 		model.addAttribute("list3LatestPublications", list4LatestPublications);
 		model.addAttribute("list4LatestNews", list4LatestNews);
-		
+		model.addAttribute("visitCount", visitService.getTotalVisits());
+
 		return "index";
-	}	
+	}
+
+	@GetMapping("/about-us")
+	public String getAbouUsPage(Model model) {
+		model.addAttribute("activeLink", "/about-us");
+
+		Setting aboutUsSetting = settingService.getAboutUsSetting();
+
+		if (aboutUsSetting != null) {
+			model.addAttribute("SITE_ABOUT_US", aboutUsSetting.getValue());
+		}
+		return "about_us";
+	}
+
+	@GetMapping("/contact-us")
+	public String getContactUsPage(Model model) {
+		model.addAttribute("activeLink", "/contact-us");
+
+		return "contact_us";
+	}
+
 }

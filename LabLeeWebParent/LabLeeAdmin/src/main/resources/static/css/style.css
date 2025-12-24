@@ -44,6 +44,7 @@ body {
 	left: 0px;
 	right: 0px;
 	margin-bottom: 0px; */
+	
 }
 
 .truncate-text {
@@ -53,16 +54,16 @@ body {
 }
 
 .editor-wrapper {
-    width: 100%;             /* Chiều rộng wrapper */
-    max-width: 1000px;       /* Giới hạn tối đa */
-    margin: auto;
+	width: 100%; /* Chiều rộng wrapper */
+	max-width: 1000px; /* Giới hạn tối đa */
+	margin: auto;
 }
 
 .ck-editor {
-    width: 100%;             /* Chiều rộng editor */
+	width: 100%; /* Chiều rộng editor */
 }
 
 .ck-editor__editable_inline {
-    min-height: 400px;       /* Chiều cao vùng soạn thảo */
-    font-size: 14px;
+	min-height: 400px; /* Chiều cao vùng soạn thảo */
+	font-size: 14px;
 }

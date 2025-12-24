@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('A', 'none')}" />
+<body>
+	<section th:replace="~{fragments::header}"></section>
+	<div class="container">
+		<h1 class="text-center mt-3">Contact us</h1>
+		<div class="line-break-common-5px text-center mt-3"></div>
+
+		<section
+			id="contact"
+			class="p_3 bg-white mt-3"
+		>
+			<div class="container-xl">
+				<h2 class="text-center">[[${SITE_LAB_NAME}]] - [[${SITE_LAB_NAME_DETAILS}]]</h2>
+				<div class="contact_1 row p-4 px-3  border_1 rounded-3 mx-0">
+					<div class="col-md-12">
+						<div class="contact_1l bg_light p-4  rounded-3">
+							<div class="contact_1li row">
+								<div class="col-md-3">
+									<div class="contact_1lil">
+										<span class="d-inline-block p-3 border_1 rounded-circle">
+											<i
+												class="fa-solid fa-user fa-xl bg-white text-center rounded-circle border_1 col_blue d-inline-block"
+											></i>
+										</span>
+									</div>
+								</div>
+								<div class="col-md-9">
+									<div class="contact_1lir mt-3">
+										<h6 class="col_blue">Lab manager.</h6>
+										<h4 class="mb-0 mt-3">
+											<a href="#">[[${SITE_LAB_MANAGER_NAME}]]</a>
+										</h4>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<div class="contact_1li row">
+								<div class="col-md-3">
+									<div class="contact_1lil">
+										<span class="d-inline-block p-3 border_1 rounded-circle">
+											<i
+												class="fa-solid fa-building-columns fa-xl bg-white text-center rounded-circle border_1 col_blue d-inline-block"
+											></i>
+										</span>
+									</div>
+								</div>
+								<div class="col-md-9">
+									<div class="contact_1lir mt-3">
+										<h6 class="col_blue">University.</h6>
+										<h4 class="mb-0 mt-3">
+											<a href="#">[[${CONTACT_NAME_UNIVERSITY}]]</a>
+										</h4>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<div class="contact_1li row">
+								<div class="col-md-3">
+									<div class="contact_1lil">
+										<span class="d-inline-block p-3 border_1 rounded-circle">
+											<i
+												class="fa-solid fa-building fa-xl bg-white text-center rounded-circle border_1 col_blue d-inline-block"
+											></i>
+										</span>
+									</div>
+								</div>
+								<div class="col-md-9">
+									<div class="contact_1lir mt-3">
+										<h6 class="col_blue">Department.</h6>
+										<h4 class="mb-0 mt-3">
+											<a href="#">[[${CONTACT_NAME_DEPARTMENT}]]</a>
+										</h4>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<div class="contact_1li row">
+								<div class="col-md-3">
+									<div class="contact_1lil">
+										<span class="d-inline-block p-3 border_1 rounded-circle">
+											<i
+												class="fa-solid fa-phone fa-xl bg-white text-center rounded-circle border_1 col_blue d-inline-block"
+											></i>
+										</span>
+									</div>
+								</div>
+								<div class="col-md-9">
+									<div class="contact_1lir mt-3">
+										<h6 class="col_blue">Office No.</h6>
+										<h4 class="mb-0 mt-3">
+											<a href="#">[[${CONTACT_PHONE_NUMBER}]]</a>
+										</h4>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<div class="contact_1li row">
+								<div class="col-md-3">
+									<div class="contact_1lil">
+										<span class="d-inline-block p-3 border_1 rounded-circle">
+											<i
+												class="fa-solid fa-envelope fa-xl bg-white text-center rounded-circle border_1 col_blue d-inline-block"
+											></i>
+										</span>
+									</div>
+								</div>
+								<div class="col-md-9">
+									<div class="contact_1lir mt-3">
+										<h6 class="col_blue">Email Address.</h6>
+										<h4 class="mb-0 mt-3">
+											<a href="#">[[${CONTACT_EMAIL}]]</a>
+										</h4>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<div class="contact_1li row">
+								<div class="col-md-3">
+									<div class="contact_1lil">
+										<span class="d-inline-block p-3 border_1 rounded-circle">
+											<i
+												class="fa-solid fa-location-dot fa-xl bg-white text-center rounded-circle border_1 col_blue d-inline-block"
+											></i>
+										</span>
+									</div>
+								</div>
+								<div class="col-md-9">
+									<div class="contact_1lir mt-3">
+										<h6 class="col_blue">Office Address.</h6>
+										<h4 class="mb-0 mt-3">[[${CONTACT_ADDRESS}]]</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div
+					class="row contact_2 mt-4"
+					id="lab-location-container"
+				>
+					<div
+						class="col-md-12"
+						th:utext="${SITE_LINK_GOOGLE_MAP_LAB_LOCATION}"
+					></div>
+				</div>
+			</div>
+		</section>
+
+	</div>
+	<div th:replace="~{fragments::footer}"></div>
+	<script type="text/javascript">
+		const moduleURL = "[[@{/about-us}]]";
+	</script>
+</body>
+</html>

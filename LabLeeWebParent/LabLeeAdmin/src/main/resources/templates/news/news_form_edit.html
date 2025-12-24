@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<head th:replace="~{fragments :: page_head('Cập nhật bài đăng', 'tag')}" />
+<head th:replace="~{fragments :: page_head('Edit news', 'tag')}" />
 <script
 	src="https://cdn.tiny.cloud/1/23v8b65dspuhtpforj308ya1cib61htuo5l3sd5j8f328t4y/tinymce/6/tinymce.min.js"
 	referrerpolicy="origin"
@@ -18,7 +18,7 @@
 <body>
 	<div class="container-fluid">
 		<div th:replace="~{navigation::menu}"></div>
-		<h1 class="text-center">Cập nhật đăng ID ([[${newsFormEditDTO.id}]])</h1>
+		<h1 class="text-center mt-5">Edit news ID ([[${newsFormEditDTO.id}]])</h1>
 		<div th:replace="~{fragments::alert_message_box}"></div>
 		<form
 			th:action="@{/news/edit}"
@@ -43,19 +43,19 @@
 						role="presentation"
 					>
 						<button
-							class="nav-link active"
+							class="nav-link fw-bold active"
 							data-bs-toggle="tab"
 							data-bs-target="#overview"
 							type="button"
 							role="tab"
-						>Common Information</button>
+						>General Information</button>
 					</li>
 					<li
 						class="nav-item"
 						role="presentation"
 					>
 						<button
-							class="nav-link"
+							class="nav-link fw-bold"
 							data-bs-toggle="tab"
 							data-bs-target="#shortDescription"
 							type="button"
@@ -67,7 +67,7 @@
 						role="presentation"
 					>
 						<button
-							class="nav-link"
+							class="nav-link fw-bold"
 							data-bs-toggle="tab"
 							data-bs-target="#mainContent"
 							type="button"
@@ -105,12 +105,12 @@
 				<div class="text-center">
 					<input
 						type="submit"
-						value="Lưu"
+						value="Save"
 						class="btn btn-primary m-3"
 					/>
 					<input
 						type="button"
-						value="Hủy"
+						value="Cancel"
 						class="btn btn-secondary"
 						id="buttonCancel"
 					/>
@@ -130,21 +130,20 @@
 		$(document).ready(function() {
 			tinymce.init({
 		        selector: 'textarea.tinymce-editor',
-		        height: 1200,
+		        height: 750,
 		        plugins: 'image link media table code lists',
 		        toolbar: 'undo redo | bold italic underline | link image media | code | bullist numlist',
 		        menubar: true,
 		        automatic_uploads: true,
-		        // Bắt buộc đường dẫn tuyệt đối
 			    relative_urls: false,
-			    remove_script_host: true,   // chỉ giữ path, bỏ hostname
-			    convert_urls: true,         // TinyMCE tự convert URL
+			    remove_script_host: true,
+			    convert_urls: true,
 		        images_upload_handler: function(blobInfo) {
 		            const file = blobInfo.blob();
 		            const maxSize = 1 * 1024 * 1024; // 1MB
 		
 		            if (file.size > maxSize) {
-		                return Promise.reject('Dung lượng ảnh phải nhỏ hơn 1MB!');
+		                return Promise.reject('Image file size must be less than 1MB!');
 		            }
 		
 		            const formData = new FormData();
@@ -160,16 +159,16 @@
 		                if (data.url) {
 		                    return data.url;
 		                } else {
-		                    return Promise.reject(data.error || 'Upload thất bại');
+		                    return Promise.reject(data.error || 'Upload fail');
 		                }
 		            })
-		            .catch(err => Promise.reject('Upload lỗi: ' + err));
+		            .catch(err => Promise.reject('Upload fail: ' + err));
 		        },
 		
 		        file_picker_types: 'image',
 		        file_picker_callback: function(callback, value, meta) {
 		            if (meta.filetype === 'image') {
-		                const url = prompt('Nhập URL ảnh:');
+		                const url = prompt('Enter image URL:');
 		                if (url) {
 		                    callback(url, { alt: '' });
 		                }

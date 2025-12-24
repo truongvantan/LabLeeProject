@@ -8,6 +8,7 @@ user-photos/
 member-avatars/
 uploads/
 publication-thumbnails/
+*.log
 
 ### STS ###
 .apt_generated

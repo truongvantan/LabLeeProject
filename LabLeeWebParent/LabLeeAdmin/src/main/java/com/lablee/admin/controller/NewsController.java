@@ -2,6 +2,8 @@ package com.lablee.admin.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class NewsController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(NewsController.class);
+	
 	private final NewsService newsService;
 	private final PaginationCommon paginationCommon;
 	private final UserService userService;
@@ -123,7 +127,8 @@ public class NewsController {
 
 			return "news/news_form_edit";
 		} catch (NewsNotFoundException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy bài đăng với id: " + newsId);
+			LOGGER.error(e.getMessage(), e);
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 			return "redirect:/news";
 		}
 	}
@@ -164,7 +169,9 @@ public class NewsController {
 					.toString();
 			redirectAttributes.addFlashAttribute("successMessage", message);
 		} catch (NewsNotFoundException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy bài đăng có ID " + newsId);
+			LOGGER.error(e.getMessage(), e);
+			
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 			return "redirect:/news";
 		}
 

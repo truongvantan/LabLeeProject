@@ -36,6 +36,8 @@ public class Project {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Column(unique = true, nullable = false)
 	private String title;
 
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

@@ -4,16 +4,16 @@
 <body>
 	<section th:replace="~{fragments::header}"></section>
 	<div class="container">
-		<h1 class="text-center mt-3 text-header-color-common">Publications</h1>
+		<h1 class="text-center mt-3">Publications</h1>
 		<div class="line-break-common-5px text-center mt-3"></div>
 
 		<div th:replace="~{fragments::search_form('/publications', 'publication')}"></div>
-		<div class="row">
+		<div class="row mb-3">
 			<div class="col-12">
-				<label class="fw-bold">Publish Year:</label>
+				<label class="fw-bold">Publish year:</label>
 				<select
 					id="sort-select"
-					class="form-select w-25"
+					class="form-select w-25 fw-bold"
 				>
 					<th:block th:each="sortDirValue : ${listSortDir}">
 						<option
@@ -69,8 +69,8 @@
 			<div class="line-break-common-2px text-center mt-3"></div>
 		</th:block>
 		<div th:replace="~{fragments::pagination('/publications', 'publications')}"></div>
-		<div th:replace="~{fragments::footer}"></div>
 	</div>
+	<div th:replace="~{fragments::footer}"></div>
 
 	<script type="text/javascript">
 		const moduleURL = "[[@{/publications}]]";

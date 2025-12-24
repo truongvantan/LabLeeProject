@@ -25,7 +25,7 @@ public class Setting {
 	@Column(name = "setting_key")
 	private String key;
 
-	@Column(nullable = false, length = 1024)
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String value;
 
 	@Enumerated(EnumType.STRING)

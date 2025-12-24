@@ -2,6 +2,8 @@ package com.lablee.admin.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class MemberLabProfileController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MemberLabProfileController.class);
+
 	private final MemberLabProfileService memberLabProfileService;
 	private final UserService userService;
 	private final PaginationCommon paginationCommon;
@@ -45,7 +49,7 @@ public class MemberLabProfileController {
 			@RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
 			@RequestParam(name = "keyword", defaultValue = "") String keyword) {
 		model.addAttribute("activeLink", "/members");
-		
+
 		Object[] arrReturned = memberLabProfileService.listByPage(strPageNum, keyword, sortField, sortDir);
 
 		List<MemberLabProfile> listMemberLabDTOs = (List<MemberLabProfile>) arrReturned[0];
@@ -80,7 +84,7 @@ public class MemberLabProfileController {
 	@GetMapping("members/showAdd")
 	public String showAdd(Model model) {
 		model.addAttribute("activeLink", "/members");
-		
+
 		MemberLabProfileFormAddDTO memberLabProfileFormAddDTO = new MemberLabProfileFormAddDTO();
 		List<User> listUsers = userService.findAllMemberLabWithoutProfile();
 
@@ -95,7 +99,7 @@ public class MemberLabProfileController {
 			@Valid @ModelAttribute(name = "memberLabProfileFormAddDTO") MemberLabProfileFormAddDTO memberLabProfileFormAddDTO,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		model.addAttribute("activeLink", "/members");
-		
+
 		String messageReturned = memberLabProfileService.addNewMember(memberLabProfileFormAddDTO, bindingResult,
 				multipartFile);
 
@@ -124,14 +128,15 @@ public class MemberLabProfileController {
 			@PathVariable(name = "memberLabProfileId", required = false) String memberLabProfileId,
 			RedirectAttributes redirectAttributes) {
 		model.addAttribute("activeLink", "/members");
-		
+
 		MemberLabProfileFormEditDTO memberLabProfileFormEditDTO;
 
 		try {
 			memberLabProfileFormEditDTO = memberLabProfileService.findById(memberLabProfileId);
 		} catch (MemberLabProfileNotFoundException e) {
-			redirectAttributes.addFlashAttribute("errorMessage",
-					"Không tìm thấy thành viên với id: " + memberLabProfileId);
+			LOGGER.error(e.getMessage(), e);
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+
 			return "redirect:/members";
 		}
 
@@ -146,8 +151,9 @@ public class MemberLabProfileController {
 			@Valid @ModelAttribute(name = "memberLabProfileFormEditDTO") MemberLabProfileFormEditDTO memberLabProfileFormEditDTO,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		model.addAttribute("activeLink", "/members");
-		
-		String messageReturned = memberLabProfileService.editMember(memberLabProfileFormEditDTO, bindingResult, multipartFile);
+
+		String messageReturned = memberLabProfileService.editMember(memberLabProfileFormEditDTO, bindingResult,
+				multipartFile);
 
 		switch (messageReturned) {
 		case ConstantUtil.MESSAGE_SUCCESS_EDIT_MEMBER_LAB_PROFILE:
@@ -167,7 +173,7 @@ public class MemberLabProfileController {
 			@PathVariable(name = "memberLabProfileId", required = false) String memberLabProfileId,
 			@PathVariable(name = "status", required = false) boolean enabled, RedirectAttributes redirectAttributes) {
 		model.addAttribute("activeLink", "/members");
-		
+
 		try {
 			memberLabProfileService.updateMemberLabProfileEnabledStatus(memberLabProfileId, enabled);
 			String status = enabled ? "mở khóa" : "khóa";
@@ -176,8 +182,8 @@ public class MemberLabProfileController {
 			redirectAttributes.addFlashAttribute("successMessage", message);
 
 		} catch (MemberLabProfileNotFoundException e) {
-			redirectAttributes.addFlashAttribute("errorMessage",
-					"Không tìm thấy hồ sơ thành viên lab có ID " + memberLabProfileId);
+			LOGGER.error(e.getMessage(), e);
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 			return "redirect:/members";
 		}
 

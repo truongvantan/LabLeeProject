@@ -87,9 +87,9 @@
 			class="mt-4 text-center"
 		>
 			<span>
-				Trang
+				Page
 				<b>[[${currentPageNumber}]]</b>
-				của [[${totalPageNumber}]]
+				of [[${totalPageNumber}]]
 			</span>
 		</div>
 		<div
@@ -97,7 +97,7 @@
 			class="mt-4"
 		>
 			<span>
-				<b>Danh sách rỗng</b>
+				<b>Empty List</b>
 			</span>
 		</div>
 		<div
@@ -108,11 +108,11 @@
 				<ul class="pagination justify-content-center flex-wrap">
 					<!-- First -->
 					<li th:class="${currentPageNumber > 1 ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="~{fragments::page_link(${moduleURL}, 1, 'Đầu')}"></a>
+						<a th:replace="~{fragments::page_link(${moduleURL}, 1, 'First')}"></a>
 					</li>
 					<!-- Previous -->
 					<li th:class="${currentPageNumber > 1 ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="~{fragments::page_link(${moduleURL}, ${currentPageNumber - 1}, 'Trước')}"></a>
+						<a th:replace="~{fragments::page_link(${moduleURL}, ${currentPageNumber - 1}, 'Prev')}"></a>
 					</li>
 					<!-- Page Numbers -->
 					<li
@@ -123,11 +123,11 @@
 					</li>
 					<!-- Next -->
 					<li th:class="${currentPageNumber < totalPageNumber ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="~{fragments::page_link(${moduleURL}, ${currentPageNumber + 1}, 'Tiếp')}"></a>
+						<a th:replace="~{fragments::page_link(${moduleURL}, ${currentPageNumber + 1}, 'Next')}"></a>
 					</li>
 					<!-- Last -->
 					<li th:class="${currentPageNumber < totalPageNumber ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="~{fragments::page_link(${moduleURL}, ${totalPageNumber}, 'Cuối')}"></a>
+						<a th:replace="~{fragments::page_link(${moduleURL}, ${totalPageNumber}, 'Last')}"></a>
 					</li>
 				</ul>
 			</nav>
@@ -167,7 +167,7 @@
 				th:value="${keyword}"
 				class="form-control mr-2 w-75"
 				type="search"
-				placeholder="Tìm kiếm..."
+				placeholder="Search..."
 				aria-label="Search"
 			/>
 			&nbsp;
@@ -175,7 +175,7 @@
 				class="btn btn-outline-success d-block ml-2 mr-2"
 				type="submit"
 				id="btnSearch"
-				title="Tìm kiếm"
+				title="Search"
 			>
 				<i class="fa-solid fa-magnifying-glass"></i>
 			</button>
@@ -183,7 +183,7 @@
 			<button
 				type="button"
 				class="btn btn-outline-secondary"
-				title="Xóa"
+				title="Clear"
 				onclick="clearFilter()"
 			>
 				<i class="fa-solid fa-broom"></i>
@@ -198,7 +198,7 @@
 		id="footer"
 		class="text-center m-3"
 	>
-		<p>Lab ông Tuyến - Copyright &copy; Lab Lee</p>
+		<p>Lab Lee Admin - Copyright &copy; AI-Driven Digital Image Processing Laboratory</p>
 	</div>
 	<!-- ============================== END Footer ============================================= -->
 
@@ -211,7 +211,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title">Xác nhận xóa</h4>
+					<h4 class="modal-title">Confirm Dialog</h4>
 					<button
 						type="button"
 						class="btn-close"
@@ -227,12 +227,12 @@
 						href=""
 						class="btn btn-success"
 						id="confirmButton"
-					>Xác nhận</a>
+					>Confirm</a>
 					<button
 						type="button"
 						class="btn btn-danger"
 						data-bs-dismiss="modal"
-					>Hủy</button>
+					>Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -249,7 +249,7 @@
 			class="fa-solid fa-pen-to-square fa-xl icon-green"
 			data-bs-toggle="tooltip"
 			data-bs-placement="top"
-			th:title="'Chỉnh sửa ' + ${entityName} + ' này'"
+			th:title="'Edit this ' + ${entityName}"
 		> </a>
 	</div>
 	<!-- ============================== END Edit Button  ============================================= -->
@@ -266,7 +266,7 @@
 				class="fa-solid fa-trash fa-xl link-delete icon-red"
 				data-bs-toggle="tooltip"
 				data-bs-placement="top"
-				th:title="'Xóa ' + ${entityName} + ' này'"
+				th:title="'Delete this ' + ${entityName}"
 			> </a>
 		</th:block>
 	</div>
@@ -302,7 +302,7 @@
 			class="link-enabled-false fa-solid fa-toggle-on fa-xl icon-blue"
 			data-bs-toggle="tooltip"
 			data-bs-placement="top"
-			th:title="'Khóa ' + ${entityName} + ' này'"
+			th:title="'Disable this ' + ${entityName}"
 			th:href="@{${entityURL} + '/enabled/false'}"
 		></a>
 		<a
@@ -311,7 +311,7 @@
 			class="link-enabled-true fa-solid fa-toggle-off fa-xl icon-silver"
 			data-bs-toggle="tooltip"
 			data-bs-placement="top"
-			th:title="'Mở khóa ' + ${entityName} + ' này'"
+			th:title="'Enable this ' + ${entityName}"
 			th:href="@{${entityURL} + '/enabled/true'}"
 		></a>
 	</div>

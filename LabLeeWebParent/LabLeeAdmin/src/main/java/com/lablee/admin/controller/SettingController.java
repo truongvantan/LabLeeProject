@@ -32,7 +32,6 @@ public class SettingController {
 		
 		List<Setting> listSettings = settingService.listAllSettings();
 
-
 		for (Setting setting : listSettings) {
 			model.addAttribute(setting.getKey(), setting.getValue());
 		}
@@ -82,6 +81,20 @@ public class SettingController {
 			String uploadDir = ConstantUtil.PATH_SITE_LOGO_DIR_DEFAULT;
 			FileUploadUtil.cleanDir(uploadDir);
 			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+		}
+	}
+	
+	@PostMapping("/settings/save_about_us")
+	public String saveAboutUsSetttings(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		List<Setting> aboutUsSettings = settingService.getAboutUsSettings();
+		
+		if (!settingService.checkValidSettingValue(request, aboutUsSettings)) {
+			redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng nhập đầy đủ thông tin.");
+			return "redirect:/settings";
+		} else {
+			updateSettingValuesFromForm(request, aboutUsSettings);
+			redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thông tin About Us thành công.");
+			return "redirect:/settings";
 		}
 	}
 	

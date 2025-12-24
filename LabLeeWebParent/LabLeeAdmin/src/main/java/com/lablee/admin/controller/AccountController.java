@@ -2,6 +2,8 @@ package com.lablee.admin.controller;
 
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class AccountController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
+	
 	private final UserService userService;
 
 	@GetMapping("/account")
@@ -36,9 +40,10 @@ public class AccountController {
 		try {
 			userAccountFormEditDTO = userService.findByEmail(email);
 		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-			model.addAttribute("errorMessage", "Không tìm thấy tài khoản có email: " + email);
-			redirectAttributes.addAttribute("errorMessage", "Không tìm thấy tài khoản có email: " + email);
+			LOGGER.error(e.getMessage(), e);
+			model.addAttribute("errorMessage", e.getMessage());
+			redirectAttributes.addAttribute("errorMessage", e.getMessage());
+			
 			return "redirect:/";
 		}
 
@@ -74,6 +79,5 @@ public class AccountController {
 
 
 		return "users/account_form";
-//		return "redirect:/account";
 	}
 }

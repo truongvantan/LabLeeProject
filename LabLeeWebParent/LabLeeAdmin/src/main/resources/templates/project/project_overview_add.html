@@ -6,7 +6,7 @@
 		th:remove="tag"
 	>
 		<div class="my-4">
-			<label>Title:</label>
+			<label class="fw-bold">Title <span class="text-danger">(*)</span>:</label>
 			<input
 				class="form-control"
 				th:field="*{title}"
@@ -19,7 +19,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Sponsor:</label>
+			<label class="fw-bold">Sponsor:</label>
 			<input
 				class="form-control"
 				th:field="*{sponsor}"
@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Budget (NTD):</label>
+			<label class="fw-bold">Budget (NTD):</label>
 			<input
 				class="form-control"
 				type="text"
@@ -47,7 +47,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Start Date:</label>
+			<label class="fw-bold">Start Date <span class="text-danger">(*)</span>:</label>
 			<input
 				class="form-control"
 				type="date"
@@ -62,7 +62,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>End Date:</label>
+			<label class="fw-bold">End Date:</label>
 			<input
 				class="form-control"
 				type="date"
@@ -74,9 +74,23 @@
 				class="text-danger"
 			>End Date Error</span>
 		</div>
+		
+		<div class="my-4">
+			<label class="fw-bold">List members:</label>
+			<select
+				class="form-select"
+				th:field="*{members}"
+				multiple
+				style="resize: vertical; height: 100px"
+			>
+				<th:block th:each="member : ${listMembers}">
+					<option th:value="${member.id}">[[${member.fullName}]]</option>
+				</th:block>
+			</select>
+		</div>
 
 		<div class="my-4">
-			<label>Enabled:</label>
+			<label class="fw-bold">Enabled:</label>
 			<div class="form-check form-switch mt-2">
 				<input
 					class="form-check-input"
@@ -88,7 +102,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Thumbnail:</label>
+			<label class="fw-bold">Thumbnail:</label>
 
 			<input
 				type="hidden"
@@ -112,21 +126,7 @@
 				alt="thumbnail"
 				th:src="@{${projectFormAddDTO.thumbnailPath}}"
 			/>
-			<small>Vui lòng chọn file có kích thước dưới 1MB</small>
-		</div>
-
-		<div class="my-4">
-			<label>List members:</label>
-			<select
-				class="form-select"
-				th:field="*{members}"
-				multiple
-				style="resize: vertical; height: 100px"
-			>
-				<th:block th:each="member : ${listMembers}">
-					<option th:value="${member.id}">[[${member.fullName}]]</option>
-				</th:block>
-			</select>
+			<small>Please select a file smaller than 1MB.</small>
 		</div>
 	</div>
 </body>

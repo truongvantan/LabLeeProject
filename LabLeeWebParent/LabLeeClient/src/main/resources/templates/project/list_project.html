@@ -4,10 +4,27 @@
 <body>
 	<section th:replace="~{fragments::header}"></section>
 	<div class="container">
-		<h1 class="text-center mt-3 text-header-color-common">Projects</h1>
+		<h1 class="text-center mt-3">Projects</h1>
 		<div class="line-break-common-5px text-center mt-3"></div>
 
 		<div th:replace="~{fragments::search_form('/projects', 'projects')}"></div>
+		<div class="row mb-3">
+			<div class="col-12">
+				<label class="fw-bold">Completion year:</label>
+				<select
+					id="sort-select"
+					class="form-select w-25 fw-bold"
+				>
+					<th:block th:each="sortDirValue : ${listSortDir}">
+						<option
+							th:value="${sortDirValue}"
+							th:selected="(${sortDir} == ${sortDirValue})"
+						>[[${sortDirValue}]]</option>
+					</th:block>
+				</select>
+			</div>
+		</div>
+		
 		<th:block th:each="project : ${listProjects}">
 			<div class="row">
 				<div class="row d-flex mt-2">
@@ -15,7 +32,7 @@
 						<a
 							th:href="@{'/projects/details/' + ${project.id}}"
 							class="fw-bold h3"
-						>[[${project.endDate}]]: [[${project.title}]]</a>
+						><span th:text="${#temporals.format(project.endDate, 'yyyy')}"></span> - [[${project.title}]]</a>
 					</div>
 				</div>
 				<div class="row d-flex mt-2">
@@ -72,11 +89,20 @@
 			<div class="line-break-common-2px text-center mt-3"></div>
 		</th:block>
 		<div th:replace="~{fragments::pagination('/projects', 'projects')}"></div>
-		<div th:replace="~{fragments::footer}"></div>
 	</div>
+	<div th:replace="~{fragments::footer}"></div>
 
 	<script type="text/javascript">
 		const moduleURL = "[[@{/projects}]]";
+		
+		$(document).ready(function () {
+			$('#sort-select').on('change', function() {
+		        const sortDir = $(this).val();
+		        $("input[name='sortField']").val('endDate');
+		        $("input[name='sortDir']").val(sortDir);
+		        $('#search-form').submit();
+		    });
+		});
 	</script>
 </body>
 </html>

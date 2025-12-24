@@ -54,4 +54,8 @@ public class SettingService {
 		
 		return true;
 	}
+
+	public List<Setting> getAboutUsSettings() {
+		return settingRepository.findByCategory(SettingCategory.ABOUT_US);
+	}
 }

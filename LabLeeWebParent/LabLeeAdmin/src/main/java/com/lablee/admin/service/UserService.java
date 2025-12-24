@@ -8,6 +8,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +44,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
 	private final UserRepository userRepository;
 	private final UserMapper userMapper;
 	private final RoleMapper roleMapper;
@@ -97,12 +101,15 @@ public class UserService {
 					FileUploadUtil.saveFile(uploadDir, savedUser.getPhoto(), multipartFile);
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 		} catch (DataIntegrityViolationException e) { // duplicate email
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER;
+			bindingResult.rejectValue("email", "userFormAddDTO.email",
+					ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER);
+
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		return ConstantUtil.MESSAGE_SUCCESS_INSERT_NEW_USER;
@@ -123,6 +130,7 @@ public class UserService {
 
 			return userFormEditDTO;
 		} catch (NoSuchElementException e) {
+			LOGGER.error(e.getMessage(), e);
 			throw new UserNotFoundException("Could not find any user with ID " + userId);
 		}
 	}
@@ -167,6 +175,11 @@ public class UserService {
 
 		// validation unique value
 		User editUser = userMapper.formEditDTOToEntity(userFormEditDTO);
+		
+		if (editUser.hasRole("Root Admin")) {
+			return "Cannot disable root admin account";
+		}
+		
 		try {
 			User savedUser = userRepository.save(editUser);
 
@@ -177,14 +190,17 @@ public class UserService {
 					FileUploadUtil.saveFile(uploadDir, savedUser.getPhoto(), multipartFile);
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 
 			userRepository.flush();
 		} catch (DataIntegrityViolationException e) { // duplicate email
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER;
+			bindingResult.rejectValue("email", "userFormEditDTO.email",
+					ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER);
+			
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_USER;
@@ -200,7 +216,11 @@ public class UserService {
 
 			if (userInDB.isPresent()) {
 				User user = userInDB.get();
-
+				
+				if (user.hasRole("Root Admin")) {
+					throw new UserNotFoundException("Cannot disable root admin account");
+				}
+				
 				user.setEnabled(enabled);
 				userRepository.save(user);
 			} else {
@@ -330,14 +350,18 @@ public class UserService {
 					userAccountFormEditDTO.setPhoto(savedUser.getPhoto());
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 
 			userRepository.flush();
 		} catch (DataIntegrityViolationException e) { // duplicate email
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER;
+
+			bindingResult.rejectValue("email", "userAccountFormEditDTO.email",
+					ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER);
+
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_USER_ACCOUNT;

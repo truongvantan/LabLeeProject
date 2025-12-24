@@ -115,7 +115,15 @@
 								th:href="@{/}"
 							>Home</a>
 						</li>
-
+						
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								th:classappend="${activeLink == '/about-us' ? 'active' : ''}"
+								th:href="@{/about-us}"
+							>About us</a>
+						</li>
+						
 						<li class="nav-item">
 							<a
 								class="nav-link"
@@ -149,9 +157,9 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								th:classappend="${activeLink == '/about-us' ? 'active' : ''}"
-								th:href="@{/about-us}"
-							>About us</a>
+								th:classappend="${activeLink == '/contact-us' ? 'active' : ''}"
+								th:href="@{/contact-us}"
+							>Contact us</a>
 						</li>
 					</ul>
 				</div>

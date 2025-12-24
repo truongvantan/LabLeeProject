@@ -29,7 +29,7 @@ public class FileUploadUtil {
 				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);	
 			}
 		} catch (IOException e) {
-			LOGGER.error("Could not save file: " + fileName);
+			LOGGER.error(e.getMessage(), e);
 			throw new IOException("Could not save file: " + fileName, e);
 		}
 	}
@@ -43,12 +43,12 @@ public class FileUploadUtil {
 					try {
 						Files.delete(file);
 					} catch (IOException e) {
-						LOGGER.error("Could not delete file: " + file);
+						LOGGER.error(e.getMessage(), e);
 					}
 				}
 			});
 		} catch (IOException e) {
-			LOGGER.error("Could not list directory: " + dirPath);
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class FileUploadUtil {
 		try {
 			Files.delete(Paths.get(dir));
 		} catch (IOException e) {
-			LOGGER.error("Could not remove directory: " + dir);
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 }

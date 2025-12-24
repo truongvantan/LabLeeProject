@@ -6,7 +6,7 @@
 		th:remove="tag"
 	>
 		<div class="my-4">
-			<label>Title:</label>
+			<label class="fw-bold">Title <span class="text-danger">(*)</span>:</label>
 			<input
 				class="form-control"
 				th:field="*{title}"
@@ -19,7 +19,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Publish Year:</label>
+			<label class="fw-bold">Publish Year <span class="text-danger">(*)</span>:</label>
 			<input
 				class="form-control"
 				th:field="*{publishYear}"
@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>DOI link:</label>
+			<label class="fw-bold">DOI link:</label>
 			<input
 				class="form-control"
 				th:field="*{doiLink}"
@@ -45,7 +45,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Enabled:</label>
+			<label class="fw-bold">Enabled:</label>
 			<div class="form-check form-switch mt-2">
 				<input
 					class="form-check-input"
@@ -57,7 +57,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Thumbnail:</label>
+			<label class="fw-bold">Thumbnail:</label>
 
 			<input
 				type="hidden"
@@ -81,7 +81,7 @@
 				alt="thumbnail"
 				th:src="@{${publicationFormEditDTO.thumbnailPath}}"
 			/>
-			<small>Vui lòng chọn file có kích thước dưới 1MB</small>
+			<small>Please select a file smaller than 1MB.</small>
 		</div>
 
 	</div>

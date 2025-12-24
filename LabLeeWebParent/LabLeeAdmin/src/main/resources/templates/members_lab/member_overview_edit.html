@@ -6,7 +6,7 @@
 		th:remove="tag"
 	>
 		<div class="my-4">
-			<label>Mã hồ sơ:</label>
+			<label class="fw-bold">Profile ID:</label>
 			<input
 				class="form-control"
 				th:field="*{id}"
@@ -15,7 +15,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Họ tên:</label>
+			<label class="fw-bold">Full name:</label>
 			<input
 				class="form-control"
 				th:field="*{fullName}"
@@ -24,7 +24,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Học hàm/Học vị:</label>
+			<label class="fw-bold">Academic rank:</label>
 			<input
 				class="form-control"
 				th:field="*{academicRank}"
@@ -37,7 +37,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Đơn vị đang công tác:</label>
+			<label class="fw-bold">Current Organization:</label>
 			<input
 				class="form-control"
 				th:field="*{currentOrganization}"
@@ -50,7 +50,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Lĩnh vực nghiên cứu:</label>
+			<label class="fw-bold">Research Interests:</label>
 			<input
 				class="form-control"
 				th:field="*{researchInterests}"
@@ -63,7 +63,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Email public:</label>
+			<label class="fw-bold">Email public:</label>
 			<input
 				class="form-control"
 				th:field="*{emailPublic}"
@@ -76,7 +76,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Ngày vào lab:</label>
+			<label class="fw-bold">Join date <span class="text-danger">(*)</span>:</label>
 			<input
 				class="form-control"
 				type="date"
@@ -91,7 +91,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Ngày tốt nghiệp:</label>
+			<label class="fw-bold">Graduation date:</label>
 			<input
 				class="form-control"
 				type="date"
@@ -105,7 +105,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Enabled:</label>
+			<label class="fw-bold">Enabled:</label>
 			<div class="form-check form-switch mt-2">
 				<input
 					class="form-check-input"
@@ -117,7 +117,7 @@
 		</div>
 
 		<div class="my-4">
-			<label>Avatar:</label>
+			<label class="fw-bold">Avatar:</label>
 
 			<input
 				type="hidden"
@@ -141,7 +141,7 @@
 				alt="avatar"
 				th:src="@{${memberLabProfileFormEditDTO.avatarPath}}"
 			/>
-			<small>Vui lòng chọn file có kích thước dưới 1MB</small>
+			<small>Please select a file smaller than 1MB.</small>
 		</div>
 	</div>
 </body>

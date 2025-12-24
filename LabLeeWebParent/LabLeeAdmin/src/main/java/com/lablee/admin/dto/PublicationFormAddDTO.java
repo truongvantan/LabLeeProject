@@ -2,6 +2,7 @@ package com.lablee.admin.dto;
 
 import com.lablee.common.constant.ConstantUtil;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -10,9 +11,11 @@ import lombok.Data;
 public class PublicationFormAddDTO {
 	private Integer id;
 	
+	@NotBlank(message = ConstantUtil.MESSAGE_FAIL_VALIDATION_BLANK_INPUT_TEXT)
 	@Size(max = 255, message = ConstantUtil.MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_255)
 	private String title;
 	
+	@NotBlank(message = ConstantUtil.MESSAGE_FAIL_VALIDATION_BLANK_INPUT_TEXT)
 	@Size(max = 255, message = ConstantUtil.MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_255)
 	private String doiLink;
 	

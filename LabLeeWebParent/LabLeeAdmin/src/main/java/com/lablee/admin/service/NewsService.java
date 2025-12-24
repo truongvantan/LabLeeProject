@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +39,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class NewsService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(NewsService.class);
+	
 	private final NewsRepository newsRepository;
 	private final UserRepository userRepository;
 	private final NewsMapper newsMapper;
@@ -121,11 +125,11 @@ public class NewsService {
 					FileUploadUtil.saveFile(uploadDir, savedNews.getThumbnail(), multipartFileThumbnail);
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 			newsRepository.flush();
 		} catch (DataIntegrityViolationException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			bindingResult.rejectValue("title", "newsFormEditDTO.title", ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_NEWS);
 			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
@@ -198,12 +202,12 @@ public class NewsService {
 					FileUploadUtil.saveFile(uploadDir, savedNews.getThumbnail(), multipartFileThumbnail);
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 			
 			newsRepository.flush();
 		} catch (DataIntegrityViolationException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			bindingResult.rejectValue("title", "newsFormEditDTO.title", ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_NEWS);
 			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;

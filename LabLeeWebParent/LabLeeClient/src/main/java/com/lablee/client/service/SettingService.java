@@ -22,4 +22,9 @@ public class SettingService {
 	public List<Setting> getGeneralSettings() {
 		return settingRepository.findByGeneralCategory(SettingCategory.GENERAL);
 	}
+
+	public Setting getAboutUsSetting() {
+		Setting aboutUsSetting = settingRepository.findByKey("SITE_ABOUT_US");
+		return aboutUsSetting;
+	}
 }

@@ -2,6 +2,8 @@ package com.lablee.admin.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class PublicationController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(PublicationController.class);
+	
 	private final PublicationService publicationService;
 	private final PaginationCommon paginationCommon;
 
@@ -107,20 +111,6 @@ public class PublicationController {
 
 	}
 
-//	@GetMapping("/publications/showEdit/{publicationId}")
-//	public String showEdit(Model model, @PathVariable(name = "publicationId", required = false) String publicationId,
-//			RedirectAttributes redirectAttributes) {
-//
-//		try {
-//			Publication publication = publicationService.findById(publicationId);
-//			model.addAttribute("publication", publication);
-//			return "publication/publication_form_edit";
-//		} catch (PublicationNotFoundException e) {
-//			redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy bài báo với id: " + publicationId);
-//			return "redirect:/publications";
-//		}
-//	}
-
 	@GetMapping("/publications/showEdit/{publicationId}")
 	public String showEdit(Model model, @PathVariable(name = "publicationId", required = false) String publicationId,
 			RedirectAttributes redirectAttributes) {
@@ -131,27 +121,11 @@ public class PublicationController {
 			model.addAttribute("publicationFormEditDTO", publicationFormEditDTO);
 			return "publication/publication_form_edit";
 		} catch (PublicationNotFoundException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy bài báo với id: " + publicationId);
+			LOGGER.error(e.getMessage(), e);
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 			return "redirect:/publications";
 		}
 	}
-
-//	@PostMapping("/publications/edit")
-//	public String editPublication(Model model,
-//			@RequestParam(name = "image", required = false) MultipartFile multipartFileThumbnail,
-//			@ModelAttribute(name = "publication") Publication publication, RedirectAttributes redirectAttributes) {
-//
-//		String messageReturned = publicationService.editPublication(publication, multipartFileThumbnail);
-//
-//		switch (messageReturned) {
-//		case ConstantUtil.MESSAGE_SUCCESS_EDIT_PUBLICATION:
-//			redirectAttributes.addFlashAttribute("successMessage", messageReturned);
-//			return "redirect:/publications";
-//		default:
-//			model.addAttribute("errorMessage", messageReturned);
-//			return "publication/publication_form_edit";
-//		}
-//	}
 
 	@PostMapping("/publications/edit")
 	public String editPublication(Model model,
@@ -187,7 +161,8 @@ public class PublicationController {
 					.append(publicationId).toString();
 			redirectAttributes.addFlashAttribute("successMessage", message);
 		} catch (PublicationNotFoundException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy bài báo có ID " + publicationId);
+			LOGGER.error(e.getMessage(), e);
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 			return "redirect:/publications";
 		}
 

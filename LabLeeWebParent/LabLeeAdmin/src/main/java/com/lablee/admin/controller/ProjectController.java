@@ -2,6 +2,8 @@ package com.lablee.admin.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class ProjectController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProjectController.class);
+	
 	private final ProjectService projectService;
 	private final MemberLabProfileService memberLabProfileService;
 	private final PaginationCommon paginationCommon;
@@ -77,17 +81,6 @@ public class ProjectController {
 		return "project/projects";
 	}
 
-//	@GetMapping("/projects/showAdd")
-//	public String showAdd(Model model) {
-//		List<MemberLabProfile> listMembers = memberLabProfileService.findAllEnabled();
-//		
-//		Project project = new Project();
-//		model.addAttribute("project", project);
-//		model.addAttribute("listMembers", listMembers);
-//		
-//		return "project/project_form_add";
-//	}
-
 	@GetMapping("/projects/showAdd")
 	public String showAdd(Model model) {
 		model.addAttribute("activeLink", "/projects");
@@ -100,23 +93,6 @@ public class ProjectController {
 
 		return "project/project_form_add";
 	}
-
-//	@PostMapping("/projects/add")
-//	public String addNewProject(Model model,
-//			@RequestParam(name = "image", required = false) MultipartFile multipartFileThumbnail,
-//			@ModelAttribute(name = "project") Project project, RedirectAttributes redirectAttributes) {
-//		
-//		String messageReturned = projectService.addNewProject(project, multipartFileThumbnail);
-//		
-//		switch (messageReturned) {
-//		case ConstantUtil.MESSAGE_SUCCESS_ADD_PROJECT:
-//			redirectAttributes.addFlashAttribute("successMessage", messageReturned);
-//			return "redirect:/projects";
-//		default:
-//			model.addAttribute("errorMessage", messageReturned);
-//			return "project/project_form_add";
-//		}
-//	}
 
 	@PostMapping("/projects/add")
 	public String addNewProject(Model model,
@@ -136,7 +112,6 @@ public class ProjectController {
 			model.addAttribute("listMembers", listMembers);
 			return "project/project_form_add";
 		}
-
 		default: {
 			model.addAttribute("errorMessage", messageReturned);
 			List<MemberLabProfile> listMembers = memberLabProfileService.findAllEnabled();
@@ -146,23 +121,6 @@ public class ProjectController {
 		}
 		}
 	}
-
-//	@GetMapping("/projects/showEdit/{projectId}")
-//	public String showEdit(Model model, @PathVariable(name = "projectId", required = false) String projectId,
-//			RedirectAttributes redirectAttributes) {
-//
-//		try {
-//			Project project = projectService.findById(projectId);
-//			List<MemberLabProfile> listMembers = memberLabProfileService.findAllEnabled();
-//			model.addAttribute("project", project);
-//			model.addAttribute("listMembers", listMembers);
-//
-//			return "project/project_form_edit";
-//		} catch (ProjectNotFoundException e) {
-//			redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy dự án với id: " + projectId);
-//			return "redirect:/projects";
-//		}
-//	}
 
 	@GetMapping("/projects/showEdit/{projectId}")
 	public String showEdit(Model model, @PathVariable(name = "projectId", required = false) String projectId,
@@ -178,29 +136,12 @@ public class ProjectController {
 
 			return "project/project_form_edit";
 		} catch (ProjectNotFoundException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy dự án với id: " + projectId);
+			LOGGER.error(e.getMessage(), e);
+			
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 			return "redirect:/projects";
 		}
 	}
-
-//	@PostMapping("/projects/edit")
-//	public String editPublication(Model model,
-//			@RequestParam(name = "image", required = false) MultipartFile multipartFileThumbnail,
-//			@ModelAttribute(name = "project") Project project, RedirectAttributes redirectAttributes) {
-//
-//		String messageReturned = projectService.editProject(project, multipartFileThumbnail);
-//
-//		switch (messageReturned) {
-//		case ConstantUtil.MESSAGE_SUCCESS_EDIT_PROJECT:
-//			redirectAttributes.addFlashAttribute("successMessage", messageReturned);
-//			return "redirect:/projects";
-//		default:
-//			model.addAttribute("errorMessage", messageReturned);
-//			List<MemberLabProfile> listMembers = memberLabProfileService.findAllEnabled();
-//			model.addAttribute("listMembers", listMembers);
-//			return "project/project_form_edit";
-//		}
-//	}
 
 	@PostMapping("/projects/edit")
 	public String editPublication(Model model,
@@ -241,7 +182,8 @@ public class ProjectController {
 					.append(projectId).toString();
 			redirectAttributes.addFlashAttribute("successMessage", message);
 		} catch (ProjectNotFoundException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy dự án có ID " + projectId);
+			LOGGER.error(e.getMessage(), e);
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 			return "redirect:/projects";
 		}
 

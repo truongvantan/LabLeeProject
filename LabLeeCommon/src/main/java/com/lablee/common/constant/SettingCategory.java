@@ -1,5 +1,5 @@
 package com.lablee.common.constant;
 
 public enum SettingCategory {
-	GENERAL
+	GENERAL, ABOUT_US
 }

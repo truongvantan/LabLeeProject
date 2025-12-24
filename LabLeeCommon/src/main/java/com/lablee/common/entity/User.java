@@ -98,7 +98,7 @@ public class User {
 		while (iterator.hasNext()) {
 			role = iterator.next();
 			
-			if (role.getName().equals(roleName)) {
+			if (role.getName().equalsIgnoreCase(roleName)) {
 				return true;
 			}
 		}

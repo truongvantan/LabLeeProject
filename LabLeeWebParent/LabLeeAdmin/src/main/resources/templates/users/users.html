@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: page_head('Danh sách tài khoản', 'none')}" />
+<head th:replace="~{fragments :: page_head('List Users', 'none')}" />
 <body>
 	<div class="container-fluid">
 		<div th:replace="~{navigation::menu}"></div>
-		<h1 class="text-center">List user</h1>
+		<h1 class="text-center mt-5">Manage Users</h1>
 		<div th:replace="~{fragments::alert_message_box}"></div>
 		<a
 			th:href="@{/users/showAdd}"
 			class="btn btn-primary"
-		>Thêm mới</a>
-		<div th:replace="~{fragments::search_form('/users', 'người dùng')}"></div>
+		>Add new</a>
+		<div th:replace="~{fragments::search_form('/users', 'user')}"></div>
 		<table class="table table-responsive-xl table-bordered table-hover">
 			<thead>
 				<tr>
 					<th th:replace="~{fragments::column_link('/users', 'id', 'ID')}" />
 					<th scope="col">Photo</th>
 					<th th:replace="~{fragments::column_link('/users', 'email', 'Email')}" />
-					<th th:replace="~{fragments::column_link('/users', 'fullName', 'Họ và tên')}" />
-					<th scope="col">Quyền</th>
-					<th th:replace="~{fragments::column_link('/users', 'enabled', 'Khả dụng')}" />
+					<th th:replace="~{fragments::column_link('/users', 'fullName', 'Full name')}" />
+					<th scope="col">Roles</th>
+					<th th:replace="~{fragments::column_link('/users', 'enabled', 'Enabled')}" />
 					<th scope="col">Activities</th>
 				</tr>
 			</thead>
@@ -43,11 +43,11 @@
 					<td>[[${userDTO.setRoleDTOs}]]</td>
 					<td>
 						<div
-							th:replace="~{fragments::enabled_status(${userDTO.enabled}, 'người dùng', '/users/' + ${userDTO.id}, ${userDTO.id})}"
+							th:replace="~{fragments::enabled_status(${userDTO.enabled}, 'user', '/users/' + ${userDTO.id}, ${userDTO.id})}"
 						></div>
 					</td>
 					<td>
-						<div th:replace="~{fragments::edit('người dùng', '/users/showEdit/' + ${userDTO.id})}"></div>
+						<div th:replace="~{fragments::edit('user', '/users/showEdit/' + ${userDTO.id})}"></div>
 					</td>
 				</tr>
 			</tbody>
@@ -69,12 +69,12 @@
 		$(document).ready(function() {
 			$(".link-enabled-true").on("click", function(e) {
 				e.preventDefault();
-				showConfirmModal($(this), 'người dùng', 'Bạn muốn mở khóa');
+				showConfirmModal($(this), 'user', 'You want to enable');
 			});
 			
 			$(".link-enabled-false").on("click", function(e) {
 				e.preventDefault();
-				showConfirmModal($(this), 'người dùng', 'Bạn chắc chắn muốn khóa');
+				showConfirmModal($(this), 'user', 'You definitely want to disable');
 			});
 		});
 	</script>

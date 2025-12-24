@@ -4,7 +4,7 @@
 <body>
 	<section th:replace="~{fragments::header}"></section>
 	<div class="container">
-		<h1 class="text-center mt-3 text-header-color-common">Our members</h1>
+		<h1 class="text-center mt-3">Our members</h1>
 		<div class="line-break-common-5px text-center mt-3"></div>
 		<div th:replace="~{fragments::search_form('/members', 'member')}"></div>
 		<div class="list-members">
@@ -15,7 +15,10 @@
 							class="card rounded-3"
 							style="height: 100%"
 						>
-							<a th:href="@{'/members/details/' + ${memberProfile.id}}" class="image-hover-scale">
+							<a
+								th:href="@{'/members/details/' + ${memberProfile.id}}"
+								class="image-hover-scale"
+							>
 								<img
 									th:src="@{${memberProfile.avatarPath}}"
 									class="card-img-top square"
@@ -23,20 +26,19 @@
 								>
 							</a>
 							<div class="card-body">
-								<h5 class="card-title">[[${memberProfile.fullName}]]</h5>
-								<div
-									class="member-organization"
-								
-								>
+								<h5 class="card-title">
+									<a th:href="@{'/members/details/' + ${memberProfile.id}}">[[${memberProfile.fullName}]]</a>
+								</h5>
+								<div class="member-organization">
 									<p class="card-text">[[${memberProfile.academicRank}]]</p>
 									<p class="card-text p-limit-2">[[${memberProfile.currentOrganization}]]</p>
 									<p class="card-text fst-italic ellipsis-content">[[${memberProfile.researchInterests}]]</p>
 									<p class="card-text">([[${memberProfile.displayPeriod}]])</p>
 
-								<a
-									th:href="@{'/members/details/' + ${memberProfile.id}}"
-									class="button_1 pt-2 pb-2"
-								>Details</a>
+									<a
+										th:href="@{'/members/details/' + ${memberProfile.id}}"
+										class="button_1 pt-2 pb-2"
+									>Biography</a>
 								</div>
 							</div>
 						</div>
@@ -49,7 +51,7 @@
 		<div th:replace="~{fragments::pagination('/members', 'members')}"></div>
 		<div th:replace="~{fragments::footer}"></div>
 	</div>
-	
+
 	<script type="text/javascript">
 		const moduleURL = "[[@{/members}]]";
 	</script>

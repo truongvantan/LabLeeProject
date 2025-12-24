@@ -3,6 +3,8 @@ package com.lablee.admin.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class UserController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+	
 	private final UserService userService;
 	private final RoleService roleService;
 	private final PaginationCommon paginationCommon;
@@ -135,7 +139,8 @@ public class UserController {
 
 			return "users/user_form_edit";
 		} catch (UserNotFoundException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy người dùng có ID " + userId);
+			LOGGER.error(e.getMessage(), e);
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 			return "redirect:/users";
 		}
 	}
@@ -176,7 +181,8 @@ public class UserController {
 			redirectAttributes.addFlashAttribute("successMessage", message);
 
 		} catch (UserNotFoundException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy người dùng có ID " + userId);
+			LOGGER.error(e.getMessage(), e);
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 			return "redirect:/users";
 		}
 

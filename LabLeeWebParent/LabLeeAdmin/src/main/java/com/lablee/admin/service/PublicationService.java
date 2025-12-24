@@ -5,12 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +35,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class PublicationService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(PublicationService.class);
+	
 	private final PublicationRepository publicationRepository;
 	private final PublicationMapper publicationMapper;
 
@@ -67,43 +74,11 @@ public class PublicationService {
 
 		listPublications = pagePublication.getContent();
 
-//		listUserDTOs = userMapper.toDTOList(listUsers);
 
 		return new Object[] { listPublications, totalPages, totalElements };
 	}
 
-//	@Transactional
-//	public String addNewPublication(Publication publication, MultipartFile multipartFileThumbnail) {
-//		// validation file size
-//		if (!FileUploadUtil.isValidFileSize(multipartFileThumbnail)) {
-//			return ConstantUtil.MESSAGE_FAIL_VALIDATION_UPLOAD_FILE_SIZE_1MB;
-//		}
-//
-//		// validation thumbnail
-//		if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-//			String fileName = StringUtils.cleanPath(multipartFileThumbnail.getOriginalFilename());
-//			publication.setThumbnail(fileName);
-//		} else if ("".equals(publication.getThumbnail()) || publication.getThumbnail() == null) {
-//			publication.setThumbnail(null);
-//		}
-//
-//		Publication savedPublication = publicationRepository.save(publication);
-//		String uploadDir = ConstantUtil.PATH_PUBLICATION_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedPublication.getId();
-//
-//		try {
-//			if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-//				FileUploadUtil.cleanDir(uploadDir);
-//				FileUploadUtil.saveFile(uploadDir, savedPublication.getThumbnail(), multipartFileThumbnail);
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return ConstantUtil.MESSAGE_FAIL_ADD_PUBLICATION;
-//		}
-//
-//		return ConstantUtil.MESSAGE_SUCCESS_ADD_PUBLICATION;
-//	}
-
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String addNewPublication(@Valid PublicationFormAddDTO publicationFormAddDTO, BindingResult bindingResult,
 			MultipartFile multipartFileThumbnail) {
 		// validation binding result form
@@ -125,39 +100,29 @@ public class PublicationService {
 		}
 		Publication publication = publicationMapper.formAddDTOToEntity(publicationFormAddDTO);
 
-		Publication savedPublication = publicationRepository.save(publication);
-		String uploadDir = ConstantUtil.PATH_PUBLICATION_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedPublication.getId();
-
 		try {
-			if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-				FileUploadUtil.cleanDir(uploadDir);
-				FileUploadUtil.saveFile(uploadDir, savedPublication.getThumbnail(), multipartFileThumbnail);
+			Publication savedPublication = publicationRepository.save(publication);
+			String uploadDir = ConstantUtil.PATH_PUBLICATION_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedPublication.getId();
+
+			try {
+				if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
+					FileUploadUtil.cleanDir(uploadDir);
+					FileUploadUtil.saveFile(uploadDir, savedPublication.getThumbnail(), multipartFileThumbnail);
+				}
+			} catch (IOException e) {
+				LOGGER.error(e.getMessage(), e);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ConstantUtil.MESSAGE_FAIL_ADD_PUBLICATION;
+			publicationRepository.flush();
+		} catch (DataIntegrityViolationException e) {
+			LOGGER.error(e.getMessage(), e);
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			bindingResult.rejectValue("title", "publicationFormAddDTO.title", ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_PUBLICATION);
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		return ConstantUtil.MESSAGE_SUCCESS_ADD_PUBLICATION;
 
 	}
-
-//	public Publication findById(String publicationId) throws PublicationNotFoundException {
-//		int id = -1;
-//
-//		try {
-//			id = Integer.parseInt(publicationId);
-//		} catch (NumberFormatException e) {
-//			throw new PublicationNotFoundException("Could not find any publication with ID " + publicationId);
-//		}
-//
-//		Optional<Publication> oPublication = publicationRepository.findById(id);
-//		if (oPublication.isPresent()) {
-//			return oPublication.get();
-//		} else {
-//			throw new PublicationNotFoundException("Could not find any publication with ID " + publicationId);
-//		}
-//	}
 
 	public PublicationFormEditDTO findById(String publicationId) throws PublicationNotFoundException {
 		int id = -1;
@@ -179,38 +144,7 @@ public class PublicationService {
 		}
 	}
 
-//	@Transactional
-//	public String editPublication(Publication publication, MultipartFile multipartFileThumbnail) {
-//		// validation file size
-//		if (!FileUploadUtil.isValidFileSize(multipartFileThumbnail)) {
-//			return ConstantUtil.MESSAGE_FAIL_VALIDATION_UPLOAD_FILE_SIZE_1MB;
-//		}
-//
-//		// validation thumbnail
-//		if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-//			String fileName = StringUtils.cleanPath(multipartFileThumbnail.getOriginalFilename());
-//			publication.setThumbnail(fileName);
-//		} else if ("".equals(publication.getThumbnail()) || publication.getThumbnail() == null) {
-//			publication.setThumbnail(null);
-//		}
-//
-//		Publication savedPublication = publicationRepository.save(publication);
-//		String uploadDir = ConstantUtil.PATH_PUBLICATION_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedPublication.getId();
-//
-//		try {
-//			if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-//				FileUploadUtil.cleanDir(uploadDir);
-//				FileUploadUtil.saveFile(uploadDir, savedPublication.getThumbnail(), multipartFileThumbnail);
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return ConstantUtil.MESSAGE_FAIL_EDIT_PUBLICATION;
-//		}
-//
-//		return ConstantUtil.MESSAGE_SUCCESS_EDIT_PUBLICATION;
-//	}
-
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String editPublication(@Valid PublicationFormEditDTO publicationFormEditDTO, BindingResult bindingResult,
 			MultipartFile multipartFileThumbnail) {
 		// validation binding result form
@@ -232,17 +166,24 @@ public class PublicationService {
 		}
 		Publication publication = publicationMapper.formEditDTOToEntity(publicationFormEditDTO);
 
-		Publication savedPublication = publicationRepository.save(publication);
-		String uploadDir = ConstantUtil.PATH_PUBLICATION_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedPublication.getId();
-
 		try {
-			if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-				FileUploadUtil.cleanDir(uploadDir);
-				FileUploadUtil.saveFile(uploadDir, savedPublication.getThumbnail(), multipartFileThumbnail);
+			Publication savedPublication = publicationRepository.save(publication);
+			String uploadDir = ConstantUtil.PATH_PUBLICATION_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedPublication.getId();
+
+			try {
+				if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
+					FileUploadUtil.cleanDir(uploadDir);
+					FileUploadUtil.saveFile(uploadDir, savedPublication.getThumbnail(), multipartFileThumbnail);
+				}
+			} catch (IOException e) {
+				LOGGER.error(e.getMessage(), e);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ConstantUtil.MESSAGE_FAIL_EDIT_PUBLICATION;
+			publicationRepository.flush();
+		} catch (DataIntegrityViolationException e) {
+			LOGGER.error(e.getMessage(), e);
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			bindingResult.rejectValue("title", "publicationFormEditDTO.title", ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_PUBLICATION);
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_PUBLICATION;

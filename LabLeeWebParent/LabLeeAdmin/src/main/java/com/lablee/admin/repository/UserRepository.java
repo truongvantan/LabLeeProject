@@ -35,7 +35,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 			FROM users u
 			INNER JOIN users_roles ur ON u.id = ur.user_id
 			INNER JOIN roles r ON r.id = ur.role_id
-			WHERE r.name = 'Thành viên lab'
+			WHERE r.name = 'Lab Member'
 			ORDER BY u.id
 			""", nativeQuery = true)
 	List<User> findAllByRoleMemberLab();
@@ -45,7 +45,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 			FROM users u
 			INNER JOIN users_roles ur ON u.id = ur.user_id
 			INNER JOIN roles r ON r.id = ur.role_id
-			WHERE r.name = 'Thành viên lab' AND u.id NOT IN (SELECT user_id FROM member_profiles)
+			WHERE r.name = 'Lab Member' AND u.id NOT IN (SELECT user_id FROM member_profiles)
 			ORDER BY u.id
 			""", nativeQuery = true)
 	List<User> findAllMemberLabWithoutProfile();

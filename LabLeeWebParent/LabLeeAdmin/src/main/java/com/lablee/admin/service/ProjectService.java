@@ -5,12 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +35,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProjectService.class);
+	
 	private final ProjectRepository projectRepository;
 	private final ProjectMapper projectMapper;
 
@@ -70,50 +77,7 @@ public class ProjectService {
 		return new Object[] { listProjects, totalPages, totalElements };
 	}
 
-//	@Transactional
-//	public String addNewProject(Project project, MultipartFile multipartFileThumbnail) {
-//		// validation file size
-//		if (!FileUploadUtil.isValidFileSize(multipartFileThumbnail)) {
-//			return ConstantUtil.MESSAGE_FAIL_VALIDATION_UPLOAD_FILE_SIZE_1MB;
-//		}
-//
-//		// validation thumbnail
-//		if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-//			String fileName = StringUtils.cleanPath(multipartFileThumbnail.getOriginalFilename());
-//			project.setThumbnail(fileName);
-//		} else if ("".equals(project.getThumbnail()) || project.getThumbnail() == null) {
-//			project.setThumbnail(null);
-//		}
-//
-//		if (project.getStartDate() == null) {
-//			return "Start Date không hợp lệ";
-//		}
-//
-//		// Validation endDate must >= startDate
-//		if (project.getEndDate() != null && project.getStartDate() != null
-//				&& project.getEndDate().isBefore(project.getStartDate())) {
-//
-//			return "End Date phải sau Start Date";
-//		}
-//
-//		Project savedProject = projectRepository.save(project);
-//		String uploadDir = ConstantUtil.PATH_PROJECT_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedProject.getId();
-//
-//		try {
-//			if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-//				FileUploadUtil.cleanDir(uploadDir);
-//				FileUploadUtil.saveFile(uploadDir, savedProject.getThumbnail(), multipartFileThumbnail);
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return ConstantUtil.MESSAGE_FAIL_ADD_PROJECT;
-//		}
-//
-//		return ConstantUtil.MESSAGE_SUCCESS_ADD_PROJECT;
-//
-//	}
-
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String addNewProject(@Valid ProjectFormAddDTO projectFormAddDTO, BindingResult bindingResult,
 			MultipartFile multipartFileThumbnail) {
 		// validation binding result form
@@ -151,39 +115,30 @@ public class ProjectService {
 
 		Project project = projectMapper.formAddDTOToEntity(projectFormAddDTO);
 
-		Project savedProject = projectRepository.save(project);
-		String uploadDir = ConstantUtil.PATH_PROJECT_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedProject.getId();
-
 		try {
-			if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-				FileUploadUtil.cleanDir(uploadDir);
-				FileUploadUtil.saveFile(uploadDir, savedProject.getThumbnail(), multipartFileThumbnail);
+			Project savedProject = projectRepository.save(project);
+			String uploadDir = ConstantUtil.PATH_PROJECT_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedProject.getId();
+
+			try {
+				if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
+					FileUploadUtil.cleanDir(uploadDir);
+					FileUploadUtil.saveFile(uploadDir, savedProject.getThumbnail(), multipartFileThumbnail);
+				}
+			} catch (IOException e) {
+				LOGGER.error(e.getMessage(), e);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ConstantUtil.MESSAGE_FAIL_ADD_PROJECT;
+			projectRepository.flush();
+		} catch (DataIntegrityViolationException e) {
+			LOGGER.error(e.getMessage(), e);
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			bindingResult.rejectValue("title", "projectFormAddDTO.title",
+					ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_PROJECT);
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		return ConstantUtil.MESSAGE_SUCCESS_ADD_PROJECT;
 
 	}
-
-//	public Project findById(String projectId) throws ProjectNotFoundException {
-//		int id = -1;
-//
-//		try {
-//			id = Integer.parseInt(projectId);
-//		} catch (NumberFormatException e) {
-//			throw new ProjectNotFoundException("Could not find any project with ID " + projectId);
-//		}
-//
-//		Optional<Project> oProject = projectRepository.findById(id);
-//		if (oProject.isPresent()) {
-//			return oProject.get();
-//		} else {
-//			throw new ProjectNotFoundException("Could not find any project with ID " + projectId);
-//		}
-//	}
 
 	public ProjectFormEditDTO findById(String projectId) throws ProjectNotFoundException {
 		int id = -1;
@@ -205,49 +160,7 @@ public class ProjectService {
 		}
 	}
 
-	@Transactional
-	public String editProject(Project project, MultipartFile multipartFileThumbnail) {
-		// validation file size
-		if (!FileUploadUtil.isValidFileSize(multipartFileThumbnail)) {
-			return ConstantUtil.MESSAGE_FAIL_VALIDATION_UPLOAD_FILE_SIZE_1MB;
-		}
-
-		// validation thumbnail
-		if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-			String fileName = StringUtils.cleanPath(multipartFileThumbnail.getOriginalFilename());
-			project.setThumbnail(fileName);
-		} else if ("".equals(project.getThumbnail()) || project.getThumbnail() == null) {
-			project.setThumbnail(null);
-		}
-
-		if (project.getStartDate() == null) {
-			return "Start Date không hợp lệ";
-		}
-
-		// Validation endDate must >= startDate
-		if (project.getEndDate() != null && project.getStartDate() != null
-				&& project.getEndDate().isBefore(project.getStartDate())) {
-
-			return "End Date phải sau Start Date";
-		}
-
-		Project savedProject = projectRepository.save(project);
-		String uploadDir = ConstantUtil.PATH_PROJECT_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedProject.getId();
-
-		try {
-			if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-				FileUploadUtil.cleanDir(uploadDir);
-				FileUploadUtil.saveFile(uploadDir, savedProject.getThumbnail(), multipartFileThumbnail);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ConstantUtil.MESSAGE_FAIL_EDIT_PROJECT;
-		}
-
-		return ConstantUtil.MESSAGE_SUCCESS_EDIT_PROJECT;
-	}
-
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String editProject(@Valid ProjectFormEditDTO projectFormEditDTO, BindingResult bindingResult,
 			MultipartFile multipartFileThumbnail) {
 		// validation binding result form
@@ -285,17 +198,25 @@ public class ProjectService {
 
 		Project project = projectMapper.formEditDTOToEntity(projectFormEditDTO);
 
-		Project savedProject = projectRepository.save(project);
-		String uploadDir = ConstantUtil.PATH_PROJECT_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedProject.getId();
-
 		try {
-			if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
-				FileUploadUtil.cleanDir(uploadDir);
-				FileUploadUtil.saveFile(uploadDir, savedProject.getThumbnail(), multipartFileThumbnail);
+			Project savedProject = projectRepository.save(project);
+			String uploadDir = ConstantUtil.PATH_PROJECT_THUMBNAIL_UPLOAD_DIR_DEFAULT + savedProject.getId();
+
+			try {
+				if (multipartFileThumbnail != null && !multipartFileThumbnail.isEmpty()) {
+					FileUploadUtil.cleanDir(uploadDir);
+					FileUploadUtil.saveFile(uploadDir, savedProject.getThumbnail(), multipartFileThumbnail);
+				}
+			} catch (IOException e) {
+				LOGGER.error(e.getMessage(), e);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ConstantUtil.MESSAGE_FAIL_EDIT_PROJECT;
+			projectRepository.flush();
+		} catch (DataIntegrityViolationException e) {
+			LOGGER.error(e.getMessage(), e);
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			bindingResult.rejectValue("title", "projectFormEditDTO.title",
+					ConstantUtil.MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_PROJECT);
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_PROJECT;

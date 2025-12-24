@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: page_head('Danh sách bài báo', 'none')}" />
+<head th:replace="~{fragments :: page_head('Manage publications', 'none')}" />
 <body>
 	<div class="container-fluid">
 		<div th:replace="~{navigation::menu}"></div>
-		<h1 class="text-center mt-5">Danh sách bài báo</h1>
+		<h1 class="text-center mt-5">Manage Publications</h1>
 		<div th:replace="~{fragments::alert_message_box}"></div>
 		<a
 			th:href="@{/publications/showAdd}"
 			class="btn btn-primary"
-		>Thêm mới</a>
-		<div th:replace="~{fragments::search_form('/publications', 'bài báo')}"></div>
+		>Add new</a>
+		<div th:replace="~{fragments::search_form('/publications', 'publication')}"></div>
 		<table class="table table-responsive-xl table-bordered table-hover">
 			<thead>
 				<tr>
@@ -52,7 +52,7 @@
 					</td>
 					<td>
 						<div
-							th:replace="~{fragments::edit('bài báo', '/publications/showEdit/' + ${publication.id})}"
+							th:replace="~{fragments::edit('publication', '/publications/showEdit/' + ${publication.id})}"
 						></div>
 					</td>
 				</tr>
@@ -76,12 +76,12 @@
 		$(document).ready(function() {
 			$(".link-enabled-true").on("click", function(e) {
 				e.preventDefault();
-				showConfirmModal($(this), 'bài báo', 'Bạn muốn mở khóa');
+				showConfirmModal($(this), 'publication', 'You want to enable');
 			});
 			
 			$(".link-enabled-false").on("click", function(e) {
 				e.preventDefault();
-				showConfirmModal($(this), 'bài báo', 'Bạn chắc chắn muốn khóa');
+				showConfirmModal($(this), 'publication', 'You definitely want to disable');
 			});
 		});
 

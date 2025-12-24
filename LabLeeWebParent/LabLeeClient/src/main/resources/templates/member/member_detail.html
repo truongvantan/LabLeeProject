@@ -4,8 +4,8 @@
 <body>
 	<section th:replace="~{fragments::header}"></section>
 	<div class="container mt-5">
-		<h1 class="text-center mt-3">Our members</h1>
-		<div class="line text-center mt-3"></div>
+		<h1 class="text-center mt-3 text-header-color-common">Biography</h1>
+		<div class="line-break-common-5px text-center mt-3"></div>
 		<div th:replace="~{fragments::search_form('/members', 'member')}"></div>
 		<h2 class="text-center mt-5">[[${memberLabProfile.user.fullName}]]</h2>
 		<h4 class="text-center">[[${memberLabProfile.currentOrganization}]]</h4>

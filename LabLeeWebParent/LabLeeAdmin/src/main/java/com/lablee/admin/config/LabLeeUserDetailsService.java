@@ -2,6 +2,8 @@ package com.lablee.admin.config;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +16,7 @@ import com.lablee.common.entity.User;
 
 
 public class LabLeeUserDetailsService implements UserDetailsService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LabLeeUserDetailsService.class);
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -30,7 +33,8 @@ public class LabLeeUserDetailsService implements UserDetailsService {
 			return new LabLeeUserDetails(userLoginDTO);
 		}
 		
-		throw new UsernameNotFoundException("Could not find user with email: " + email);
+		LOGGER.error("Could not find any user with email: {}", email);
+		throw new UsernameNotFoundException("Could not find any user with email: " + email);
 	}
 
 }

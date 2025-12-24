@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: page_head('Thêm mới người dùng', 'none')}" />
+<head th:replace="~{fragments :: page_head('Add new user', 'none')}" />
 <body>
 	<div class="container-fluid">
 		<div th:replace="~{navigation::menu}"></div>
-		<h1 class="text-center">Thêm mới người dùng</h1>
+		<h1 class="text-center mt-5">Add a new user</h1>
 		<div th:replace="~{fragments::alert_message_box}"></div>
 		<form
 			th:action="@{/users/add}"
@@ -16,7 +16,7 @@
 			<div class="border border-secondary rounded p-3">
 				<div class="form-group row mb-3">
 					<label
-						class="col-sm-4 col-form-label"
+						class="col-sm-4 col-form-label fw-bold"
 						for="email"
 					>
 						Email:
@@ -38,10 +38,10 @@
 				</div>
 				<div class="form-group row mb-3">
 					<label
-						class="col-sm-4 col-form-label"
+						class="col-sm-4 col-form-label fw-bold"
 						for="fullName"
 					>
-						Họ và tên:
+						Full name:
 						<span class="text-danger">(*)</span>
 					</label>
 					<div class="col-sm-8">
@@ -60,10 +60,10 @@
 				</div>
 				<div class="form-group row mb-3">
 					<label
-						class="col-sm-4 col-form-label"
+						class="col-sm-4 col-form-label fw-bold"
 						for="password"
 					>
-						Mật khẩu:
+						Password:
 						<span class="text-danger">(*)</span>
 					</label>
 					<div class="col-sm-8">
@@ -83,10 +83,10 @@
 				</div>
 				<div class="form-group row mb-3">
 					<label
-						class="col-sm-4 col-form-label"
+						class="col-sm-4 col-form-label fw-bold"
 						for="repassword"
 					>
-						Nhập lại mật khẩu:
+						Confirm password:
 						<span class="text-danger">(*)</span>
 					</label>
 					<div class="col-sm-8">
@@ -105,7 +105,7 @@
 					</div>
 				</div>
 				<div class="form-group row mb-3">
-					<label class="col-sm-4 col-form-label d-flex align-items-center">Quyền:</label>
+					<label class="col-sm-4 col-form-label d-flex align-items-center fw-bold">Roles:</label>
 					<div class="col-sm-8">
 						<th:block th:each="roleDTO : ${listRoleDTOs}">
 							<div class="form-check">
@@ -132,9 +132,9 @@
 				</div>
 				<div class="form-group row mb-3">
 					<label
-						class="col-sm-4 col-form-label"
+						class="col-sm-4 col-form-label fw-bold"
 						for="enabled"
-					>Khả dụng:</label>
+					>Enabled:</label>
 					<div class="col-sm-8">
 						<div class="form-check form-switch mt-2">
 							<input
@@ -153,7 +153,7 @@
 				</div>
 				<div class="form-group row mb-3">
 					<label
-						class="col-sm-4 col-form-label"
+						class="col-sm-4 col-form-label fw-bold"
 						for="fileImage"
 					>Avatar:</label>
 					<div class="col-sm-8 d-flex flex-wrap">
@@ -179,17 +179,18 @@
 							alt="photo"
 							th:src="@{/images/default-user.png}"
 						/>
+						<small>Please select a file smaller than 1MB.</small>
 					</div>
 				</div>
 				<div class="text-center">
 					<input
 						type="submit"
-						value="Thêm mới"
+						value="Add"
 						class="btn btn-primary m-3"
 					/>
 					<input
 						type="button"
-						value="Thoát"
+						value="Exit"
 						class="btn btn-secondary"
 						id="buttonCancel"
 					/>

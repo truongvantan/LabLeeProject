@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lablee.admin.dto.RoleDTO;
 import com.lablee.admin.mapper.RoleMapper;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RoleService {
 	private final RoleRepository roleRepository;
 	private final RoleMapper roleMapper;

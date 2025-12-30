@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-	
+
 	private final UserService userService;
 	private final RoleService roleService;
 	private final PaginationCommon paginationCommon;
@@ -41,34 +41,39 @@ public class UserController {
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
 		model.addAttribute("activeLink", "/users");
-		return listByPage(model, "1", "id", "asc", null);
+		return listByPage(model, "1", "id", "asc", "5", null);
 	}
 
 	@GetMapping("/users/page/{pageNum}")
 	public String listByPage(Model model, @PathVariable(name = "pageNum", required = false) String strPageNum,
 			@RequestParam(name = "sortField", defaultValue = "id") String sortField,
 			@RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
+			@RequestParam(name = "pageSize", defaultValue = "5") String strPageSize,
 			@RequestParam(name = "keyword", defaultValue = "") String keyword) {
 		model.addAttribute("activeLink", "/users");
-		
-		Object[] arrReturned = userService.listByPage(strPageNum, keyword, sortField, sortDir);
-		
-		List<UserDTO> listUserDTOs = (List<UserDTO>)arrReturned[0];
-		int totalPageNumber = (int)arrReturned[1];
-		long totalElements = (long)arrReturned[2];
-		
+
+		Object[] arrReturned = userService.listByPage(strPageNum, keyword, sortField, sortDir, strPageSize);
+
+		List<UserDTO> listUserDTOs = (List<UserDTO>) arrReturned[0];
+		int totalPageNumber = (int) arrReturned[1];
+		long totalElements = (long) arrReturned[2];
+
 		String reverseSortDir = "asc".equals(sortDir) ? "desc" : "asc";
-		
+
 		int currentPageNumber = 1;
-		
+		int pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
+
 		try {
 			currentPageNumber = Integer.parseInt(strPageNum);
+			pageSize = Integer.parseInt(strPageSize);
 		} catch (NumberFormatException e) {
 			currentPageNumber = 1;
+			pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
 		}
-		
+
 		List<Integer> pageNumbers = paginationCommon.getListPageNumbers(totalPageNumber, currentPageNumber);
-		
+		List<String> listPageSize = List.of(ConstantUtil.LIST_PAGE_SIZE);
+
 		model.addAttribute("currentPageNumber", currentPageNumber);
 		model.addAttribute("totalPageNumber", totalPageNumber);
 		model.addAttribute("totalItems", totalElements);
@@ -78,6 +83,8 @@ public class UserController {
 		model.addAttribute("reverseSortDir", reverseSortDir);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("listUserDTOs", listUserDTOs);
+		model.addAttribute("listPageSize", listPageSize);
+		model.addAttribute("pageSize", pageSize);
 
 		return "users/users";
 	}
@@ -85,7 +92,7 @@ public class UserController {
 	@GetMapping("users/showAdd")
 	public String showAdd(Model model) {
 		model.addAttribute("activeLink", "/users");
-		
+
 		UserFormAddDTO userFormAddDTO = new UserFormAddDTO();
 		userFormAddDTO.setEnabled(true);
 		List<RoleDTO> listRoleDTOs = roleService.getListRoleDTOS();
@@ -101,7 +108,7 @@ public class UserController {
 			@Valid @ModelAttribute UserFormAddDTO userFormAddDTO, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
 		model.addAttribute("activeLink", "/users");
-		
+
 		List<RoleDTO> listRoleDTOs = new ArrayList<>();
 		String messageReturned = userService.saveNewUser(userFormAddDTO, bindingResult, multipartFile);
 
@@ -130,7 +137,7 @@ public class UserController {
 	public String showEditUser(Model model, @PathVariable(name = "userId", required = false) String userId,
 			RedirectAttributes redirectAttributes) {
 		model.addAttribute("activeLink", "/users");
-		
+
 		try {
 			UserFormEditDTO userFormEditDTO = userService.findById(userId);
 			List<RoleDTO> listRoleDTOs = roleService.getListRoleDTOS();
@@ -150,7 +157,7 @@ public class UserController {
 			@Valid @ModelAttribute UserFormEditDTO userFormEditDTO, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
 		model.addAttribute("activeLink", "/users");
-		
+
 		List<RoleDTO> listRoleDTOs = new ArrayList<>();
 		String messageReturned = userService.editUser(userFormEditDTO, bindingResult, multipartFile);
 
@@ -172,11 +179,11 @@ public class UserController {
 	public String editUserEnabledStatus(Model model, @PathVariable(name = "userId", required = false) String userId,
 			@PathVariable(name = "status", required = false) boolean enabled, RedirectAttributes redirectAttributes) {
 		model.addAttribute("activeLink", "/users");
-		
+
 		try {
 			userService.updateUserEnabledStatus(userId, enabled);
-			String status = enabled ? "mở khóa" : "khóa";
-			String message = new StringBuffer("").append("Đã ").append(status).append(" người dùng ID ").append(userId)
+			String status = enabled ? "Enabled" : "Disabled";
+			String message = new StringBuffer("").append(status).append(" user ID ").append(userId)
 					.toString();
 			redirectAttributes.addFlashAttribute("successMessage", message);
 

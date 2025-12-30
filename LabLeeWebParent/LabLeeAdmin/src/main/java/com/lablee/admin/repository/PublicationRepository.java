@@ -13,7 +13,7 @@ import com.lablee.common.entity.Publication;
 public interface PublicationRepository extends JpaRepository<Publication, Integer> {
 
 	@Query("""
-			SELECT p
+			SELECT DISTINCT p
 			FROM Publication p
 			WHERE
 				CONCAT(p.id, '') LIKE LOWER(CONCAT('%', :keyword, '%'))

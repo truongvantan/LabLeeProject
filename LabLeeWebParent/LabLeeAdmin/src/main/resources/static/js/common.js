@@ -3,21 +3,18 @@ $(document).ready(function() {
 		e.preventDefault();
 		document.logoutForm.submit();
 	});
-	
+
+	$('#cbbPageSize').on('change', function() {
+		const pageSizeValue = $(this).val();
+		$("input[name='pageSize']").val(pageSizeValue);
+		$('#search-form').submit();
+	});
+
 	customizeDropDownMenu()
 });
 
 function customizeDropDownMenu() {
-	$(".navbar .dropdown").hover(
-		function() {
-			$(this).find(".dropdown-menu").first().stop(true, true).delay(150).slideDown();
-		},
-		function() {
-			$(this).find(".dropdown-menu").first().stop(true, true).delay(100).slideUp();
-		}
-	);
-	
-	$(".dropdown > a").click(function() {
+	$(".dropdown > a").click(function(e) {
 		location.href = this.href;
 	});
 }

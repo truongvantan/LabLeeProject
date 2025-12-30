@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lablee.client.repository.PublicationRepository;
 import com.lablee.common.entity.Publication;
@@ -16,9 +17,10 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PublicationService {
 	private final PublicationRepository publicationRepository;
-	private static final int PAGE_SIZE = 3;
+	private static final int PAGE_SIZE = 5;
 	/**
 	 * @return Object[0]: List(Publication)<br>
 	 *         Object[1]: int totalPages<br>
@@ -62,6 +64,9 @@ public class PublicationService {
 		return publicationRepository.getTotalPublicationsEnabled();
 	}
 	public List<Publication> getList3LatestPublications() {
-		return publicationRepository.findFirst3ByOrderByPublishYearDesc();
+		Pageable pageable = PageRequest.of(0, 3);
+		Page<Publication> pagePublication = publicationRepository.findFirst3ByOrderByPublishYearDesc(pageable);
+		
+		return pagePublication.getContent();
 	}
 }

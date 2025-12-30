@@ -43,6 +43,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
@@ -50,15 +51,6 @@ public class UserService {
 	private final UserMapper userMapper;
 	private final RoleMapper roleMapper;
 	private final PasswordEncoder passwordEncoder;
-
-	public List<UserDTO> getListUserDTOs() {
-		List<UserDTO> listUserDTOs = new ArrayList<>();
-		List<User> listUsers = userRepository.findAllByOrderByIdAsc();
-
-		listUserDTOs = userMapper.toDTOList(listUsers);
-
-		return listUserDTOs;
-	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String saveNewUser(@Valid UserFormAddDTO userFormAddDTO, BindingResult bindingResult,
@@ -69,8 +61,9 @@ public class UserService {
 		}
 
 		// validation password vs repassword
-		if (!userFormAddDTO.getPassword().equals(userFormAddDTO.getRepassword())) {
-			return ConstantUtil.MESSAGE_FAIL_VALIDATION_REPASSWORD_PASSWORD_USER;
+		if (!userFormAddDTO.getPassword().equals(userFormAddDTO.getConfirmPassword())) {
+			bindingResult.rejectValue("confirmPassword", "userFormAddDTO.confirmPassword", ConstantUtil.MESSAGE_FAIL_VALIDATION_CONFIRM_PASSWORD_PASSWORD_USER);
+			return ConstantUtil.MESSAGE_FAIL_VALIDATION_BINDING_RESULT;
 		}
 
 		// validation file size
@@ -206,7 +199,6 @@ public class UserService {
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_USER;
 	}
 
-	@Transactional
 	public void updateUserEnabledStatus(String userId, boolean enabled) throws UserNotFoundException {
 		int id = -1;
 
@@ -236,21 +228,24 @@ public class UserService {
 	 *         Object[1]: int totalPages<br>
 	 *         Object[2]: long totalElements
 	 */
-	public Object[] listByPage(String strPageNum, String keyword, String sortField, String sortDir) {
+	public Object[] listByPage(String strPageNum, String keyword, String sortField, String sortDir, String strPageSize) {
 		List<UserDTO> listUserDTOs = new ArrayList<>();
 
 		int pageNum = 1;
-
+		int pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
+		
 		try {
 			pageNum = Integer.parseInt(strPageNum);
+			pageSize = Integer.parseInt(strPageSize);
 		} catch (NumberFormatException e) {
 			pageNum = 1;
+			pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
 		}
 
 		Sort sort = Sort.by(sortField);
 		sort = "asc".equals(sortDir) ? sort.ascending() : sort.descending();
 
-		Pageable pageable = PageRequest.of(pageNum - 1, ConstantUtil.PAGE_SIZE_DEFAULT, sort);
+		Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
 
 		Page<User> pageUser = null;
 
@@ -259,7 +254,7 @@ public class UserService {
 		} else {
 			pageUser = userRepository.findAll(keyword.trim(), pageable);
 		}
-
+		
 		int totalPages = pageUser.getTotalPages();
 		long totalElements = pageUser.getTotalElements();
 
@@ -270,7 +265,7 @@ public class UserService {
 		return new Object[] { listUserDTOs, totalPages, totalElements };
 
 	}
-
+	
 	public UserAccountFormEditDTO findByEmail(String email) throws UserNotFoundException {
 		Optional<User> oUser = userRepository.findByEmail(email);
 		if (oUser.isPresent()) {
@@ -367,7 +362,7 @@ public class UserService {
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_USER_ACCOUNT;
 
 	}
-
+	
 	public Set<RoleDTO> getSetRolesByEmail(String email) {
 		Set<RoleDTO> setRolesDTO = new HashSet<>();
 		Optional<User> oUser = userRepository.findByEmail(email);
@@ -380,18 +375,10 @@ public class UserService {
 		return setRolesDTO;
 	}
 
-	public List<User> findAll() {
-		return userRepository.findAll();
-	}
-
-	public List<User> findAllByRoleMemberLab() {
-		return userRepository.findAllByRoleMemberLab();
-	}
-
 	public List<User> findAllMemberLabWithoutProfile() {
 		return userRepository.findAllMemberLabWithoutProfile();
 	}
-
+	
 	public User findById(Integer id) {
 		return userRepository.findById(id).get();
 	}

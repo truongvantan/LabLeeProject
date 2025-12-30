@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.lablee.common.entity.MemberLabProfile;
+import com.lablee.common.entity.User;
 
 @Repository
 public interface MemberLabProfileRepository extends JpaRepository<MemberLabProfile, Integer> {
@@ -31,16 +32,13 @@ public interface MemberLabProfileRepository extends JpaRepository<MemberLabProfi
 	Page<MemberLabProfile> findAll(@Param("keyword") String keyword, Pageable pageable);
 
 	@Query("""
-			SELECT m FROM MemberLabProfile m JOIN FETCH m.user u
-			WHERE m.id = :id
-			""")
-	Optional<MemberLabProfile> findByIdCustom(@Param("id") int id);
-	
-	@Query("""
 			SELECT m
 			FROM MemberLabProfile m
 			WHERE m.enabled = TRUE
 			""")
 	List<MemberLabProfile> findAllEnabled();
+	
+	
+	Optional<MemberLabProfile> findByUser(User user);
 
 }

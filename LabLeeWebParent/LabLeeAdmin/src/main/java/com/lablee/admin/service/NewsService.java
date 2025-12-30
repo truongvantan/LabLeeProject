@@ -38,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class NewsService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NewsService.class);
 	
@@ -50,21 +51,24 @@ public class NewsService {
 	 *         Object[1]: int totalPages<br>
 	 *         Object[2]: long totalElements
 	 */
-	public Object[] listByPage(String strPageNum, String keyword, String sortField, String sortDir) {
+	public Object[] listByPage(String strPageNum, String keyword, String sortField, String sortDir, String strPageSize) {
 		List<News> listNews = new ArrayList<>();
 
 		int pageNum = 1;
-
+		int pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
+		
 		try {
 			pageNum = Integer.parseInt(strPageNum);
+			pageSize = Integer.parseInt(strPageSize);
 		} catch (NumberFormatException e) {
 			pageNum = 1;
+			pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
 		}
 
 		Sort sort = Sort.by(sortField);
 		sort = "asc".equals(sortDir) ? sort.ascending() : sort.descending();
 
-		Pageable pageable = PageRequest.of(pageNum - 1, ConstantUtil.PAGE_SIZE_DEFAULT, sort);
+		Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
 
 		Page<News> pageNews = null;
 
@@ -216,7 +220,6 @@ public class NewsService {
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_NEWS;
 	}
 	
-	@Transactional
 	public void editNewsEnabledStatus(String newsId, boolean enabled) throws NewsNotFoundException {
 		int id = -1;
 

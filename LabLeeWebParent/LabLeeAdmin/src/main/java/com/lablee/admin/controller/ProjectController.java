@@ -40,17 +40,18 @@ public class ProjectController {
 	@GetMapping("/projects")
 	public String listFirstPage(Model model) {
 		model.addAttribute("activeLink", "/projects");
-		return listByPage(model, "1", "id", "asc", null);
+		return listByPage(model, "1", "id", "asc", "5", null);
 	}
 
 	@GetMapping("/projects/page/{pageNum}")
 	public String listByPage(Model model, @PathVariable(name = "pageNum", required = false) String strPageNum,
 			@RequestParam(name = "sortField", defaultValue = "id") String sortField,
 			@RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
+			@RequestParam(name = "pageSize", defaultValue = "5") String strPageSize,
 			@RequestParam(name = "keyword", defaultValue = "") String keyword) {
 		model.addAttribute("activeLink", "/projects");
 		
-		Object[] arrReturned = projectService.listByPage(strPageNum, keyword, sortField, sortDir);
+		Object[] arrReturned = projectService.listByPage(strPageNum, keyword, sortField, sortDir, strPageSize);
 
 		List<Project> listProjects = (List<Project>) arrReturned[0];
 		int totalPageNumber = (int) arrReturned[1];
@@ -59,15 +60,19 @@ public class ProjectController {
 		String reverseSortDir = "asc".equals(sortDir) ? "desc" : "asc";
 
 		int currentPageNumber = 1;
+		int pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
 
 		try {
 			currentPageNumber = Integer.parseInt(strPageNum);
+			pageSize = Integer.parseInt(strPageSize);
 		} catch (NumberFormatException e) {
 			currentPageNumber = 1;
+			pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
 		}
 
 		List<Integer> pageNumbers = paginationCommon.getListPageNumbers(totalPageNumber, currentPageNumber);
-
+		List<String> listPageSize = List.of(ConstantUtil.LIST_PAGE_SIZE);
+		
 		model.addAttribute("currentPageNumber", currentPageNumber);
 		model.addAttribute("totalPageNumber", totalPageNumber);
 		model.addAttribute("totalItems", totalElements);
@@ -77,6 +82,8 @@ public class ProjectController {
 		model.addAttribute("reverseSortDir", reverseSortDir);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("listProjects", listProjects);
+		model.addAttribute("listPageSize", listPageSize);
+		model.addAttribute("pageSize", pageSize);
 
 		return "project/projects";
 	}
@@ -177,8 +184,8 @@ public class ProjectController {
 		
 		try {
 			projectService.editProjectEnabledStatus(projectId, enabled);
-			String status = enabled ? "mở khóa" : "khóa";
-			String message = new StringBuffer("").append("Đã ").append(status).append(" dự án ID ")
+			String status = enabled ? "Enabled" : "Disabled";
+			String message = new StringBuffer("").append(status).append(" project ID ")
 					.append(projectId).toString();
 			redirectAttributes.addFlashAttribute("successMessage", message);
 		} catch (ProjectNotFoundException e) {

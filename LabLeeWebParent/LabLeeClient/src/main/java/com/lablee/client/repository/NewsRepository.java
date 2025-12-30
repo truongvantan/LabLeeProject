@@ -1,6 +1,5 @@
 package com.lablee.client.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -15,7 +14,13 @@ import com.lablee.common.entity.News;
 @Repository
 public interface NewsRepository extends JpaRepository<News, Integer> {
 
-	List<News> findFirst4ByOrderByUpdateAtDesc();
+	@Query("""
+			SELECT n
+			FROM News n
+			WHERE n.enabled = TRUE
+			ORDER BY n.updateAt DESC
+			""")
+	Page<News> findFirst4ByOrderByUpdateAtDesc(Pageable pageable);
 
 	@Query("""
 			SELECT n

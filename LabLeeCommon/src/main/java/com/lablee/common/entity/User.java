@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.lablee.common.constant.ConstantUtil;
 
 import jakarta.persistence.CascadeType;
@@ -35,31 +37,27 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(length = 128, nullable = false, unique = true)
 	private String email;
-	
+
 	@Column(length = 128, nullable = false)
 	private String password;
-	
+
 	@Column(length = 128, nullable = true)
 	private String fullName;
-	
+
 	private String photo;
 	private boolean enabled;
-	
-	
-	@ManyToMany
-	@JoinTable(
-			name = "users_roles",
-			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "role_id")
-			)
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@BatchSize(size = 10)
 	private Set<Role> setRoles = new HashSet<>();
-	
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    private MemberLabProfile memberProfile;
-	
+	private MemberLabProfile memberProfile;
+
 	public User(String email, String password, String fullName) {
 		this.email = email;
 		this.password = password;
@@ -82,36 +80,37 @@ public class User {
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
 	public void addRole(Role role) {
 		this.setRoles.add(role);
 	}
-	
+
 //	@Transient
 //	public String getFullName() {
 //		return this.firstName + " " + this.lastName;
 //	}
-	
+
 	public boolean hasRole(String roleName) {
 		Iterator<Role> iterator = setRoles.iterator();
 		Role role = null;
 		while (iterator.hasNext()) {
 			role = iterator.next();
-			
+
 			if (role.getName().equalsIgnoreCase(roleName)) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Transient
 	public String getPhotoImagePath() {
 		if (this.id == null || this.photo == null) {
 			return "/images/default-user.png";
 		}
-		
-		return new StringBuffer(ConstantUtil.PATH_USER_PHOTO_STORED_DEFAULT).append(this.id).append("/").append(this.photo).toString();
+
+		return new StringBuffer(ConstantUtil.PATH_USER_PHOTO_STORED_DEFAULT).append(this.id).append("/")
+				.append(this.photo).toString();
 	}
 }

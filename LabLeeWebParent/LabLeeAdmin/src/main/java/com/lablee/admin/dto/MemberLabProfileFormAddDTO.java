@@ -49,7 +49,7 @@ public class MemberLabProfileFormAddDTO {
 	private User user;
 	
 	public String getAvatarPath() {
-		if (this.id == null || this.avatar == null) {
+		if (this.id == null || this.avatar == null || this.avatar.isBlank()) {
 			return "/images/default-user.png";
 		}
 

@@ -75,7 +75,7 @@ public class News {
 	
 	@Transient
 	public String getThumbnailPath() {
-		if (this.id == null || this.thumbnail == null) {
+		if (this.id == null || this.thumbnail == null || this.thumbnail.isBlank()) {
 			return "/images/default-user.png";
 		}
 

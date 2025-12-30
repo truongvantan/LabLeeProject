@@ -80,7 +80,7 @@
 
 						<li
 							class="nav-item"
-							sec:authorize="hasAnyAuthority('Root Admin', 'Lab Member', 'Collaborator' , 'Content Censor')"
+							sec:authorize="hasAnyAuthority('Root Admin', 'Lab Member')"
 						>
 							<a
 								class="nav-link"
@@ -91,7 +91,7 @@
 
 						<li
 							class="nav-item"
-							sec:authorize="hasAnyAuthority('Root Admin', 'Lab Member', 'Collaborator' , 'Content Censor')"
+							sec:authorize="hasAnyAuthority('Root Admin', 'Lab Member')"
 						>
 							<a
 								class="nav-link"
@@ -110,7 +110,7 @@
 								th:href="@{/news}"
 							>News</a>
 						</li>
-						
+
 						<li
 							class="nav-item"
 							sec:authorize="hasAuthority('Root Admin')"
@@ -123,15 +123,15 @@
 						</li>
 
 						<li class="nav-item dropdown">
-							<a
-								class="nav-link dropdown-toggle"
+							<button
+								class="btn btn-secondary dropdown-toggle"
+								type="button"
 								sec:authentication="principal.fullName"
-								th:href="@{/account}"
 								id="navbarDropdown"
 								role="button"
 								data-bs-toggle="dropdown"
 								aria-expanded="false"
-							></a>
+							></button>
 							<ul
 								class="dropdown-menu"
 								aria-labelledby="navbarDropdown"
@@ -142,11 +142,11 @@
 										th:href="@{/account}"
 									>Account Info</a>
 								</li>
-								<li>
+								<li sec:authorize="hasAuthority('Lab Member')">
 									<a
 										class="dropdown-item"
-										th:href="@{/profile}"
-									>Profile</a>
+										th:href="@{/members/profile}"
+									>Lab member profile</a>
 								</li>
 								<li>
 									<a

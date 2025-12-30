@@ -37,17 +37,20 @@ public class WebSecurityConfig {
 	SecurityFilterChain configure(HttpSecurity http) throws Exception {
 		http.authenticationProvider(authenticationProvider());
 
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/images/**", "/js/**", "/webjars/**", "/css/**",
-				"/fontawesome/**", "/fonts/**", "/webfonts/**").permitAll()
-				.requestMatchers("/users/**", "/members/**", "/publications/**", "/api/**").hasAuthority("Root Admin")
-				.anyRequest().authenticated())
+		http.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/images/**", "/js/**", "/webjars/**", "/css/**", "/fontawesome/**", "/fonts/**",
+						"/webfonts/**")
+				.permitAll()
+				.requestMatchers("/users/**", "/settings/**", "/members/showAdd/**", "/members/add/**",
+						"/members/showEdit/**", "/members/edit/**").hasAuthority("Root Admin")
+				.requestMatchers("/members/**", "/publications/**", "/projects/**", "/news/**", "/api/**").hasAnyAuthority("Root Admin", "Lab Member")
+				.requestMatchers("/news/**", "/api/**").hasAnyAuthority("Root Admin", "Lab Member", "Collaborator").anyRequest().authenticated())
 				.formLogin(login -> login.loginPage("/login").usernameParameter("email").defaultSuccessUrl("/")
 						.permitAll())
 				.logout(logout -> logout.permitAll())
 				.rememberMe(rem -> rem.key("AbcDefgHijKlmnOpqrs_1234567890").tokenValiditySeconds(7 * 24 * 60 * 60));
-		
-		http.headers(header -> header
-				.frameOptions(option -> option.sameOrigin()));
+
+		http.headers(header -> header.frameOptions(option -> option.sameOrigin()));
 
 		return http.build();
 	}

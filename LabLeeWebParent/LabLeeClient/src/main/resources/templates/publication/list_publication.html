@@ -13,7 +13,8 @@
 				<label class="fw-bold">Publish year:</label>
 				<select
 					id="sort-select"
-					class="form-select w-25 fw-bold"
+					class="form-select fw-bold"
+					style="min-width: 100px; width: 150px;"
 				>
 					<th:block th:each="sortDirValue : ${listSortDir}">
 						<option
@@ -69,8 +70,8 @@
 			<div class="line-break-common-2px text-center mt-3"></div>
 		</th:block>
 		<div th:replace="~{fragments::pagination('/publications', 'publications')}"></div>
+		<div th:replace="~{fragments::footer}"></div>
 	</div>
-	<div th:replace="~{fragments::footer}"></div>
 
 	<script type="text/javascript">
 		const moduleURL = "[[@{/publications}]]";

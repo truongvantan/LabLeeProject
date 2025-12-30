@@ -4,7 +4,7 @@
 <body>
 	<section th:replace="~{fragments::header}"></section>
 	<div class="container mt-5">
-		<h1 class="text-center mt-3 text-header-color-common">News</h1>
+		<h1 class="text-center mt-3">News</h1>
 		<div class="line-break-common-5px text-center mt-3"></div>
 		<div th:replace="~{fragments::search_form('/news', 'news')}"></div>
 
@@ -22,8 +22,6 @@
 			style="font-size: 1.1rem;"
 			th:utext="${news.content}"
 		></article>
-
-
 	</div>
 	<div th:replace="~{fragments::footer}"></div>
 	<script type="text/javascript">

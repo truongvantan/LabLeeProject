@@ -23,7 +23,7 @@ public class UserFormAddDTO {
 	private String password;
 	
 	@Pattern(regexp = ConstantUtil.REGEX_PASSWORD_20, message = ConstantUtil.MESSAGE_FAIL_VALIDATION_PASSWORD_20)
-	private String repassword;
+	private String confirmPassword;
 	private String photo;
 	private boolean enabled;
 	private Set<Integer> setRoleDTOIds;

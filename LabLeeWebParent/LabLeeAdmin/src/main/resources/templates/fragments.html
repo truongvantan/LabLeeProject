@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html
-	xmlns:th="http://www.thymeleaf.org"
->
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head
 	th:fragment="page_head(title, remove)"
@@ -68,7 +66,7 @@
 	>
 		<a
 			class="link-underline-opacity-75-hover"
-			th:href="@{${moduleURL} + '/page/' + ${currentPageNumber} + '?sortField=' + ${fieldName} +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}"
+			th:href="@{${moduleURL} + '/page/' + ${currentPageNumber} + '?sortField=' + ${fieldName} +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + '&pageSize=' + ${pageSize} + ${keyword != null ? '&keyword=' + keyword : ''}}"
 		>[[${columnLabel}]]</a>
 		<span
 			th:if="${sortField == fieldName}"
@@ -94,7 +92,7 @@
 		</div>
 		<div
 			th:unless="${currentPageNumber <= totalPageNumber}"
-			class="mt-4"
+			class="mt-4 text-center"
 		>
 			<span>
 				<b>Empty List</b>
@@ -139,17 +137,18 @@
 	<a
 		th:fragment="page_link(moduleURL, pageNum, label)"
 		class="page-link"
-		th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}"
+		th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&pageSize=' + ${pageSize}  + ${keyword != null ? '&keyword=' + keyword : ''}}"
 	>[[${label}]]</a>
 	<!-- ============================== END Page Link ============================================= -->
 
 	<!-- ============================== Search Form ============================================= -->
 	<div
 		th:fragment="search_form(moduleURL, title)"
-		class="row my-3"
+		class="my-3"
 	>
 		<form
-			class="col-sm-4 d-flex align-items-center"
+			id="search-form"
+			class="row d-flex align-items-center"
 			th:action="@{${moduleURL} + '/page/1'}"
 		>
 			<input
@@ -163,31 +162,52 @@
 				th:value="${sortDir}"
 			/>
 			<input
-				name="keyword"
-				th:value="${keyword}"
-				class="form-control mr-2 w-75"
-				type="search"
-				placeholder="Search..."
-				aria-label="Search"
+				type="hidden"
+				name="pageSize"
+				th:value="${pageSizeValue}"
 			/>
-			&nbsp;
-			<button
-				class="btn btn-outline-success d-block ml-2 mr-2"
-				type="submit"
-				id="btnSearch"
-				title="Search"
-			>
-				<i class="fa-solid fa-magnifying-glass"></i>
-			</button>
-			&nbsp;
-			<button
-				type="button"
-				class="btn btn-outline-secondary"
-				title="Clear"
-				onclick="clearFilter()"
-			>
-				<i class="fa-solid fa-broom"></i>
-			</button>
+			<div class="col-md-8 d-flex justity-content-center align-items-center">
+				<label class="fw-bold">Page size:</label> &nbsp;
+				<select
+					id="cbbPageSize"
+					class="form-select fw-bold mr-2"
+					style="width: 100px;"
+				>
+					<th:block th:each="pageSizeValue : ${listPageSize}">
+						<option
+							th:value="${pageSizeValue}"
+							th:selected="(${pageSize} == ${pageSizeValue})"
+						>[[${pageSizeValue}]]</option>
+					</th:block>
+				</select>
+				&nbsp;&nbsp;&nbsp;
+				<input
+					name="keyword"
+					th:value="${keyword}"
+					class="form-control mr-2 w-50"
+					type="search"
+					placeholder="Search..."
+					aria-label="Search"
+				/>
+				&nbsp;
+				<button
+					class="btn btn-outline-success d-inline ml-2 mr-2"
+					type="submit"
+					id="btnSearch"
+					title="Search"
+				>
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</button>
+				&nbsp;
+				<button
+					type="button"
+					class="btn btn-outline-secondary d-inline"
+					title="Clear"
+					onclick="clearFilter()"
+				>
+					<i class="fa-solid fa-broom"></i>
+				</button>
+			</div>
 		</form>
 	</div>
 	<!-- ============================== END Search Form ============================================= -->

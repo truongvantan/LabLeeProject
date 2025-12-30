@@ -93,15 +93,15 @@
 						<input
 							type="password"
 							class="form-control"
-							id="repassword"
-							name="repassword"
-							th:value="*{repassword}"
+							id="confirmPassword"
+							name="confirmPassword"
+							th:value="*{confirmPassword}"
 						>
 						<span
-							th:if="${#fields.hasErrors('repassword')}"
-							th:errors="${userFormAddDTO.repassword}"
+							th:if="${#fields.hasErrors('confirmPassword')}"
+							th:errors="${userFormAddDTO.confirmPassword}"
 							class="text-danger"
-						>Re Password Error</span>
+						>Confirm Password Error</span>
 					</div>
 				</div>
 				<div class="form-group row mb-3">

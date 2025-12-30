@@ -17,21 +17,27 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lablee.admin.config.LabLeeUserDetails;
 import com.lablee.admin.dto.MemberLabProfileFormAddDTO;
 import com.lablee.admin.dto.MemberLabProfileFormEditDTO;
 import com.lablee.admin.exception.MemberLabProfileNotFoundException;
 import com.lablee.admin.mapper.MemberLabProfileMapper;
 import com.lablee.admin.repository.MemberLabProfileRepository;
+import com.lablee.admin.repository.UserRepository;
 import com.lablee.admin.util.FileUploadUtil;
 import com.lablee.common.constant.ConstantUtil;
 import com.lablee.common.entity.MemberLabProfile;
+import com.lablee.common.entity.User;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberLabProfileService {
+
+    private final UserRepository userRepository;
 	private static final Logger LOGGER = LoggerFactory.getLogger(MemberLabProfileService.class);
 
 	private final MemberLabProfileRepository memberLabProfileRepository;
@@ -42,21 +48,24 @@ public class MemberLabProfileService {
 	 *         Object[1]: int totalPages<br>
 	 *         Object[2]: long totalElements
 	 */
-	public Object[] listByPage(String strPageNum, String keyword, String sortField, String sortDir) {
+	public Object[] listByPage(String strPageNum, String keyword, String sortField, String sortDir, String strPageSize) {
 		List<MemberLabProfile> listMemberLabDTOs = new ArrayList<>();
 
 		int pageNum = 1;
-
+		int pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
+		
 		try {
 			pageNum = Integer.parseInt(strPageNum);
+			pageSize = Integer.parseInt(strPageSize);
 		} catch (NumberFormatException e) {
 			pageNum = 1;
+			pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
 		}
 
 		Sort sort = Sort.by(sortField);
 		sort = "asc".equals(sortDir) ? sort.ascending() : sort.descending();
 
-		Pageable pageable = PageRequest.of(pageNum - 1, ConstantUtil.PAGE_SIZE_DEFAULT, sort);
+		Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
 
 		Page<MemberLabProfile> pageMemberLabProfile = null;
 
@@ -74,7 +83,6 @@ public class MemberLabProfileService {
 		return new Object[] { listMemberLabDTOs, totalPages, totalElements };
 	}
 
-	@Transactional
 	public String addNewMember(MemberLabProfileFormAddDTO memberLabProfileFormAddDTO, BindingResult bindingResult,
 			MultipartFile multipartFile) {
 
@@ -161,7 +169,6 @@ public class MemberLabProfileService {
 
 	}
 
-	@Transactional
 	public String editMember(@Valid MemberLabProfileFormEditDTO memberLabProfileFormEditDTO,
 			BindingResult bindingResult, MultipartFile multipartFile) {
 		// validation binding result form
@@ -248,12 +255,33 @@ public class MemberLabProfileService {
 	}
 
 	public List<MemberLabProfile> findAllEnabled() {
-
 		List<MemberLabProfile> listMembers = new ArrayList<>();
-
 		listMembers = memberLabProfileRepository.findAllEnabled();
-
 		return listMembers;
+	}
+
+	public int getMemberLabProfileIdFromEmail(LabLeeUserDetails loggedUser) {
+		Optional<User> oUser = userRepository.findByEmail(loggedUser.getUsername());
+		
+		if (!oUser.isPresent()) {
+			return 0;
+		}
+		
+		User userInDB = oUser.get();
+		Optional<MemberLabProfile> oMemberLabProfile = memberLabProfileRepository.findByUser(userInDB);
+		
+		if (!oMemberLabProfile.isPresent()) {
+			return 0;
+		}
+		
+		MemberLabProfile memberLabProfileInDB = oMemberLabProfile.get();
+		
+		if (!memberLabProfileInDB.isEnabled()) {
+			return 0;
+		}
+		
+		return oMemberLabProfile.get().getId();
+		
 	}
 
 }

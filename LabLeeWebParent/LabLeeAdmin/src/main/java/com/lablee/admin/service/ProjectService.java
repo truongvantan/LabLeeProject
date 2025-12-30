@@ -34,9 +34,10 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProjectService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProjectService.class);
-	
+
 	private final ProjectRepository projectRepository;
 	private final ProjectMapper projectMapper;
 
@@ -45,21 +46,24 @@ public class ProjectService {
 	 *         Object[1]: int totalPages<br>
 	 *         Object[2]: long totalElements
 	 */
-	public Object[] listByPage(String strPageNum, String keyword, String sortField, String sortDir) {
+	public Object[] listByPage(String strPageNum, String keyword, String sortField, String sortDir, String strPageSize) {
 		List<Project> listProjects = new ArrayList<>();
 
 		int pageNum = 1;
-
+		int pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
+		
 		try {
 			pageNum = Integer.parseInt(strPageNum);
+			pageSize = Integer.parseInt(strPageSize);
 		} catch (NumberFormatException e) {
 			pageNum = 1;
+			pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
 		}
 
 		Sort sort = Sort.by(sortField);
 		sort = "asc".equals(sortDir) ? sort.ascending() : sort.descending();
 
-		Pageable pageable = PageRequest.of(pageNum - 1, ConstantUtil.PAGE_SIZE_DEFAULT, sort);
+		Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
 
 		Page<Project> pageProject = null;
 
@@ -68,6 +72,8 @@ public class ProjectService {
 		} else {
 			pageProject = projectRepository.findAll(keyword.trim(), pageable);
 		}
+
+		pageProject.getContent().forEach(project -> project.getMembers().size());
 
 		int totalPages = pageProject.getTotalPages();
 		long totalElements = pageProject.getTotalElements();
@@ -222,7 +228,6 @@ public class ProjectService {
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_PROJECT;
 	}
 
-	@Transactional
 	public void editProjectEnabledStatus(String projectId, boolean enabled) throws ProjectNotFoundException {
 		int id = -1;
 

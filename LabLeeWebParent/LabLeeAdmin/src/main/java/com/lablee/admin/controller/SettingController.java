@@ -43,20 +43,20 @@ public class SettingController {
 	public String saveGeneralSettings(@RequestParam(name = "fileImage", required = false) MultipartFile multipartFile,
 			HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
 		if (!FileUploadUtil.isValidFileSize(multipartFile)) {
-			redirectAttributes.addFlashAttribute("error", "Vui lòng chọn tệp có kích thước không vượt quá 1MB");
+			redirectAttributes.addFlashAttribute("error", ConstantUtil.MESSAGE_FAIL_VALIDATION_UPLOAD_FILE_SIZE_1MB);
 			return "redirect:/settings";
 		}
 		
 		GeneralSettingBag settingBag = settingService.getGeneralSettings();
 		
 		if (!settingService.checkValidSettingValue(request, settingBag.list())) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng nhập đầy đủ thông tin.");
+			redirectAttributes.addFlashAttribute("errorMessage", "Please fill in all the information completely");
 			return "redirect:/settings";
 		}
 		
 		saveSiteLogo(multipartFile, settingBag);
 		updateSettingValuesFromForm(request, settingBag.list());
-		redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thông tin thành công.");
+		redirectAttributes.addFlashAttribute("successMessage", "Edit information successfully");
 		
 		return "redirect:/settings";
 	}
@@ -89,11 +89,11 @@ public class SettingController {
 		List<Setting> aboutUsSettings = settingService.getAboutUsSettings();
 		
 		if (!settingService.checkValidSettingValue(request, aboutUsSettings)) {
-			redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng nhập đầy đủ thông tin.");
+			redirectAttributes.addFlashAttribute("errorMessage", "Please fill in all the information completely");
 			return "redirect:/settings";
 		} else {
 			updateSettingValuesFromForm(request, aboutUsSettings);
-			redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thông tin About Us thành công.");
+			redirectAttributes.addFlashAttribute("successMessage", "Edit about-us information successfully.");
 			return "redirect:/settings";
 		}
 	}

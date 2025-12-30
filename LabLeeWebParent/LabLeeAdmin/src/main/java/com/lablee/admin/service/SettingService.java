@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SettingService {
 	private final SettingRepository settingRepository;
 	
@@ -33,7 +34,6 @@ public class SettingService {
 		return new GeneralSettingBag(settings);
 	}
 	
-	@Transactional
 	public void saveAll(Iterable<Setting> settings) {
 		settingRepository.saveAll(settings);
 	}

@@ -25,14 +25,14 @@
 				th:field="*{publishYear}"
 			/>
 			<span
-				th:if="${#fields.hasErrors('title')}"
+				th:if="${#fields.hasErrors('publishYear')}"
 				th:errors="${publicationFormAddDTO.publishYear}"
 				class="text-danger"
 			>Publish Year Error</span>
 		</div>
 
 		<div class="my-4">
-			<label class="fw-bold">DOI link:</label>
+			<label class="fw-bold">DOI link <span class="text-danger">(*)</span>:</label>
 			<input
 				class="form-control"
 				th:field="*{doiLink}"

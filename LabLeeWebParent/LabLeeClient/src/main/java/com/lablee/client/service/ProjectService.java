@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lablee.client.exception.ProjectNotFoundException;
 import com.lablee.client.repository.ProjectRepository;
@@ -18,10 +19,11 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProjectService {
 	private final ProjectRepository projectRepository;
 
-	private static final int PAGE_SIZE = 3;
+	private static final int PAGE_SIZE = 5;
 
 	/**
 	 * @return Object[0]: List(Project)<br>
@@ -51,7 +53,9 @@ public class ProjectService {
 		} else {
 			pageProject = projectRepository.findAllEnabled(keyword.trim(), pageable);
 		}
-
+		
+		pageProject.getContent().forEach(project -> project.getMembers().size());
+		
 		int totalPages = pageProject.getTotalPages();
 		long totalElements = pageProject.getTotalElements();
 
@@ -74,6 +78,7 @@ public class ProjectService {
 
 		if (oProject.isPresent()) {
 			project = oProject.get();
+			project.getMembers().size();
 			return project;
 		} else {
 			throw new ProjectNotFoundException("Could not find project with ID: " + projectId);
@@ -85,7 +90,11 @@ public class ProjectService {
 	}
 
 	public Project getLatestProject() {
-		return projectRepository.findFirstByOrderByStartDateDesc();
+		Pageable pageable = PageRequest.of(0, 1);
+		Page<Project> pageProject = projectRepository.findFirstByOrderByStartDateDesc(pageable);
+		List<Project> listProjects = pageProject.getContent();
+		
+		return listProjects.get(0);
 	}
 
 	public long getTotalProjectsEnabled() {

@@ -3,6 +3,7 @@ package com.lablee.client.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lablee.client.repository.SettingRepository;
 import com.lablee.common.constant.SettingCategory;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class SettingService {
 	private final SettingRepository settingRepository;
 	

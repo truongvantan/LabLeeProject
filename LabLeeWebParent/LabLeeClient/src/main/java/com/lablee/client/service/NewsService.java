@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lablee.client.exception.NewsNotFoundException;
 import com.lablee.client.repository.NewsRepository;
@@ -18,12 +19,16 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class NewsService {
 	private final NewsRepository newsRepository;
 	private static final int PAGE_SIZE = 10;
 	
 	public List<News> getList4LatestNews() {
-		return newsRepository.findFirst4ByOrderByUpdateAtDesc();
+		Pageable pageable = PageRequest.of(0, 4);
+		Page<News> pageNews = newsRepository.findFirst4ByOrderByUpdateAtDesc(pageable);
+		
+		return pageNews.getContent();
 	}
 
 	/**

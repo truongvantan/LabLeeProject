@@ -17,7 +17,7 @@ public class UserDTO {
 	
 	
 	public String getPhotoImagePath() {
-		if (this.id == null || this.photo == null) {
+		if (this.id == null || this.photo == null || this.photo.isBlank()) {
 			return "/images/default-user.png";
 		}
 		

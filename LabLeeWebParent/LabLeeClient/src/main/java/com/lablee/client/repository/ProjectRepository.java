@@ -15,15 +15,17 @@ import com.lablee.common.entity.Project;
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
 	@Query("""
-			SELECT p
+			SELECT DISTINCT p
 			FROM Project p
+			LEFT JOIN p.members m
 			WHERE p.enabled = TRUE
 			""")
 	Page<Project> findAllEnabled(Pageable pageable);
 
 	@Query("""
-			SELECT p
+			SELECT DISTINCT p
 			 FROM Project p
+			 LEFT JOIN p.members m
 			 WHERE p.enabled = true
 			   AND (
 			         (:keyword IS NULL)
@@ -34,20 +36,29 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 			      OR LOWER(p.sponsor) LIKE LOWER(CONCAT('%', :keyword, '%'))
 			      OR LOWER(p.projectAbstract) LIKE LOWER(CONCAT('%', :keyword, '%'))
 			      OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
+			      OR LOWER(m.user.fullName) LIKE LOWER(CONCAT('%', :keyword, '%'))
 			   )
 			""")
 	Page<Project> findAllEnabled(@Param("keyword") String keyword, Pageable pageable);
-	
+
 	@Query("""
-			SELECT p
+			SELECT DISTINCT p
 			FROM Project p
+			LEFT JOIN p.members m
 			WHERE p.enabled = TRUE
 				AND p.id = :id
 			""")
 	Optional<Project> findByIdEnabled(@Param("id") int id);
 
-	Project findFirstByOrderByStartDateDesc();
-	
+	@Query("""
+			SELECT DISTINCT p
+			FROM Project p
+			LEFT JOIN p.members m
+			WHERE p.enabled = TRUE
+			ORDER BY p.startDate DESC
+			""")
+	Page<Project> findFirstByOrderByStartDateDesc(Pageable pageable);
+
 	@Query("""
 			SELECT COUNT(p)
 			FROM Project p

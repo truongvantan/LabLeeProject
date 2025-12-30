@@ -42,7 +42,7 @@ public class MainController {
 
 		List<MemberLabProfile> listMembers = memberLabProfileService.getAllMembersEnabled();
 
-		List<Publication> list4LatestPublications = publicationService.getList3LatestPublications();
+		List<Publication> list3LatestPublications = publicationService.getList3LatestPublications();
 
 		List<News> list4LatestNews = newsService.getList4LatestNews();
 
@@ -52,7 +52,7 @@ public class MainController {
 		model.addAttribute("numberOfProjects", numberOfProjects);
 		model.addAttribute("latestProject", latestProject);
 		model.addAttribute("listMembers", listMembers);
-		model.addAttribute("list3LatestPublications", list4LatestPublications);
+		model.addAttribute("list3LatestPublications", list3LatestPublications);
 		model.addAttribute("list4LatestNews", list4LatestNews);
 		model.addAttribute("visitCount", visitService.getTotalVisits());
 

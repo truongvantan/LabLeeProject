@@ -58,7 +58,7 @@ public class ImageUploadController {
 		// validation file size
 		if (!FileUploadUtil.isValidFileSize(file)) {
 			return ResponseEntity.badRequest()
-					.body(Map.of("error", Map.of("message", "Dung lượng ảnh phải nhỏ hơn 1MB!")));
+					.body(Map.of("error", Map.of("message", "Image file size must be less than 1MB!")));
 		}
 
 		Map<String, Object> response = new HashMap<>();

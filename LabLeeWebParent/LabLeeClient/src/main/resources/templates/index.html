@@ -45,7 +45,7 @@
 					>[[${numberOfProjects}]]</div>
 					<div class="fs-5 text-white fw-bold">Projects</div>
 				</div>
-				
+
 				<div class="col-12 col-lg-3">
 					<div class="text-center text-white mb-2">
 						<i class="fa-solid fa-eye fa-2xl"></i>
@@ -200,7 +200,7 @@
 								<div class="blog_h1l1r text-end mt-1">
 									<h6 class="mb-0">
 										<a th:href="@{/publications}">
-											View All
+											View all
 											<i class="fa fa-chevron-circle-right col_blue ms-1"></i>
 										</a>
 									</h6>
@@ -219,6 +219,7 @@
 														th:src="@{${publication.thumbnailPath}}"
 														height="170"
 														alt="abc"
+														class="w-100 border"
 													>
 												</a>
 											</figure>
@@ -228,7 +229,11 @@
 								<div class="col-md-8">
 									<div class="blog_h1l2r">
 										<h5 class="mt-3">
-											<a th:href="${publication.doiLink}">[[${publication.title}]]</a>
+											<a
+												th:href="${publication.doiLink}"
+												data-bs-toggle="tooltip"
+												th:title="${publication.title}"
+											>[[${publication.title}]]</a>
 										</h5>
 										<div
 											th:utext="${publication.publicationAbstract}"
@@ -245,8 +250,6 @@
 							</div>
 						</th:block>
 
-
-
 						<div class="blog_h1l1 row mt-4">
 							<div class="col-md-6 col-6">
 								<div class="blog_h1l1l">
@@ -257,7 +260,7 @@
 								<div class="blog_h1l1r text-end mt-1">
 									<h6>
 										<a th:href="@{/news}">
-											View All
+											View all
 											<i class="fa fa-chevron-circle-right col_blue ms-1"></i>
 										</a>
 									</h6>
@@ -267,12 +270,12 @@
 						<hr>
 						<div class="row mt-4">
 							<th:block th:each="news : ${list4LatestNews}">
-								<div class="col-md-3">
+								<div class="col-md-3 mt-3">
 									<figure class="effect-jazz mb-0">
 										<a th:href="@{'/news/details/' + ${news.id}}">
 											<img
 												th:src="@{${news.thumbnailPath}}"
-												class="w-100"
+												class="w-100 border"
 												height="200"
 												alt="abc"
 											>
@@ -285,14 +288,14 @@
 										</span>
 									</h6>
 									<div style="height: 50px;">
-										<h5 class="fs-6 mt-3 p-limit-3">
-											<a th:href="@{'/news/details/' + ${news.id}}">[[${news.title}]]</a>
+										<h5 class="fs-6 mt-3 p-limit-2">
+											<a
+												th:href="@{'/news/details/' + ${news.id}}"
+												data-bs-toggle="tooltip"
+												th:title="${news.title}"
+											>[[${news.title}]]</a>
 										</h5>
 									</div>
-									<div
-										class="font_14 p-limit-3"
-										th:utext="${news.shortDescription}"
-									></div>
 									<div class="mt-2">
 										<a
 											class="button_1 pt-2 pb-2"
@@ -321,6 +324,10 @@
 	</script>
 
 	<script type="text/javascript">
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+		
 		function animateNumber(finalNumber, duration = 5000, startNumber = 0, callback) {
 		    let currentNumber = startNumber;
 		    const interval = window.setInterval(updateNumber, 17);

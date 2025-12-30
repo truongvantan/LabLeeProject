@@ -1,7 +1,5 @@
 package com.lablee.client.repository;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,14 +13,14 @@ import com.lablee.common.entity.Publication;
 public interface PublicationRepository extends JpaRepository<Publication, Integer> {
 
 	@Query("""
-			SELECT p
+			SELECT DISTINCT p
 			FROM Publication p
 			WHERE p.enabled = TRUE
 			""")
 	Page<Publication> findAllEnabled(Pageable pageable);
 
 	@Query("""
-			SELECT p
+			SELECT DISTINCT p
 			 FROM Publication p
 			 WHERE p.enabled = true
 			   AND (
@@ -35,7 +33,7 @@ public interface PublicationRepository extends JpaRepository<Publication, Intege
 			   )
 			""")
 	Page<Publication> findAllEnabled(@Param("keyword") String keyword, Pageable pageable);
-	
+
 	@Query("""
 			SELECT COUNT(p)
 			FROM Publication p
@@ -43,8 +41,12 @@ public interface PublicationRepository extends JpaRepository<Publication, Intege
 			""")
 	long getTotalPublicationsEnabled();
 
-	List<Publication> findFirst3ByOrderByPublishYearDesc();
-	
-	
+	@Query("""
+			SELECT DISTINCT p
+			FROM Publication p
+			WHERE p.enabled = TRUE
+			ORDER BY p.publishYear DESC
+			""")
+	Page<Publication> findFirst3ByOrderByPublishYearDesc(Pageable pageable);
 
 }

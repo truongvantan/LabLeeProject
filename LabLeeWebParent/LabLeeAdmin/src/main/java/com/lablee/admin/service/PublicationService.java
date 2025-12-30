@@ -34,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PublicationService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PublicationService.class);
 	
@@ -45,21 +46,24 @@ public class PublicationService {
 	 *         Object[1]: int totalPages<br>
 	 *         Object[2]: long totalElements
 	 */
-	public Object[] listByPage(String strPageNum, String keyword, String sortField, String sortDir) {
+	public Object[] listByPage(String strPageNum, String keyword, String sortField, String sortDir, String strPageSize) {
 		List<Publication> listPublications = new ArrayList<>();
 
 		int pageNum = 1;
-
+		int pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
+		
 		try {
 			pageNum = Integer.parseInt(strPageNum);
+			pageSize = Integer.parseInt(strPageSize);
 		} catch (NumberFormatException e) {
 			pageNum = 1;
+			pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
 		}
 
 		Sort sort = Sort.by(sortField);
 		sort = "asc".equals(sortDir) ? sort.ascending() : sort.descending();
 
-		Pageable pageable = PageRequest.of(pageNum - 1, ConstantUtil.PAGE_SIZE_DEFAULT, sort);
+		Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
 
 		Page<Publication> pagePublication = null;
 
@@ -189,7 +193,6 @@ public class PublicationService {
 		return ConstantUtil.MESSAGE_SUCCESS_EDIT_PUBLICATION;
 	}
 
-	@Transactional
 	public void editPublicationEnabledStatus(String publicationId, boolean enabled)
 			throws PublicationNotFoundException {
 		int id = -1;

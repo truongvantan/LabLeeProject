@@ -15,15 +15,6 @@
 		</div>
 
 		<div class="my-4">
-			<label class="fw-bold">Full name:</label>
-			<input
-				class="form-control"
-				th:field="*{fullName}"
-				readonly="readonly"
-			/>
-		</div>
-
-		<div class="my-4">
 			<label class="fw-bold">Academic rank:</label>
 			<input
 				class="form-control"
@@ -107,21 +98,6 @@
 				th:errors="${memberLabProfileFormEditDTO.leaveDate}"
 				class="text-danger"
 			>Leave Date Error</span>
-		</div>
-
-		<div
-			sec:authorize="hasAnyAuthority('Root Admin')"
-			class="my-4"
-		>
-			<label class="fw-bold">Enabled:</label>
-			<div class="form-check form-switch mt-2">
-				<input
-					class="form-check-input"
-					type="checkbox"
-					id="enabled"
-					th:field="*{enabled}"
-				/>
-			</div>
 		</div>
 
 		<div class="my-4">

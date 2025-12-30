@@ -22,7 +22,6 @@ import com.lablee.admin.dto.NewsFormAddDTO;
 import com.lablee.admin.dto.NewsFormEditDTO;
 import com.lablee.admin.exception.NewsNotFoundException;
 import com.lablee.admin.service.NewsService;
-import com.lablee.admin.service.UserService;
 import com.lablee.common.constant.ConstantUtil;
 import com.lablee.common.entity.News;
 
@@ -36,22 +35,22 @@ public class NewsController {
 	
 	private final NewsService newsService;
 	private final PaginationCommon paginationCommon;
-	private final UserService userService;
 
 	@GetMapping("/news")
 	public String listFirstPage(Model model) {
 		model.addAttribute("activeLink", "/news");
-		return listByPage(model, "1", "createAt", "desc", null);
+		return listByPage(model, "1", "createAt", "desc", "5", null);
 	}
 
 	@GetMapping("/news/page/{pageNum}")
 	public String listByPage(Model model, @PathVariable(name = "pageNum", required = false) String strPageNum,
 			@RequestParam(name = "sortField", defaultValue = "createAt") String sortField,
 			@RequestParam(name = "sortDir", defaultValue = "desc") String sortDir,
+			@RequestParam(name = "pageSize", defaultValue = "5") String strPageSize,
 			@RequestParam(name = "keyword", defaultValue = "") String keyword) {
 		model.addAttribute("activeLink", "/news");
 		
-		Object[] arrReturned = newsService.listByPage(strPageNum, keyword, sortField, sortDir);
+		Object[] arrReturned = newsService.listByPage(strPageNum, keyword, sortField, sortDir, strPageSize);
 
 		List<News> listNews = (List<News>) arrReturned[0];
 		int totalPageNumber = (int) arrReturned[1];
@@ -60,15 +59,19 @@ public class NewsController {
 		String reverseSortDir = "asc".equals(sortDir) ? "desc" : "asc";
 
 		int currentPageNumber = 1;
+		int pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
 
 		try {
 			currentPageNumber = Integer.parseInt(strPageNum);
+			pageSize = Integer.parseInt(strPageSize);
 		} catch (NumberFormatException e) {
 			currentPageNumber = 1;
+			pageSize = ConstantUtil.PAGE_SIZE_DEFAULT;
 		}
 
 		List<Integer> pageNumbers = paginationCommon.getListPageNumbers(totalPageNumber, currentPageNumber);
-
+		List<String> listPageSize = List.of(ConstantUtil.LIST_PAGE_SIZE);
+		
 		model.addAttribute("currentPageNumber", currentPageNumber);
 		model.addAttribute("totalPageNumber", totalPageNumber);
 		model.addAttribute("totalItems", totalElements);
@@ -78,6 +81,8 @@ public class NewsController {
 		model.addAttribute("reverseSortDir", reverseSortDir);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("listNews", listNews);
+		model.addAttribute("listPageSize", listPageSize);
+		model.addAttribute("pageSize", pageSize);
 
 		return "news/news";
 	}
@@ -164,8 +169,8 @@ public class NewsController {
 		
 		try {
 			newsService.editNewsEnabledStatus(newsId, enabled);
-			String status = enabled ? "mở khóa" : "khóa";
-			String message = new StringBuffer("").append("Đã ").append(status).append(" bài đăng ID ").append(newsId)
+			String status = enabled ? "Enabled" : "Disabled";
+			String message = new StringBuffer("").append(status).append(" news ID ").append(newsId)
 					.toString();
 			redirectAttributes.addFlashAttribute("successMessage", message);
 		} catch (NewsNotFoundException e) {

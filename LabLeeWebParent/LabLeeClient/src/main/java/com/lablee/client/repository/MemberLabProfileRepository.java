@@ -16,19 +16,25 @@ import com.lablee.common.entity.MemberLabProfile;
 public interface MemberLabProfileRepository extends JpaRepository<MemberLabProfile, Integer> {
 
 	@Query("""
-			SELECT m FROM MemberLabProfile m JOIN FETCH m.user u
+			SELECT m
+			FROM MemberLabProfile m
+			LEFT JOIN m.user u
 			WHERE m.enabled = TRUE
 			""")
 	List<MemberLabProfile> getListMemberProfileEnabled();
 
 	@Query("""
-			SELECT m FROM MemberLabProfile m JOIN FETCH m.user u
+			SELECT m
+			FROM MemberLabProfile m
+			LEFT JOIN m.user u
 			WHERE m.enabled = TRUE AND m.id = :id
 			""")
 	Optional<MemberLabProfile> findByIdEnabled(@Param("id") int id);
 
 	@Query("""
-			SELECT m FROM MemberLabProfile m JOIN FETCH m.user u
+			SELECT m
+			FROM MemberLabProfile m
+			LEFT JOIN m.user u
 			WHERE m.enabled = TRUE
 			""")
 	Page<MemberLabProfile> findAllEnabled(Pageable pageable);
@@ -54,6 +60,5 @@ public interface MemberLabProfileRepository extends JpaRepository<MemberLabProfi
 			WHERE m.enabled = TRUE
 			""")
 	long getTotalMembersEnabled();
-	
 
 }

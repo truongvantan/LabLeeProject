@@ -28,7 +28,7 @@ public class PublicationFormAddDTO {
 	private String publishYear;
 	
 	public String getThumbnailPath() {
-		if (this.id == null || this.thumbnail == null) {
+		if (this.id == null || this.thumbnail == null || this.thumbnail.isBlank()) {
 			return "/images/default-user.png";
 		}
 

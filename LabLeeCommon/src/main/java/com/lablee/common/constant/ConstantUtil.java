@@ -9,30 +9,31 @@ public class ConstantUtil {
 
 	public static final long MAX_FILE_SIZE = 1_048_576L; // 1MB
 	public static final int PAGE_SIZE_DEFAULT = 5;
+	public static final String[] LIST_PAGE_SIZE = {"1", "5", "10", "15"};
 
 	// Common Message
-	public static final String MESSAGE_FAIL_INTERNAL_SERVER_ERROR = "Đã xảy ra lỗi không xác định trong hệ thống. Vui lòng thử lại";
+	public static final String MESSAGE_FAIL_INTERNAL_SERVER_ERROR = "An unknown error has occurred in the system. Please try again.";
 
 	// Message biding result validation
-	public static final String MESSAGE_FAIL_VALIDATION_EMAIL = "Email không đúng định dạng (vd: example@gmail.com)";
-	public static final String MESSAGE_FAIL_VALIDATION_PASSWORD_20 = "Mật khẩu phải có độ dài ít nhất 6 ký tự và tối đa 20 ký tự. Chứa ít nhất 1 kí tự chữ số, chữ cái thường, chữ cái in hoa và kí tự đặc biệt.";
-	public static final String MESSAGE_FAIL_VALIDATION_PASSWORD_60 = "Mật khẩu phải có độ dài ít nhất 6 ký tự và tối đa 60 ký tự. Chứa ít nhất 1 kí tự chữ số, chữ cái thường, chữ cái in hoa và kí tự đặc biệt.";
+	public static final String MESSAGE_FAIL_VALIDATION_EMAIL = "The email is not in the correct format. (e.g: example@gmail.com)";
+	public static final String MESSAGE_FAIL_VALIDATION_PASSWORD_20 = "Passwords must be at least 6 characters long and no more than 20 characters long, must contain at least 1 digit, 1 lowercase letter, 1 uppercase letter, and 1 special character";
+	public static final String MESSAGE_FAIL_VALIDATION_PASSWORD_60 = "Passwords must be at least 6 characters long and no more than 60 characters long, must contain at least 1 digit, 1 lowercase letter, 1 uppercase letter, and 1 special character";
 
-	public static final String MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_50 = "Vui lòng nhập tối đa 50 kí tự";
-	public static final String MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_128 = "Vui lòng nhập tối đa 128 kí tự";
-	public static final String MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_255 = "Vui lòng nhập tối đa 255 kí tự";
-	public static final String MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_512 = "Vui lòng nhập tối đa 512 kí tự";
-	public static final String MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_64 = "Vui lòng nhập tối đa 64 kí tự";
-	public static final String MESSAGE_FAIL_VALIDATION_MIN_SIZE_INPUT_TEXT_3 = "Vui lòng nhập tối thiểu 03 kí tự";
-	public static final String MESSAGE_FAIL_VALIDATION_BLANK_INPUT_TEXT = "Vui lòng không được để trống";
-	public static final String MESSAGE_FAIL_VALIDATION_BINDING_RESULT = "Xảy ra lỗi binding result form";
-	public static final String MESSAGE_FAIL_VALIDATION_NOT_NULL = "Vui lòng không được để trống";
-	public static final String MESSAGE_FAIL_VALIDATION_DATE = "Ngày không đúng định dạng";
-	public static final String MESSAGE_FAIL_VALIDATION_YEAR_4_DIGIT = "Năm không đúng định dạng (XXXX)";
+	public static final String MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_50 = "Please enter a maximum of 50 characters";
+	public static final String MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_128 = "Please enter a maximum of 128 characters";
+	public static final String MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_255 = "Please enter a maximum of 255 characters";
+	public static final String MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_512 = "Please enter a maximum of 512 characters";
+	public static final String MESSAGE_FAIL_VALIDATION_MAX_SIZE_INPUT_TEXT_64 = "Please enter a maximum of 64 characters";
+	public static final String MESSAGE_FAIL_VALIDATION_MIN_SIZE_INPUT_TEXT_3 = "Please enter at least 3 characters";
+	public static final String MESSAGE_FAIL_VALIDATION_BLANK_INPUT_TEXT = "Please do not leave it blank";
+	public static final String MESSAGE_FAIL_VALIDATION_BINDING_RESULT = "A binding result error occurred";
+	public static final String MESSAGE_FAIL_VALIDATION_NOT_NULL = "Please do not leave it blank";
+	public static final String MESSAGE_FAIL_VALIDATION_DATE = "The date is not in the correct format";
+	public static final String MESSAGE_FAIL_VALIDATION_YEAR_4_DIGIT = "The year is not in the correct format (XXXX)";
 
 	// Message FAIL
 	// upload file
-	public static final String MESSAGE_FAIL_VALIDATION_UPLOAD_FILE_SIZE_1MB = "Vui lòng chọn tệp có kích thước không vượt quá 1MB";
+	public static final String MESSAGE_FAIL_VALIDATION_UPLOAD_FILE_SIZE_1MB = "Please select a file that does not exceed 1MB in size";
 	
 	//default upload logo
 	public static final String PATH_SITE_LOGO_DIR_DEFAULT = "../uploads/site-logo/";
@@ -71,46 +72,46 @@ public class ConstantUtil {
 	public static final String PATH_ABOUT_US_CONTENT_STORED_DEFAULT = "/uploads/about-us-content/";
 
 	// Message User
-	public static final String MESSAGE_FAIL_VALIDATION_REPASSWORD_PASSWORD_USER = "Mật khẩu và xác nhận mật khẩu không trùng khớp";
-	public static final String MESSAGE_SUCCESS_INSERT_NEW_USER = "Thêm mới người dùng thành công";
-	public static final String MESSAGE_FAIL_INSERT_NEW_USER = "Thêm mới người dùng thất bại";
+	public static final String MESSAGE_FAIL_VALIDATION_CONFIRM_PASSWORD_PASSWORD_USER = "Password and password confirmation do not match.";
+	public static final String MESSAGE_SUCCESS_INSERT_NEW_USER = "Add new user successfully";
+	public static final String MESSAGE_FAIL_INSERT_NEW_USER = "Add new user failed";
 
-	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER = "Email đã được sử dụng. Vui lòng chọn email khác";
-	public static final String MESSAGE_SUCCESS_EDIT_USER = "Cập nhật người dùng thành công";
-	public static final String MESSAGE_SUCCESS_EDIT_USER_ACCOUNT = "Thông tin tài khoản đã được cập nhật thành công";
-	public static final String MESSAGE_FAIL_VALIDATION_CONFIRM_PASSWORD = "Xác nhận mật khẩu không trùng khớp";
+	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_EMAIL_USER = "This email address is already in use. Please use a different email address";
+	public static final String MESSAGE_SUCCESS_EDIT_USER = "Edit user successfully";
+	public static final String MESSAGE_SUCCESS_EDIT_USER_ACCOUNT = "Edit account information successfully";
+	public static final String MESSAGE_FAIL_VALIDATION_CONFIRM_PASSWORD = "Password confirmation does not match";
 
 	// Message Member Lab Profile
-	public static final String MESSAGE_SUCCESS_EDIT_MEMBER_LAB_PROFILE = "Cập nhật thông tin thành viên lab thành công";
-	public static final String MESSAGE_FAIL_EDIT_MEMBER_LAB_PROFILE = "Cập nhật thông tin thành viên lab thất bại";
-	public static final String MESSAGE_SUCCESS_ADD_MEMBER_LAB_PROFILE = "Thêm mới thông tin thành viên lab thành công";
-	public static final String MESSAGE_FAIL_ADD_MEMBER_LAB_PROFILE = "Thêm mới thông tin thành viên lab thất bại";
+	public static final String MESSAGE_SUCCESS_EDIT_MEMBER_LAB_PROFILE = "Edit member lab profile successfully";
+	public static final String MESSAGE_FAIL_EDIT_MEMBER_LAB_PROFILE = "Edit member lab profile failed";
+	public static final String MESSAGE_SUCCESS_ADD_MEMBER_LAB_PROFILE = "Add new member lab profile successfully";
+	public static final String MESSAGE_FAIL_ADD_MEMBER_LAB_PROFILE = "Add new member lab profile failed";
 	public static final String FORMAT_DISPLAY_PERIOD_MEMBER_MM_YYYY = "MM/yyyy";
-	public static final String MESSAGE_FAIL_VALIDATION_LEAVE_DATE_MEMBER_LAB_PROFILE = "Ngày tốt nghiệp phải sau ngày vào lab";
-	public static final String MESSAGE_FAIL_VALIDATION_JOIN_DATE_MEMBER_LAB_PROFILE = "Ngày vào lab phải trước ngày hiện tại";
+	public static final String MESSAGE_FAIL_VALIDATION_LEAVE_DATE_MEMBER_LAB_PROFILE = "Graduation date must be after join date.";
+	public static final String MESSAGE_FAIL_VALIDATION_JOIN_DATE_MEMBER_LAB_PROFILE = "The join date must be before the current date.";
 
 	// Message Publication
-	public static final String MESSAGE_SUCCESS_ADD_PUBLICATION = "Thêm mới bài báo thành công";
-	public static final String MESSAGE_FAIL_ADD_PUBLICATION = "Thêm mới bài báo thất bại";
-	public static final String MESSAGE_SUCCESS_EDIT_PUBLICATION = "Cập nhật bài báo thành công";
-	public static final String MESSAGE_FAIL_EDIT_PUBLICATION = "Cập nhật bài báo thất bại";
-	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_PUBLICATION = "Tiêu đề đã tồn tại";
-	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_DOI_LINK_PUBLICATION = "DOI link đã tồn tại";
+	public static final String MESSAGE_SUCCESS_ADD_PUBLICATION = "Add new publication successfully";
+	public static final String MESSAGE_FAIL_ADD_PUBLICATION = "Add new publication failed";
+	public static final String MESSAGE_SUCCESS_EDIT_PUBLICATION = "Edit publication successfully";
+	public static final String MESSAGE_FAIL_EDIT_PUBLICATION = "Edit publication failed";
+	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_PUBLICATION = "This publication's title already exists";
+	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_DOI_LINK_PUBLICATION = "This DOI's link already exists";
 	
 	// Message Project
-	public static final String MESSAGE_SUCCESS_ADD_PROJECT = "Thêm mới dự án thành công";
-	public static final String MESSAGE_FAIL_ADD_PROJECT = "Thêm mới dự án thất bại";
-	public static final String MESSAGE_SUCCESS_EDIT_PROJECT = "Cập nhật dự án thành công";
-	public static final String MESSAGE_FAIL_EDIT_PROJECT = "Cập nhật dự án thất bại";
-	public static final String MESSAGE_FAIL_VALIDATION_END_DATE_PROJECT = "End date phải sau ngày Start Date";
-	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_PROJECT = "Tiêu đề đã tồn tại";
+	public static final String MESSAGE_SUCCESS_ADD_PROJECT = "Add new project successfully";
+	public static final String MESSAGE_FAIL_ADD_PROJECT = "Add new project failed";
+	public static final String MESSAGE_SUCCESS_EDIT_PROJECT = "Edit project successfully";
+	public static final String MESSAGE_FAIL_EDIT_PROJECT = "Edit project failed";
+	public static final String MESSAGE_FAIL_VALIDATION_END_DATE_PROJECT = "End date must be after start date";
+	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_PROJECT = "This project's title already exists";
 
 	// Message News
-	public static final String MESSAGE_SUCCESS_ADD_NEWS = "Thêm mới bài đăng thành công";
-	public static final String MESSAGE_FAIL_ADD_NEWS = "Thêm mới bài đăng thất bại";
-	public static final String MESSAGE_SUCCESS_EDIT_NEWS = "Cập nhật bài đăng thành công";
-	public static final String MESSAGE_FAIL_EDIT_NEWS = "Cập nhật bài đăng thất bại";
-	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_NEWS = "Tiêu đề đã tồn tại";
+	public static final String MESSAGE_SUCCESS_ADD_NEWS = "Add news successfully";
+	public static final String MESSAGE_FAIL_ADD_NEWS = "Add news failed";
+	public static final String MESSAGE_SUCCESS_EDIT_NEWS = "Edit news successfully";
+	public static final String MESSAGE_FAIL_EDIT_NEWS = "Edit news failed";
+	public static final String MESSAGE_FAIL_VALIDATION_DUPLICATE_TITLE_NEWS = "This news title already exists";
 	
 	
 }

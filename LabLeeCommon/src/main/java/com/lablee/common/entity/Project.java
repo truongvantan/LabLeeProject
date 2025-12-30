@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import org.hibernate.annotations.BatchSize;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.lablee.common.constant.ConstantUtil;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,7 +38,7 @@ public class Project {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(unique = true, nullable = false)
 	private String title;
 
@@ -47,7 +49,7 @@ public class Project {
 	private LocalDate endDate;
 
 	private String sponsor;
-	
+
 	private String thumbnail;
 
 	@Column(columnDefinition = "TEXT", nullable = true)
@@ -60,8 +62,9 @@ public class Project {
 
 	private boolean enabled;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "members_projects", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
+	@BatchSize(size = 10)
 	private Set<MemberLabProfile> members = new HashSet<>();
 
 	@Override
@@ -80,32 +83,32 @@ public class Project {
 		Project other = (Project) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
 	@Transient
 	public String getThumbnailPath() {
-		if (this.id == null || this.thumbnail == null) {
+		if (this.id == null || this.thumbnail == null || this.thumbnail.isBlank()) {
 			return "/images/default-user.png";
 		}
 
 		return new StringBuffer(ConstantUtil.PATH_PROJECT_THUMBNAIL_STORED_DEFAULT).append(this.id).append("/")
 				.append(this.thumbnail).toString();
 	}
-	
+
 	@Transient
 	public String getShortTitle() {
 		if (title != null && title.length() > 60) {
 			return title.substring(0, 60) + "...";
 		}
-		
+
 		return title;
 	}
-	
+
 	@Transient
 	public String getShortAbstract() {
 		if (projectAbstract != null && projectAbstract.length() > 60) {
 			return projectAbstract.substring(0, 60) + "...";
 		}
-		
+
 		return projectAbstract;
 	}
 	
@@ -114,19 +117,20 @@ public class Project {
 		if (members == null || members.isEmpty()) {
 			return "";
 		}
-		
+
 		List<String> listMemberName = new ArrayList<>();
 		for (MemberLabProfile member : members) {
 			listMemberName.add(member.getUser().getFullName());
 		}
-		
+
 		String result = String.join(", ", listMemberName);
-		
+
 		if (result != null && result.length() > 60) {
 			return result.substring(0, 60) + "...";
 		}
 		
 		return result;
+
 	}
 
 }

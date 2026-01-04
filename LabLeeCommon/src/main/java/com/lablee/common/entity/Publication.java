@@ -43,7 +43,7 @@ public class Publication {
 
 	private boolean enabled;
 	
-	@Column(columnDefinition = "CHAR(4)", nullable = true)
+	@Column(columnDefinition = "VARCHAR(4)", nullable = true)
 	private String publishYear;
 
 	@Override

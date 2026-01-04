@@ -54,7 +54,7 @@
 						class="fw-bold display-4 text-white mb-3"
 						id="visit-count"
 					>[[${visitCount}]]</div>
-					<div class="fs-5 text-white fw-bold">Website visitor</div>
+					<div class="fs-5 text-white fw-bold">Website visitors</div>
 				</div>
 
 			</div>
@@ -69,30 +69,27 @@
 	>
 		<div class="container-xl">
 			<div class="row center_h1">
-				<div class="col-md-5">
-					<div class="center_h1l position-relative">
-						<div class="center_h1l1">
-							<div class="grid clearfix">
+				<div class="col-md-12">
+					<div class="center_h1r p-2 px-4">
+						<h1 class="font_50">Latest our research</h1>
+						<hr class="line-break-common-5px mt-4 mb-4">
+						<div class="center_h1l position-relative">
+							<div class="center_h1l1">
 								<figure class="effect-jazz mb-0">
 									<a th:href="@{'/projects/details/' + ${latestProject.id}}">
 										<img
 											th:src="@{${latestProject.thumbnailPath}}"
 											class="w-100"
 											alt="Latest Project Thumbnail"
+											style="max-height: 600px;"
 										>
 									</a>
 								</figure>
 							</div>
+							<div class="center_h1l2 bg_back p-4 position-absolute top-0 w-100">
+								<h2 class="mb-0 fw-normal text-white text-center">[[${latestProject.shortTitle}]]</h2>
+							</div>
 						</div>
-						<div class="center_h1l2 bg_back p-4 position-absolute top-0 w-100">
-							<h2 class="mb-0 fw-normal text-white text-center">[[${latestProject.shortTitle}]]</h2>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-7">
-					<div class="center_h1r p-2 px-4">
-						<h1 class="font_50">Latest our research</h1>
-						<hr class="line mt-4 mb-4">
 						<div class="mb-0 fs-5">
 							<div
 								th:utext="${latestProject.projectAbstract}"
@@ -113,7 +110,7 @@
 	<!-- ================================== List Member ==========================================================  -->
 	<div class="container my-5">
 
-		<h2 class="fw-bold text-center h1">Our Members</h2>
+		<h2 class="fw-bold text-center h1 fw-bold">Our Members</h2>
 		<div class="d-flex justify-content-center align-items-center mb-2">
 			<a
 				th:href="@{/members}"
@@ -193,13 +190,16 @@
 						<div class="blog_h1l1 row">
 							<div class="col-md-6 col-6">
 								<div class="blog_h1l1l">
-									<h4 class="mb-0">Publications</h4>
+									<h4 class="mb-0 h2 fw-bold">Publications</h4>
 								</div>
 							</div>
 							<div class="col-md-6 col-6">
 								<div class="blog_h1l1r text-end mt-1">
 									<h6 class="mb-0">
-										<a th:href="@{/publications}">
+										<a
+											th:href="@{/publications}"
+											class="fw-bold text-header-color-common"
+										>
 											View all
 											<i class="fa fa-chevron-circle-right col_blue ms-1"></i>
 										</a>
@@ -253,13 +253,16 @@
 						<div class="blog_h1l1 row mt-4">
 							<div class="col-md-6 col-6">
 								<div class="blog_h1l1l">
-									<h4 class="mb-0">News</h4>
+									<h4 class="mb-0 h2 fw-bold">News</h4>
 								</div>
 							</div>
 							<div class="col-md-6 col-6">
 								<div class="blog_h1l1r text-end mt-1">
 									<h6>
-										<a th:href="@{/news}">
+										<a
+											th:href="@{/news}"
+											class="fw-bold text-header-color-common"
+										>
 											View all
 											<i class="fa fa-chevron-circle-right col_blue ms-1"></i>
 										</a>

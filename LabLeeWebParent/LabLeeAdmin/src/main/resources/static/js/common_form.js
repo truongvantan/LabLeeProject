@@ -6,7 +6,7 @@ $(document).ready(function() {
 	$("#fileImage").change(function() {
 		fileSize = this.files[0].size;
 		if (fileSize > 1048576) {
-			this.setCustomValidity("Vui lòng chọn tệp có kích thước không vượt quá 1MB!");
+			this.setCustomValidity("Please select file smaller than 1MB size!");
 			this.reportValidity();
 		} else {
 			this.setCustomValidity("");

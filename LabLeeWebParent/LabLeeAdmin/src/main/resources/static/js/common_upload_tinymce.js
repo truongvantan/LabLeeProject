@@ -33,10 +33,10 @@ function uploadImageTinyMCE(urlUploadImage) {
 					if (data.url) {
 						return data.url;
 					} else {
-						return Promise.reject(data.error || 'Upload fail');
+						return Promise.reject(data.error || 'Upload failed');
 					}
 				})
-				.catch(err => Promise.reject('Upload fail: ' + err));
+				.catch(err => Promise.reject('Upload failed: ' + err));
 		},
 
 		file_picker_types: 'image',
